@@ -6,10 +6,14 @@ public class Character extends Hitbox {
 	private double height;
 	private double tanAlpha; 
 	
-	public int state; /* 0:fly , 
-						  1:floor */
+	public int state; 				// state of the character
+	/* 0:fly , 1:floor */
 	private double maxSpeed;		// max speed for the free fall
+	private double moveSpeed;		// walk speed
+	private double jumpSpeed;		// speed with which the character jumps
+	private double maxJump;			// max high of a jump
 	private double frictionCoef;	// friction coefficient
+	private double cosFloorSlope;	// angle of the floor segment you stand on (rad)
 	
 	public Character() {
 		width = 35;
@@ -18,7 +22,17 @@ public class Character extends Hitbox {
 		
 		state = 0;
 		maxSpeed = 25;
+		moveSpeed = 7;
+		maxJump = 90;
+		jumpSpeed = Math.sqrt(2 * Main.gravity * maxJump);
 		frictionCoef = Main.gravity / maxSpeed;
+		
+		if (Main.debug == 4) {
+			System.out.println(frictionCoef);
+		}
+		if (Main.debug == 5) {
+			System.out.println(jumpSpeed);
+		}
 		
 		setPoints();
 		this.position = new double[2];
@@ -29,11 +43,6 @@ public class Character extends Hitbox {
 	
 	
 	public void update() {
-		/**
-		 * verify state & update speed
-		 * move
-		 */
-		
 		updateState();
 		move();
 	}
@@ -43,9 +52,11 @@ public class Character extends Hitbox {
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
 			intersect(Main.sceneries[i]);
 		}
-		
-		position[0] = position[0] + tMin * speed[0] - 0.0001;
-		position[1] = position[1] + tMin * speed[1];
+
+		this.speed[0] = tMin * this.speed[0];
+		this.speed[1] = tMin * this.speed[1];
+		this.position[0] = this.position[0] + this.speed[0] - 0.001;
+		this.position[1] = this.position[1] + this.speed[1];
 	}
 	
 	private void updateState() {
@@ -65,7 +76,7 @@ public class Character extends Hitbox {
 	
 	public void setPoints() {
 		/**
-		 * CREATION DE LA HITBOX DU PERSONNAGE
+		 * character's hitbox creation
 		 */
 		
 		this.points = new double[6][2];
@@ -90,12 +101,9 @@ public class Character extends Hitbox {
 		this.points[5][1] = 0;
 	}
 	
-	// DETECTION DE CONTACT
+	// CONTACT DETECTION
 	
 	private boolean contactFloor() {
-		/**
-		 * 
-		 */
 		double t = -1;
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
 			for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
@@ -104,6 +112,11 @@ public class Character extends Hitbox {
 						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
 						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
 				if (t >= 0 && t <= 1) {
+					cosFloorSlope = (Math.atan2(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0], 
+							Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1]))%Math.PI;
+					if (Main.debug == 3) {
+						System.out.println(cosFloorSlope);
+					}
 					return true;
 				}
 			}
@@ -111,15 +124,38 @@ public class Character extends Hitbox {
 		return false;
 	}
 	
-	// ACTIONS EN CAS DE CONTACT
+	// ACTIONS
 	
 	private void fly() {
-		speed[0] = speed[0] + Main.gravity - frictionCoef * speed[0];
-		speed[1] = speed[1] - frictionCoef * speed[1];
+		
+		this.speed[0] = this.speed[0] + Main.gravity - frictionCoef * this.speed[0];
+		this.speed[1] = this.speed[1] - frictionCoef * this.speed[1];
+				
+		if(Main.keyRight){
+			this.speed[1] = moveSpeed;
+		}
+		if(Main.keyLeft){
+			this.speed[1] = - moveSpeed;
+		}
 	}
 	
+	
 	private void walk() {
+		// Reset of the walk speed to stop if any key is pressed
+		this.speed[0] = 0;
+		this.speed[1] = 0;
 		
+		if(Main.keyRight){
+			this.speed[1] = Math.sqrt(1 - Math.pow(cosFloorSlope, 2)) * moveSpeed;
+			this.speed[0] = cosFloorSlope * moveSpeed;
+		}
+		if(Main.keyLeft) {
+			this.speed[1] = - Math.sqrt(1 - Math.pow(cosFloorSlope, 2)) * moveSpeed;
+			this.speed[0] = - cosFloorSlope * moveSpeed;
+		}
+		if(Main.keyUp) {
+			this.speed[0] = - jumpSpeed;
+		}
 	}
 	
 }

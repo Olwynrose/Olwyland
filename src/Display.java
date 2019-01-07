@@ -221,4 +221,43 @@ public class Display {
 		int[][][] im_coul = convertTo2DUsingGetRGB(img);
 		return im_coul;
 	}
+	
+	public void updatePressedKeys(int key) {
+		if(key == 37)
+		{
+			Main.keyLeft = true;
+  	  	}
+  	  	if(key == 39)
+  	  	{
+  	  		Main.keyRight = true;
+  	  	}
+  	  	if(key == 38)
+  	  	{
+  	  		Main.keyUp = true;
+  	  	}
+  	  	if(key == 40)
+  	  	{
+  	  		Main.keyDown = true;
+  	  	}
+	}
+	
+	public void updateReleasedKeys(int key) {
+		if(key == 37)
+		{
+			Main.keyLeft = false;
+  	  	}
+  	  	if(key == 39)
+  	  	{
+  	  		Main.keyRight = false;
+  	  	}
+  	  	if(key == 38)
+  	  	{
+  	  		Main.keyUp = false;
+  	  	}
+  	  	if(key == 40)
+  	  	{
+  	  		Main.keyDown = false;
+  	  	}
+	}
+	
 }
