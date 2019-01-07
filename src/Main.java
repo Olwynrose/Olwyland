@@ -10,7 +10,7 @@ public class Main {
 	static double gravity = 3.5;
 	
 	
-	static int debug;
+	static int debug = 0;
 	
 	
 	public static void main(String[] args) throws InterruptedException {
@@ -28,7 +28,10 @@ public class Main {
 		
 		while(true) {
 			tic = System.currentTimeMillis();
+			
+			mainChar.update();
 			screen.global();
+			
 			toc = System.currentTimeMillis();
 			if (toc - tic < 50)
 			{

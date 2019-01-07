@@ -52,6 +52,11 @@ public class Hitbox {
 	}
 	
 	protected double lineIntersection(double iv, double jv, double ip, double jp, double ia, double ja, double ib, double jb) {
+		/**
+		 * iv, jv : speed
+		 * ip, jp : position
+		 * ia, ja, ib, jb : [AB] segment coordinates
+		 */
 		if ((iv *(jb - ja) + jv * (ia - ib)) != 0) {
 			s = (iv * (ja - jp) + jv * (ip - ia)) / (- iv * (jb - ja) + jv * (ib - ia));
 			t = ((ib - ia) * (jp - ja) - (jb - ja) * (ip - ia)) / (iv *(jb - ja) - jv * (ib - ia));
