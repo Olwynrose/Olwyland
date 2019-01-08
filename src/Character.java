@@ -17,9 +17,9 @@ public class Character extends Hitbox {
 	private double slideCoef;
 	
 	private int inactiveTime;
-	private int activeJump;	
-	private int activeLeft;
-	private int activeRight;
+	private int inactiveJump;	
+	private int inactiveLeft;
+	private int inactiveRight;
 	
 	public double[] checkPoint;
 	
@@ -43,9 +43,9 @@ public class Character extends Hitbox {
 		slideCoef = 0.8;
 		
 		inactiveTime = 10;
-		activeLeft = 0;
-		activeRight = 0;
-		activeJump = 0;
+		inactiveLeft = 0;
+		inactiveRight = 0;
+		inactiveJump = 0;
 		
 		checkPoint = new double[2];
 		checkPoint[0] = 100;
@@ -56,11 +56,11 @@ public class Character extends Hitbox {
 		times = new int[10];
 		nbTimes = 0;
 		
-		if (Main.debug == 4) {
-			System.out.println(frictionCoef);
+		if (Main.debug[4]) {
+			System.out.println("friction coefficient : " + frictionCoef + "   [Character][Character]");
 		}
-		if (Main.debug == 5) {
-			System.out.println(jumpSpeed);
+		if (Main.debug[5]) {
+			System.out.println("jump speed : " + jumpSpeed + "   [Character][Character]");
 		}
 		
 		setPoints();
@@ -120,20 +120,20 @@ public class Character extends Hitbox {
 		updateState();
 		move();
 		
-		if (Main.debug == 6) {
-			System.out.println("activeLeft : " + activeLeft);
-			System.out.println("activeRight : " + activeRight);
-			System.out.println("activeJump : " + activeJump);
+		if (Main.debug[6]) {
+			System.out.println("inactiveLeft remaining time : " + inactiveLeft + "   [Character][updateAir]");
+			System.out.println("inactiveRight remaining time : " + inactiveRight + "   [Character][updateAir]");
+			System.out.println("inactiveJump remaining time : " + inactiveJump + "   [Character][updateAir]");
 		}
 		
-		if (activeLeft > 0) {
-			activeLeft--;
+		if (inactiveLeft > 0) {
+			inactiveLeft--;
 		}
-		if (activeRight > 0) {
-			activeRight--;
+		if (inactiveRight > 0) {
+			inactiveRight--;
 		}
-		if (activeJump > 0) {
-			activeJump--;
+		if (inactiveJump > 0) {
+			inactiveJump--;
 		}
 	}
 	
@@ -150,7 +150,7 @@ public class Character extends Hitbox {
 	}
 	
 	private void updateState() {
-		if (Main.debug == 7 && Main.keySpace == true) {
+		if (Main.debug[7] && Main.keySpace == true) {
 			debugFly();
 		}
 		else {
@@ -235,8 +235,8 @@ public class Character extends Hitbox {
 			}
 		}
 		
-		if (Main.debug == 2) {
-			System.out.println(state);
+		if (Main.debug[2]) {
+			System.out.println("State : " + state + "   [Character][updateState]");
 		}
 	}
 	
@@ -285,8 +285,8 @@ public class Character extends Hitbox {
 							Math.signum(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])<0) {
 						cosFloorSlope = - cosFloorSlope;
 					}
-					if (Main.debug == 3) {
-						System.out.println(cosFloorSlope);
+					if (Main.debug[3]) {
+						System.out.println("cosFloorSlope : " + cosFloorSlope + "   [Character][contactFloor]");
 					}
 					return true;
 				}
@@ -462,10 +462,10 @@ public class Character extends Hitbox {
 		this.speed[0] = this.speed[0] + Main.gravity - frictionCoef * this.speed[0];
 		this.speed[1] = this.speed[1] - frictionCoef * this.speed[1];
 				
-		if(Main.keyRight && activeRight == 0){
+		if(Main.keyRight && inactiveRight == 0){
 			this.speed[1] = moveSpeed;
 		}
-		if(Main.keyLeft && activeLeft == 0){
+		if(Main.keyLeft && inactiveLeft == 0){
 			this.speed[1] = - moveSpeed;
 		}
 	}
@@ -476,32 +476,32 @@ public class Character extends Hitbox {
 		this.speed[0] = 0;
 		this.speed[1] = 0;
 		
-		if (activeLeft > 4) {
-			activeLeft = 2;
+		if (inactiveLeft > 4) {
+			inactiveLeft = 2;
 		}
-		if (activeRight > 4) {
-			activeRight = 2;
+		if (inactiveRight > 4) {
+			inactiveRight = 2;
 		}
-		if (activeJump > 4) {
-			activeJump = 2;
+		if (inactiveJump > 4) {
+			inactiveJump = 2;
 		}
 		
-		if(Main.keyRight && activeRight == 0){
+		if(Main.keyRight && inactiveRight == 0){
 			this.speed[1] = Math.sqrt(1 - Math.pow(cosFloorSlope, 2)) * moveSpeed;
 			this.speed[0] = cosFloorSlope * moveSpeed;
 		}
-		if(Main.keyLeft && activeLeft == 0) {
+		if(Main.keyLeft && inactiveLeft == 0) {
 			this.speed[1] = - Math.sqrt(1 - Math.pow(cosFloorSlope, 2)) * moveSpeed;
 			this.speed[0] = - cosFloorSlope * moveSpeed;
 		}
-		if(Main.keyUp && activeJump == 0) {
+		if(Main.keyUp && inactiveJump == 0) {
 			this.speed[0] = - jumpSpeed;
 		}
 	}
 	
 	private void reboundBotLeft() {
-		activeLeft = inactiveTime + 1;
-		activeRight = 4;
+		inactiveLeft = inactiveTime + 1;
+		inactiveRight = 4;
 		this.speed[0] = -3;
 		this.speed[1] = 5;
 		this.position[0] = this.position[0] - 0.01;
@@ -509,8 +509,8 @@ public class Character extends Hitbox {
 	}
 
 	private void reboundBotRight() {
-		activeRight = inactiveTime + 1;
-		activeLeft = 4;
+		inactiveRight = inactiveTime + 1;
+		inactiveLeft = 4;
 		this.speed[0] = -3;
 		this.speed[1] = -5;
 		this.position[0] = this.position[0] - 0.01;
@@ -518,8 +518,8 @@ public class Character extends Hitbox {
 	}
 	
 	private void reboundLeft() {
-		activeLeft = inactiveTime + 1;
-		activeRight = 4;
+		inactiveLeft = inactiveTime + 1;
+		inactiveRight = 4;
 		this.speed[0] = -2;
 		this.speed[1] = 3;
 		this.position[0] = this.position[0] - 0.01;
@@ -527,8 +527,8 @@ public class Character extends Hitbox {
 	}
 	
 	private void reboundRight() {
-		activeRight = inactiveTime + 1;
-		activeLeft = 4;
+		inactiveRight = inactiveTime + 1;
+		inactiveLeft = 4;
 		this.speed[0] = -2;
 		this.speed[1] = -3;
 		this.position[0] = this.position[0] - 0.01;
@@ -541,7 +541,7 @@ public class Character extends Hitbox {
 	}
 	
 	private void slideLeft(){
-		activeLeft = 2 * inactiveTime;
+		inactiveLeft = 2 * inactiveTime;
 		
 		double speedNorm;
 		speedNorm = -Math.sqrt(1-cosFloorSlope*cosFloorSlope)*this.speed[1] - cosFloorSlope*this.speed[0];
@@ -549,15 +549,15 @@ public class Character extends Hitbox {
 		this.speed[1] = -Math.sqrt(1-cosFloorSlope*cosFloorSlope)*(speedNorm*(1-frictionCoef) - slideCoef*Main.gravity*Math.abs(cosFloorSlope));
 		this.speed[0] = -cosFloorSlope*(speedNorm*(1-frictionCoef) - slideCoef*Main.gravity*Math.abs(cosFloorSlope));
 		
-		if(Main.keyUp && activeJump == 0) {
+		if(Main.keyUp && inactiveJump == 0) {
 			this.speed[0] = -jumpSpeed;
 			this.speed[1] = 0.2 * jumpSpeed;
-			activeJump = 2 * inactiveTime;
+			inactiveJump = 2 * inactiveTime;
 		}
 	}
 	
 	private void slideRight(){
-		activeRight = 2 * inactiveTime;
+		inactiveRight = 2 * inactiveTime;
 
 		double speedNorm;
 		speedNorm = Math.sqrt(1-cosFloorSlope*cosFloorSlope)*this.speed[1] + cosFloorSlope*this.speed[0];
@@ -565,10 +565,10 @@ public class Character extends Hitbox {
 		this.speed[1] = Math.sqrt(1-cosFloorSlope*cosFloorSlope)*(speedNorm - slideCoef*Main.gravity*Math.abs(cosFloorSlope));
 		this.speed[0] = cosFloorSlope*(speedNorm - slideCoef*Main.gravity*Math.abs(cosFloorSlope));
 		
-		if(Main.keyUp && activeJump == 0) {
+		if(Main.keyUp && inactiveJump == 0) {
 			this.speed[0] = -jumpSpeed;
 			this.speed[1] = - 0.2 * jumpSpeed;
-			activeJump = 2 * inactiveTime;
+			inactiveJump = 2 * inactiveTime;
 		}
 	}
 	
@@ -591,8 +591,8 @@ public class Character extends Hitbox {
 		
 		if(Main.keyUp) {
 			this.speed[0] = -jumpSpeed;
-			activeLeft = 4;
-			activeRight = 4;
+			inactiveLeft = 4;
+			inactiveRight = 4;
 		}
 	}
 	
@@ -653,8 +653,8 @@ public class Character extends Hitbox {
 					&& this.position[0] < Main.areas[i].position[0] + Main.areas[i].height 
 					&& this.position[1] > Main.areas[i].position[1] 
 					&& this.position[1] < Main.areas[i].position[1] + Main.areas[i].width) {
-				if (Main.debug == 8) {
-					System.out.println("Entering in zone " + Main.areas[i].type);
+				if (Main.debug[8]) {
+					System.out.println("Entry in area type : " + Main.areas[i].type + "   [Character][isIn]");
 				}
 				return Main.areas[i].type;
 			}

@@ -69,11 +69,14 @@ public class Display {
 		
 		translation();
 		background();	
-		if (Main.debug == 9)
+		if (Main.debug[9])
 		{
 			areas();
 		}
-		hitbox();
+		if (Main.debug[10])
+		{
+			hitbox();
+		}
 		animations();
 		
 		int i, j, k;
