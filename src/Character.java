@@ -736,6 +736,44 @@ public class Character extends Hitbox {
 			time++;
 		}
 		break;
+		case 3:
+		{
+			//death by lava
+			times[0] = 3;
+			times[1] = 10;
+			times[2] = 30;
+			nbTimes = 3;
+			
+			Main.screen.translationType = 0;
+			
+			if (time < times[0]) {
+				this.speed[0] = 3;
+				this.speed[1] = 0;
+				this.position[0] += this.speed[0];
+			}
+			else {
+				if (time < times[0] + times[1]) {
+					this.speed[0] = 0;
+					this.speed[1] = 0;
+					this.position[0] += this.speed[0];
+				}
+				else {
+					if (time < times[0] + times[1] + times[2]) {
+						this.speed[0] = 1.3*this.width / (double)times[2];
+						this.speed[1] = 0;
+						this.position[0] += this.speed[0];
+					}
+					else {
+						time = 0;
+						nbTimes = 0;
+						animation = 1;
+						return;
+					}
+				}
+			}
+			time++;
+		}
+		break;
 		}
 		
 	}
