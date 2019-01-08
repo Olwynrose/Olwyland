@@ -89,75 +89,80 @@ public class Character extends Hitbox {
 	}
 	
 	private void updateState() {
-		if (contactTop())
-		{
-			state = 2;
-			reboundTop();
+		if (Main.debug == 7 && Main.keySpace == true) {
+			debugFly();
 		}
 		else {
-			if (contactLeft()) {
-				state = 3;
-				reboundLeft();
+			if (contactTop())
+			{
+				state = 2;
+				reboundTop();
 			}
 			else {
-				if (contactRight()) {
-					state = 4;
-					reboundRight();
+				if (contactLeft()) {
+					state = 3;
+					reboundLeft();
 				}
 				else {
-					if (contactBotLeft()) {
-						state = 5;
-						reboundBotLeft();
-					} 
+					if (contactRight()) {
+						state = 4;
+						reboundRight();
+					}
 					else {
-						if (contactBotRight()) {
-							state = 6;
-							reboundBotRight();
-						}
+						if (contactBotLeft()) {
+							state = 5;
+							reboundBotLeft();
+						} 
 						else {
-							if((contactSlideLeft() || contactSlideRight()) && state == 1) {
-								if(contactSlideLeft()){
-									state = 2;
-									slideLeft();
-								}
-								else {
-									if(contactSlideRight()){
-										state = 3;
-										slideRight();
-									}
-								}
+							if (contactBotRight()) {
+								state = 6;
+								reboundBotRight();
 							}
 							else {
-								if((contactSlideLeft() || contactSlideRight()) && contactFloor()) {
+								if((contactSlideLeft() || contactSlideRight()) && state == 1) {
 									if(contactSlideLeft()){
-										state = 9;
-										slideFloor();
+										state = 2;
+										slideLeft();
 									}
 									else {
 										if(contactSlideRight()){
-											state = 10;
-											slideFloor();
+											state = 3;
+											slideRight();
 										}
 									}
 								}
 								else {
-									if(contactFloor()){
-										state = 1;
-										walk();
-									}
-									else {
+									if((contactSlideLeft() || contactSlideRight()) && contactFloor()) {
 										if(contactSlideLeft()){
-											state = 2;
-											slideLeft();
+											state = 9;
+											slideFloor();
 										}
 										else {
 											if(contactSlideRight()){
-												state = 3;
-												slideRight();
+												state = 10;
+												slideFloor();
+											}
+										}
+									}
+									else {
+										if(contactFloor()){
+											state = 1;
+											walk();
+										}
+										else {
+											if(contactSlideLeft()){
+												state = 2;
+												slideLeft();
 											}
 											else {
-												state = 0;
-												fly();
+												if(contactSlideRight()){
+													state = 3;
+													slideRight();
+												}
+												else {
+													state = 0;
+													fly();
+												}
 											}
 										}
 									}
@@ -527,6 +532,24 @@ public class Character extends Hitbox {
 			this.speed[0] = -jumpSpeed;
 			activeLeft = 4;
 			activeRight = 4;
+		}
+	}
+	
+	private void debugFly() {
+		this.speed[0] = 0;
+		this.speed[1] = 0;
+		
+		if(Main.keyUp) {
+			this.position[0] -= moveSpeed;
+		}
+		if(Main.keyDown) {
+			this.position[0] += moveSpeed;
+		}
+		if(Main.keyLeft) {
+			this.position[1] -= moveSpeed;
+		}
+		if(Main.keyRight) {
+			this.position[1] += moveSpeed;
 		}
 	}
 }

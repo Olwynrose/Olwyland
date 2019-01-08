@@ -239,6 +239,10 @@ public class Display {
   	  	{
   	  		Main.keyDown = true;
   	  	}
+  	  	if(key == 32) 
+	  	{
+	  		Main.keySpace = true;
+	  	}
 	}
 	
 	public void updateReleasedKeys(int key) {
@@ -257,6 +261,10 @@ public class Display {
   	  	if(key == 40)
   	  	{
   	  		Main.keyDown = false;
+  	  	}
+  	  	if(key == 32) 
+  	  	{
+  	  		Main.keySpace = false;
   	  	}
 	}
 	
