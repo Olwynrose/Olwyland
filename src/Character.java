@@ -24,7 +24,7 @@ public class Character extends Hitbox {
 	public double[] checkPoint;
 	
 	public int animation;			
-	/* 1: respawn, 2: death by void, 3:death by lava */
+	/* 1: respawn, 2: death by void, 3:death by lava, 4:teleportation */
 	public int time;
 	public int times[];
 	public int nbTimes;
@@ -74,7 +74,7 @@ public class Character extends Hitbox {
 		int areaType;
 		
 		if (animation == 0) {
-			areaType = isIn();
+			areaType = isIn().type;
 			
 			switch(areaType) {
 			case 0:
@@ -92,7 +92,8 @@ public class Character extends Hitbox {
 			{
 				// lava
 				animation = 3;
-				time = 0;		
+				time = 0;
+				animate();
 			}
 				break;
 			case 3:
@@ -100,6 +101,7 @@ public class Character extends Hitbox {
 				//void
 				animation = 2;
 				time = 0;
+				animate();
 			}
 				break;
 			case 4:
@@ -107,10 +109,30 @@ public class Character extends Hitbox {
 				// scale
 			}
 				break;
+			case 5:
+			{
+				// teleporter
+				if (Main.keyDown) {
+					animation = 4;
+					time = 0;
+					animate();
+				}
+				else {
+					updateAir();
+				}
+			}
+				break;
+			case 6:
+			{
+				animation = 4;
+				time = 0;
+				animate();
+			}
+			break;
 			}
 		}
 		else {
-			animates();
+			animate();
 		}
 		
 	}
@@ -477,13 +499,13 @@ public class Character extends Hitbox {
 		this.speed[1] = 0;
 		
 		if (inactiveLeft > 4) {
-			inactiveLeft = 2;
+			inactiveLeft = 4;
 		}
 		if (inactiveRight > 4) {
-			inactiveRight = 2;
+			inactiveRight = 4;
 		}
 		if (inactiveJump > 4) {
-			inactiveJump = 2;
+			inactiveJump = 4;
 		}
 		
 		if(Main.keyRight && inactiveRight == 0){
@@ -591,8 +613,8 @@ public class Character extends Hitbox {
 		
 		if(Main.keyUp) {
 			this.speed[0] = -jumpSpeed;
-			inactiveLeft = 4;
-			inactiveRight = 4;
+			inactiveLeft = 10;
+			inactiveRight = 10;
 		}
 	}
 	
@@ -646,7 +668,7 @@ public class Character extends Hitbox {
 		Main.screen.centerChar();
 	}
 	
-	private int isIn() {
+	private Area isIn() {
 		
 		for (int i = 0 ; i < Main.nbAreas ; i++) {
 			if (this.position[0] > Main.areas[i].position[0] 
@@ -656,13 +678,13 @@ public class Character extends Hitbox {
 				if (Main.debug[8]) {
 					System.out.println("Entry in area type : " + Main.areas[i].type + "   [Character][isIn]");
 				}
-				return Main.areas[i].type;
+				return Main.areas[i];
 			}
 		}
-		return 0;
+		return new Area(0,0,0,0,0);
 	}
 	
-	private void animates() {
+	private void animate() {
 		
 		switch (animation) {
 		case 1:
@@ -774,7 +796,38 @@ public class Character extends Hitbox {
 			time++;
 		}
 		break;
+		case 4:
+		{
+			times[0] = 5;
+			times[1] = 2;
+			times[2] = 5;
+			nbTimes = 3;
+			
+			if (time == times[0]+1)
+			{
+				teleport();
+			}
+			if(time == times[0]+times[1]+times[2])
+			{
+				nbTimes = 0;
+				animation = 0;
+				Main.screen.translationType = 1;
+			}
+			time++;
 		}
+		break;
+		}
+	}
+	
+	private void teleport() {
+		int indTp = isIn().indTp;
+		double mult = isIn().speedMultTp;
+
+		this.speed[0] = mult * this.speed[0];
+		this.speed[1] = mult * this.speed[1];
 		
+		this.position[0] = Main.areas[indTp].position[0] + Main.areas[indTp].height / 2;
+		this.position[1] = Main.areas[indTp].position[1] + Main.areas[indTp].width / 2;
+		Main.screen.centerChar();
 	}
 }

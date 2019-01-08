@@ -160,7 +160,33 @@ public class Display {
 					}
 				}
 			}
-			
+		}
+		break;
+		case 4:
+		{
+			for (int i = 0 ; i < idim ; i++)
+			{
+				for (int j = 0 ; j < jdim ; j++)
+				{
+					if (Main.mainChar.time < Main.mainChar.times[0] + 1) {
+						img[i][j][0] = Math.min(255, img[i][j][0] + (255 * Main.mainChar.time) / Main.mainChar.times[0]);
+						img[i][j][1] = Math.min(255, img[i][j][1] + (255 * Main.mainChar.time) / Main.mainChar.times[0]);
+						img[i][j][2] = Math.min(255, img[i][j][2] + (255 * Main.mainChar.time) / Main.mainChar.times[0]);
+					}
+					else {
+						if (Main.mainChar.time > Main.mainChar.times[0] + Main.mainChar.times[1]) {
+							img[i][j][0] = Math.min(255, img[i][j][0] + (255 * (Main.mainChar.times[0] + Main.mainChar.times[1] + Main.mainChar.times[2] - Main.mainChar.time)) / Main.mainChar.times[2]);
+							img[i][j][1] = Math.min(255, img[i][j][1] + (255 * (Main.mainChar.times[0] + Main.mainChar.times[1] + Main.mainChar.times[2] - Main.mainChar.time)) / Main.mainChar.times[2]);
+							img[i][j][2] = Math.min(255, img[i][j][2] + (255 * (Main.mainChar.times[0] + Main.mainChar.times[1] + Main.mainChar.times[2] - Main.mainChar.time)) / Main.mainChar.times[2]);
+						}
+						else {
+							img[i][j][0] = 255;
+							img[i][j][1] = 255;
+							img[i][j][2] = 255;
+						}
+					}
+				}
+			}
 		}
 		break;
 		}
@@ -191,6 +217,20 @@ public class Display {
 						img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 						img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 						img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
+					}
+					break;
+					case 5:
+					{
+						img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
+						img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+						img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+					}
+					break;
+					case 6:
+					{
+						img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+						img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
+						img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 					}
 					break;
 					}
