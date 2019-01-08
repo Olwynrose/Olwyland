@@ -14,6 +14,7 @@ public class Character extends Hitbox {
 	private double maxJump;			// max high of a jump
 	private double frictionCoef;	// friction coefficient
 	private double cosFloorSlope;	// angle of the floor segment you stand on (rad)
+	private double slideCoef;
 	
 	private int inactiveTime;
 	private int activeJump;	
@@ -32,6 +33,7 @@ public class Character extends Hitbox {
 		maxJump = 90;
 		jumpSpeed = Math.sqrt(2 * Main.gravity * maxJump);
 		frictionCoef = Main.gravity / maxSpeed;
+		slideCoef = 0.8;
 		
 		inactiveTime = 10;
 		activeLeft = 0;
@@ -56,6 +58,12 @@ public class Character extends Hitbox {
 	public void update() {
 		updateState();
 		move();
+		
+		if (Main.debug == 6) {
+			System.out.println("activeLeft : " + activeLeft);
+			System.out.println("activeRight : " + activeRight);
+			System.out.println("activeJump : " + activeJump);
+		}
 		
 		if (activeLeft > 0) {
 			activeLeft--;
@@ -107,13 +115,53 @@ public class Character extends Hitbox {
 							reboundBotRight();
 						}
 						else {
-							if (contactFloor()) {
-								state = 1;
-								walk();
+							if((contactSlideLeft() || contactSlideRight()) && state == 1) {
+								if(contactSlideLeft()){
+									state = 2;
+									slideLeft();
+								}
+								else {
+									if(contactSlideRight()){
+										state = 3;
+										slideRight();
+									}
+								}
 							}
 							else {
-								state = 0;
-								fly();
+								if((contactSlideLeft() || contactSlideRight()) && contactFloor()) {
+									if(contactSlideLeft()){
+										state = 9;
+										slideFloor();
+									}
+									else {
+										if(contactSlideRight()){
+											state = 10;
+											slideFloor();
+										}
+									}
+								}
+								else {
+									if(contactFloor()){
+										state = 1;
+										walk();
+									}
+									else {
+										if(contactSlideLeft()){
+											state = 2;
+											slideLeft();
+										}
+										else {
+											if(contactSlideRight()){
+												state = 3;
+												slideRight();
+											}
+											else {
+												state = 0;
+												fly();
+											}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -289,6 +337,57 @@ public class Character extends Hitbox {
 		}
 		return false;
 	}
+	
+	private boolean contactSlideLeft() {
+
+		tMin = 1;
+		for (int i = 0 ; i < Main.nbSceneries ; i++) {
+			for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
+				t = lineIntersection(1, 0, 
+						position[0] + points[4][0] - 0.5, position[1] + points[4][1],
+						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+				if (t >= 0 && t < 1) {
+					cosFloorSlope = Math.abs(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) / 
+							Math.sqrt((Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) + 
+									+ (Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])*(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1]));
+					if(Math.signum(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*
+							Math.signum(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])<0) {
+						cosFloorSlope = - cosFloorSlope;
+					}
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	private boolean contactSlideRight() {
+		tMin = 1;
+		for (int i = 0 ; i < Main.nbSceneries ; i++) {
+			for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
+				t = lineIntersection(1, 0, 
+						position[0] + points[1][0] - 0.5, position[1] + points[1][1],
+						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+				if (t >= 0 && t < 1) {
+					cosFloorSlope = Math.abs(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) / 
+						Math.sqrt((Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) + 
+								+ (Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])*(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1]));
+				if(Math.signum(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*
+						Math.signum(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])<0) {
+					cosFloorSlope = - cosFloorSlope;
+				}
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	
 
 	
 	// ACTIONS
@@ -336,6 +435,7 @@ public class Character extends Hitbox {
 	
 	private void reboundBotLeft() {
 		activeLeft = inactiveTime + 1;
+		activeRight = 4;
 		this.speed[0] = -3;
 		this.speed[1] = 5;
 		this.position[0] = this.position[0] - 0.01;
@@ -344,6 +444,7 @@ public class Character extends Hitbox {
 
 	private void reboundBotRight() {
 		activeRight = inactiveTime + 1;
+		activeLeft = 4;
 		this.speed[0] = -3;
 		this.speed[1] = -5;
 		this.position[0] = this.position[0] - 0.01;
@@ -352,6 +453,7 @@ public class Character extends Hitbox {
 	
 	private void reboundLeft() {
 		activeLeft = inactiveTime + 1;
+		activeRight = 4;
 		this.speed[0] = -2;
 		this.speed[1] = 3;
 		this.position[0] = this.position[0] - 0.01;
@@ -360,6 +462,7 @@ public class Character extends Hitbox {
 	
 	private void reboundRight() {
 		activeRight = inactiveTime + 1;
+		activeLeft = 4;
 		this.speed[0] = -2;
 		this.speed[1] = -3;
 		this.position[0] = this.position[0] - 0.01;
@@ -369,5 +472,61 @@ public class Character extends Hitbox {
 	private void reboundTop() {
 		this.speed[0] = 3;
 		this.position[0] = this.position[0] + 0.01;
+	}
+	
+	private void slideLeft(){
+		activeLeft = 2 * inactiveTime;
+		
+		double speedNorm;
+		speedNorm = -Math.sqrt(1-cosFloorSlope*cosFloorSlope)*this.speed[1] - cosFloorSlope*this.speed[0];
+		
+		this.speed[1] = -Math.sqrt(1-cosFloorSlope*cosFloorSlope)*(speedNorm*(1-frictionCoef) - slideCoef*Main.gravity*Math.abs(cosFloorSlope));
+		this.speed[0] = -cosFloorSlope*(speedNorm*(1-frictionCoef) - slideCoef*Main.gravity*Math.abs(cosFloorSlope));
+		
+		if(Main.keyUp && activeJump == 0) {
+			this.speed[0] = -jumpSpeed;
+			this.speed[1] = 0.2 * jumpSpeed;
+			activeJump = 2 * inactiveTime;
+		}
+	}
+	
+	private void slideRight(){
+		activeRight = 2 * inactiveTime;
+
+		double speedNorm;
+		speedNorm = Math.sqrt(1-cosFloorSlope*cosFloorSlope)*this.speed[1] + cosFloorSlope*this.speed[0];
+		
+		this.speed[1] = Math.sqrt(1-cosFloorSlope*cosFloorSlope)*(speedNorm - slideCoef*Main.gravity*Math.abs(cosFloorSlope));
+		this.speed[0] = cosFloorSlope*(speedNorm - slideCoef*Main.gravity*Math.abs(cosFloorSlope));
+		
+		if(Main.keyUp && activeJump == 0) {
+			this.speed[0] = -jumpSpeed;
+			this.speed[1] = - 0.2 * jumpSpeed;
+			activeJump = 2 * inactiveTime;
+		}
+	}
+	
+	private void slideFloor(){
+		// compute cosFloor
+		contactFloor();
+		
+		// reset speed
+		this.speed[0] = 0;
+		this.speed[1] = 0;
+		
+		if(state == 9){
+			this.speed[1] = Math.sqrt(1-cosFloorSlope*cosFloorSlope)*moveSpeed/2;
+			this.speed[0] = cosFloorSlope*moveSpeed/2;
+		}
+		else {
+			this.speed[1] = -Math.sqrt(1-cosFloorSlope*cosFloorSlope)*moveSpeed/2;
+			this.speed[0] = -cosFloorSlope*moveSpeed/2;
+		}
+		
+		if(Main.keyUp) {
+			this.speed[0] = -jumpSpeed;
+			activeLeft = 4;
+			activeRight = 4;
+		}
 	}
 }
