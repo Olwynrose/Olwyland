@@ -4,10 +4,13 @@ import java.awt.event.KeyListener;
 public class Main {
 
 	static Character mainChar;
-	static Scenery[] sceneries;
 	static Display screen;
+	static Scenery[] sceneries;
 	static int nbSceneries;
 	static int indScene;
+	
+	static Area[] areas;
+	static int nbAreas;
 	
 	static double gravity = 3.5;
 	
@@ -27,6 +30,8 @@ public class Main {
 		mainChar = new Character();
 		sceneries = new Scenery[1000];
 		nbSceneries = 0;
+		areas = new Area[1000];
+		nbAreas = 0;
 		
 		Debug.testMap(2);
 		screen = new Display();

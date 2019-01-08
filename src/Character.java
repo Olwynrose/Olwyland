@@ -7,7 +7,7 @@ public class Character extends Hitbox {
 	private double tanAlpha; 
 	
 	public int state; 				// state of the character
-	/* 0:fly , 1:floor */
+	/* 0:fly , 1:floor, 2:top, 3:left, 4:right, 5: botleft, 6:botright, 7:slideleft, 8:slideright, 9: slidefloor*/
 	private double maxSpeed;		// max speed for the free fall
 	private double moveSpeed;		// walk speed
 	private double jumpSpeed;		// speed with which the character jumps
@@ -21,6 +21,13 @@ public class Character extends Hitbox {
 	private int activeLeft;
 	private int activeRight;
 	
+	public double[] checkPoint;
+	
+	public int animation;			
+	/* 1: respawn, 2: death by void, 3:death by lava */
+	public int time;
+	public int times[];
+	public int nbTimes;
 	
 	public Character() {
 		width = 35;
@@ -40,6 +47,15 @@ public class Character extends Hitbox {
 		activeRight = 0;
 		activeJump = 0;
 		
+		checkPoint = new double[2];
+		checkPoint[0] = 100;
+		checkPoint[1] = 100;
+		
+		animation = 0;
+		time = 0;
+		times = new int[10];
+		nbTimes = 0;
+		
 		if (Main.debug == 4) {
 			System.out.println(frictionCoef);
 		}
@@ -49,13 +65,58 @@ public class Character extends Hitbox {
 		
 		setPoints();
 		this.position = new double[2];
-		this.position[0] = 100;
-		this.position[1] = 100;
+		this.position[0] = checkPoint[0];
+		this.position[1] = checkPoint[1];
 		this.speed = new double[2];
 	}
 	
-	
 	public void update() {
+		int areaType;
+		
+		if (animation == 0) {
+			areaType = isIn();
+			
+			switch(areaType) {
+			case 0:
+			{
+				// air
+				updateAir();
+			}
+				break;
+			case 1:
+			{
+				// water
+			}
+				break;
+			case 2:
+			{
+				// lava
+				animation = 3;
+				time = 0;		
+			}
+				break;
+			case 3:
+			{
+				//void
+				animation = 2;
+				time = 0;
+			}
+				break;
+			case 4:
+			{
+				// scale
+			}
+				break;
+			}
+		}
+		else {
+			animates();
+		}
+		
+	}
+	
+	private void updateAir() {
+		
 		updateState();
 		move();
 		
@@ -574,6 +635,108 @@ public class Character extends Hitbox {
 		
 		this.speed[0] = 0;
 		this.speed[1] = 0;
+	}
+	
+	public void respawn() {
+		this.speed[0] = 0;
+		this.speed[1] = 0;
+		
+		this.position[0] = checkPoint[0];
+		this.position[1] = checkPoint[1];
+		Main.screen.centerChar();
+	}
+	
+	private int isIn() {
+		
+		for (int i = 0 ; i < Main.nbAreas ; i++) {
+			if (this.position[0] > Main.areas[i].position[0] 
+					&& this.position[0] < Main.areas[i].position[0] + Main.areas[i].height 
+					&& this.position[1] > Main.areas[i].position[1] 
+					&& this.position[1] < Main.areas[i].position[1] + Main.areas[i].width) {
+				if (Main.debug == 8) {
+					System.out.println("Entering in zone " + Main.areas[i].type);
+				}
+				return Main.areas[i].type;
+			}
+		}
+		return 0;
+	}
+	
+	private void animates() {
+		
+		switch (animation) {
+		case 1:
+		{
+			//respawn			
+			times[0] = 10;
+			times[1] = 2;
+			times[2] = 10;
+			nbTimes = 3;
+			
+			if (time == times[0]+1)
+			{
+				respawn();
+			}
+			if(time == times[0]+times[1]+times[2])
+			{
+				nbTimes = 0;
+				animation = 0;
+				Main.screen.translationType = 1;
+			}
+			time++;
+		}
+		break;
+		case 2:
+		//death by void
+		{
+			double coef0 = 0.1;
+			double coef1 = 0.45;
+			double coef2 = 1.5;
+			times[0] = 5;
+			times[1] = 10;
+			times[2] = 4;
+			times[3] = 20;
+			nbTimes = 4;
+			
+			Main.screen.translationType = 0;
+			
+			if (time < times[0]) {
+				this.speed[0] = maxSpeed - time * (1-coef0) * maxSpeed / times[0];
+				this.speed[1] = 0;
+				this.position[0] += this.speed[0];
+			}
+			else {
+				if (time < times[0] + times[1]) {
+					this.speed[0] = coef0 * maxSpeed - (time - times[0]) * (2 * coef0 * maxSpeed) / times[1];
+					this.speed[1] = 0;
+					this.position[0] += this.speed[0];
+				}
+				else {
+					if (time < times[0] + times[1] + times[2]) {
+						this.speed[0] = - coef0 * maxSpeed - (time - times[0] - times[1]) * ((coef1 - coef0) * maxSpeed) / times[2];
+						this.speed[1] = 0;
+						this.position[0] += this.speed[0];
+					}
+					else {
+						if (time < times[0] + times[1] + times[2] + times[3])
+						{
+							this.speed[0] = - coef1 * maxSpeed + (time - times[0] - times[1] - times[2]) * ((coef1 + coef2) * maxSpeed) / times[3];
+							this.speed[1] = 0;
+							this.position[0] += this.speed[0];
+						}
+						else {
+							time = 0;
+							nbTimes = 0;
+							animation = 1;
+							return;
+						}
+					}
+				}	
+			}
+			time++;
+		}
+		break;
+		}
 		
 	}
 }

@@ -12,16 +12,21 @@ import java.awt.Color;
 
 public class Display {
 	
-	JFrame window;
-	JPanel pan;
-	JLabel lab;
-	ImageIcon ii;
-	int idim;
-	int jdim;
-	double margini, marginj;
-	double transi, transj;
-	int[][][] img;
-	int[] arrayimage;
+	public JFrame window;
+	private JPanel pan;
+	private JLabel lab;
+	private ImageIcon ii;
+	private int[][][] img;
+	private int[] arrayimage;
+	
+	public int idim;
+	public int jdim;
+	private double margini, marginj;
+	private double transi, transj;
+	public int translationType;
+	/* 0: no translation, 1: following, 2:centered */
+
+	private int coefTransparency;
 	
 	public Display() {
 		window = new JFrame();
@@ -33,8 +38,11 @@ public class Display {
 		marginj = 0.3*(double)jdim;
 		transi = 0;
 		transj = 0;
+		translationType = 1;
 		img = new int[idim][jdim][3];
 		arrayimage = new int[idim*jdim*3];
+		
+		coefTransparency = 80;
 		
 		window.setTitle("Olwyland");
 		window.setSize(jdim, idim);
@@ -58,10 +66,16 @@ public class Display {
 	
 	public void global() {
 		
+		
 		translation();
-		background();		
+		background();	
+		if (Main.debug == 9)
+		{
+			areas();
+		}
 		hitbox();
-
+		animations();
+		
 		int i, j, k;
 		for(i = 0; i < idim ; i++)
 		{
@@ -115,8 +129,71 @@ public class Display {
 		
 	}
 	
-	public void effects() {
-		
+	public void animations() {
+		switch (Main.mainChar.animation)
+		{
+		case 1:
+		{
+			for (int i = 0 ; i < idim ; i++)
+			{
+				for (int j = 0 ; j < jdim ; j++)
+				{
+					if (Main.mainChar.time < Main.mainChar.times[0] + 1) {
+						img[i][j][0] = (img[i][j][0]*(Main.mainChar.times[0]-Main.mainChar.time)) / Main.mainChar.times[0];
+						img[i][j][1] = (img[i][j][1]*(Main.mainChar.times[0]-Main.mainChar.time)) / Main.mainChar.times[0];
+						img[i][j][2] = (img[i][j][2]*(Main.mainChar.times[0]-Main.mainChar.time)) / Main.mainChar.times[0];
+					}
+					else {
+						if (Main.mainChar.time > Main.mainChar.times[0] + Main.mainChar.times[1]) {
+							img[i][j][0] = (img[i][j][0]*(Main.mainChar.time - Main.mainChar.times[0] - Main.mainChar.times[1])) / Main.mainChar.times[2];
+							img[i][j][1] = (img[i][j][1]*(Main.mainChar.time - Main.mainChar.times[0] - Main.mainChar.times[1])) / Main.mainChar.times[2];
+							img[i][j][2] = (img[i][j][2]*(Main.mainChar.time - Main.mainChar.times[0] - Main.mainChar.times[1])) / Main.mainChar.times[2];
+						}
+						else {
+							img[i][j][0] = 0;
+							img[i][j][1] = 0;
+							img[i][j][2] = 0;
+						}
+					}
+				}
+			}
+			
+		}
+		break;
+		}
+	}
+	
+	public void areas() {
+		for (int n = 0 ; n < Main.nbAreas ; n++) {
+			for(int i = (int)Math.max(0, Main.areas[n].position[0] - transi) ; i < (int)Math.min(idim, Main.areas[n].position[0] + Main.areas[n].height - transi); i++) {
+				for(int j = (int)Math.max(0, Main.areas[n].position[1] - transj) ; j < (int)Math.min(jdim, Main.areas[n].position[1] + Main.areas[n].width - transj); j++) {
+					switch (Main.areas[n].type)
+					{
+					case 1:
+					{
+						img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+						img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
+						img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+					}
+					break;
+					case 2:
+					{
+						img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+						img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
+						img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
+					}
+					break;
+					case 3:
+					{
+						img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+						img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+						img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
+					}
+					break;
+					}
+				}
+			}
+		}
 	}
 	
 	private void segment(double i1, double j1, double i2, double j2, int red, int green, int blue) {		
@@ -273,17 +350,29 @@ public class Display {
 	}
 	
 	private void translation() {
-		if (Main.mainChar.position[0] < transi + margini) {
-			transi = Main.mainChar.position[0] - margini;
+		switch (translationType)
+		{
+		case 1:
+		{
+			if (Main.mainChar.position[0] < transi + margini) {
+				transi = Main.mainChar.position[0] - margini;
+			}
+			if (Main.mainChar.position[0] > transi + (double)idim - margini) {
+				transi = Main.mainChar.position[0] + margini - (double)idim;
+			}
+			if (Main.mainChar.position[1] < transj + marginj) {
+				transj = Main.mainChar.position[1] - marginj;
+			}
+			if (Main.mainChar.position[1] > transj + (double)jdim - marginj) {
+				transj = Main.mainChar.position[1] + marginj - (double)jdim;	
+			}
 		}
-		if (Main.mainChar.position[0] > transi + (double)idim - margini) {
-			transi = Main.mainChar.position[0] + margini - (double)idim;
+		break;
+		case 2:
+		{
+			centerChar();
 		}
-		if (Main.mainChar.position[1] < transj + marginj) {
-			transj = Main.mainChar.position[1] - marginj;
-		}
-		if (Main.mainChar.position[1] > transj + (double)jdim - marginj) {
-			transj = Main.mainChar.position[1] + marginj - (double)jdim;	
+		break;
 		}
 	}
 	
@@ -291,5 +380,4 @@ public class Display {
 		transi = Main.mainChar.position[0] - (double)idim / 2;
 		transj = Main.mainChar.position[1] - (double)jdim / 2;
 	}
-	
 }
