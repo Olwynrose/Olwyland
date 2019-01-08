@@ -552,4 +552,28 @@ public class Character extends Hitbox {
 			this.position[1] += moveSpeed;
 		}
 	}
+	
+	public void forcedMove(double speedi, double speedj){
+		this.speed[0] = speedi;
+		this.speed[1] = speedj;
+		this.position[0] = this.position[0];
+		this.position[1] = this.position[1];
+		
+		tMin = 1;
+		for (int i = 0 ; i < Main.nbSceneries ; i++) {
+			if(i < Main.indScene || i > Main.indScene) {
+				intersect(Main.sceneries[i]);
+			}
+		}
+		
+		this.speed[0] = tMin * this.speed[0];
+		this.speed[1] = tMin * this.speed[1];
+
+		this.position[0] = this.position[0] + this.speed[0] - 0.001;
+		this.position[1] = this.position[1] + this.speed[1];
+		
+		this.speed[0] = 0;
+		this.speed[1] = 0;
+		
+	}
 }

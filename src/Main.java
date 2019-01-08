@@ -18,7 +18,7 @@ public class Main {
 	static boolean keyLeft;
 	static boolean keySpace;
 	
-	static int debug = 7;
+	static int debug = 0;
 	
 	
 	public static void main(String[] args) throws InterruptedException {
@@ -28,7 +28,7 @@ public class Main {
 		sceneries = new Scenery[1000];
 		nbSceneries = 0;
 		
-		Debug.testMap(0);
+		Debug.testMap(2);
 		screen = new Display();
 		screen.window.addKeyListener(new KeyListener() {
 			  public void keyTyped(KeyEvent e) {}
@@ -46,6 +46,9 @@ public class Main {
 			tic = System.currentTimeMillis();
 			
 			mainChar.update();
+			for(indScene=0 ; indScene<nbSceneries ; indScene++){
+				sceneries[indScene].update();
+			}
 			screen.global();
 			
 			toc = System.currentTimeMillis();
