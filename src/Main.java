@@ -18,7 +18,7 @@ public class Main {
 	static boolean keyLeft;
 	static boolean keySpace;
 	
-	static int debug = 0;
+	static int debug = 7;
 	
 	
 	public static void main(String[] args) throws InterruptedException {

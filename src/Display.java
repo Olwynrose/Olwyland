@@ -19,6 +19,7 @@ public class Display {
 	int idim;
 	int jdim;
 	double margini, marginj;
+	double transi, transj;
 	int[][][] img;
 	int[] arrayimage;
 	
@@ -28,8 +29,10 @@ public class Display {
 		lab = new JLabel();
 		idim = 620;
 		jdim = 920;
-		margini = 0.4*(double)idim;
-		marginj = 0.4*(double)jdim;
+		margini = 0.3*(double)idim;
+		marginj = 0.3*(double)jdim;
+		transi = 0;
+		transj = 0;
 		img = new int[idim][jdim][3];
 		arrayimage = new int[idim*jdim*3];
 		
@@ -55,6 +58,7 @@ public class Display {
 	
 	public void global() {
 		
+		translation();
 		background();		
 		hitbox();
 
@@ -94,15 +98,15 @@ public class Display {
 
 	public void hitbox() {
 		for (int i = 0 ; i < Main.mainChar.getNbPoints() - 1 ; i++) {
-			segment(Main.mainChar.getOnePoint(i, 0), Main.mainChar.getOnePoint(i, 1), 
-					Main.mainChar.getOnePoint(i+1, 0), Main.mainChar.getOnePoint(i+1, 1),
+			segment(Main.mainChar.getOnePoint(i, 0)-transi, Main.mainChar.getOnePoint(i, 1)-transj, 
+					Main.mainChar.getOnePoint(i+1, 0)-transi, Main.mainChar.getOnePoint(i+1, 1)-transj,
 					255, 55, 255);
 		}
 		
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
 			for(int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++)
-			segment(Main.sceneries[i].getOnePoint(j, 0), Main.sceneries[i].getOnePoint(j, 1), 
-					Main.sceneries[i].getOnePoint(j+1, 0), Main.sceneries[i].getOnePoint(j+1, 1),
+			segment(Main.sceneries[i].getOnePoint(j, 0)-transi, Main.sceneries[i].getOnePoint(j, 1)-transj, 
+					Main.sceneries[i].getOnePoint(j+1, 0)-transi, Main.sceneries[i].getOnePoint(j+1, 1)-transj,
 					255, 255, 255);
 		}
 	}
@@ -266,6 +270,26 @@ public class Display {
   	  	{
   	  		Main.keySpace = false;
   	  	}
+	}
+	
+	private void translation() {
+		if (Main.mainChar.position[0] < transi + margini) {
+			transi = Main.mainChar.position[0] - margini;
+		}
+		if (Main.mainChar.position[0] > transi + (double)idim - margini) {
+			transi = Main.mainChar.position[0] + margini - (double)idim;
+		}
+		if (Main.mainChar.position[1] < transj + marginj) {
+			transj = Main.mainChar.position[1] - marginj;
+		}
+		if (Main.mainChar.position[1] > transj + (double)jdim - marginj) {
+			transj = Main.mainChar.position[1] + marginj - (double)jdim;	
+		}
+	}
+	
+	public void centerChar() {
+		transi = Main.mainChar.position[0] - (double)idim / 2;
+		transj = Main.mainChar.position[1] - (double)jdim / 2;
 	}
 	
 }
