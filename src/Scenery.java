@@ -6,7 +6,7 @@ public class Scenery extends Hitbox {
 	public int time;			// frame number
 	public double period;
 	public short typeMove; 		
-	/* 0: fixed, 1: opentrajectory, 2: loop */
+	/* 0: fixed, 1: opentrajectory, 2: loop, 3: disappear */
 
 
 	public Scenery(int npts) {
@@ -51,6 +51,18 @@ public class Scenery extends Hitbox {
 				this.position[0] = trajectory[0][0];
 				this.position[1] = trajectory[0][1];
 			}
+		}
+		break;
+		case 3:
+		{
+			double param = ((double)time/period)%1;
+			if(param>0.5) {
+				this.type = 0;
+			}
+			else {
+				this.type = 2;
+			}
+			time = time + 1;
 		}
 		break;
 		}

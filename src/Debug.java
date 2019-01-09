@@ -1017,6 +1017,7 @@ public class Debug {
 				//========================================================
 				Main.nbSceneries = 15;
 				Main.sceneries[14] = new Scenery(2);
+				Main.sceneries[14].typeMove = 3;
 				
 				Main.sceneries[14].setOnePoint(0, 720, 1310);
 				Main.sceneries[14].setOnePoint(1, 720, 1340);

@@ -1,5 +1,6 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 
 public class Main {
 
@@ -7,6 +8,7 @@ public class Main {
 	static Display screen;
 	static Scenery[] sceneries;
 	static int nbSceneries;
+	static int maxNbSceneries;
 	static int indScene;
 	
 	static Area[] areas;
@@ -22,9 +24,10 @@ public class Main {
 	static boolean keySpace;
 	
 	static boolean[] debug;
+	static String hitboxFileImage;
+	static double rappImage;
 	
-	
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, IOException {
 		long tic, toc;
 		
 		debug = new boolean[50];
@@ -38,14 +41,24 @@ public class Main {
 		//debug[8] = true;		//print the area the character enters in
 		debug[9] = true;		//display the areas
 		debug[10] = true;		//display the hitboxes
+		debug[11] = false;		//display character position
 		
 		mainChar = new Character();
-		sceneries = new Scenery[1000];
+		maxNbSceneries = 1000;
+		sceneries = new Scenery[maxNbSceneries];
 		nbSceneries = 0;
-		areas = new Area[1000];
+		areas = new Area[maxNbSceneries];
 		nbAreas = 0;
 		
-		Debug.testMap(6);
+		//Debug.testMap(6);
+		hitboxFileImage = "files/HB_Egouts_dessin1.png";
+		rappImage = 1.8;
+		new ImageToHitbox();
+		mainChar.checkPoint[0] = 550;
+		mainChar.checkPoint[1] = 6980;
+		mainChar.position[0] = 550;
+		mainChar.position[1] = 6980;
+		
 		screen = new Display();
 		screen.window.addKeyListener(new KeyListener() {
 			  public void keyTyped(KeyEvent e) {}

@@ -50,7 +50,7 @@ public class Character extends Hitbox {
 		slideCoef = 0.8;
 		
 		waterAcceleration = 1;
-		waterSpeed = 10;
+		waterSpeed = 7;
 		waterFricCoef = waterAcceleration / waterSpeed;
 		
 		inactiveTime = 10;
@@ -59,7 +59,7 @@ public class Character extends Hitbox {
 		inactiveJump = 0;
 		keyJump = true;
 		nbJump = 0;
-		maxNbJump = 1;
+		maxNbJump = 2;
 		
 		checkPoint = new double[2];
 		checkPoint[0] = 100;
@@ -87,64 +87,74 @@ public class Character extends Hitbox {
 	public void update() {
 		int areaType;
 		
-		if (animation == 0) {
-			areaType = isIn().type;
+		if(Main.debug[11]) {
+			System.out.println(this.position[0] + " - " + this.position[1]);
+		}
 			
-			switch(areaType) {
-			case 0:
-			{
-				// air
-				updateAir();
+			
+		if (animation == 0) {
+			if (Main.debug[7] && Main.keySpace == true) {
+				debugFly();
 			}
-				break;
-			case 1:
-			{
-				// water
-				updateWater();
-			}
-				break;
-			case 2:
-			{
-				// lava
-				animation = 3;
-				time = 0;
-				animate();
-			}
-				break;
-			case 3:
-			{
-				//void
-				animation = 2;
-				time = 0;
-				animate();
-			}
-				break;
-			case 4:
-			{
-				// scale
-				updateScale();
-			}
-				break;
-			case 5:
-			{
-				// teleporter
-				if (Main.keyDown) {
+			else {
+				areaType = isIn().type;
+				
+				switch(areaType) {
+				case 0:
+				{
+					// air
+					updateAir();
+				}
+					break;
+				case 1:
+				{
+					// water
+					updateWater();
+				}
+					break;
+				case 2:
+				{
+					// lava
+					animation = 3;
+					time = 0;
+					animate();
+				}
+					break;
+				case 3:
+				{
+					//void
+					animation = 2;
+					time = 0;
+					animate();
+				}
+					break;
+				case 4:
+				{
+					// scale
+					updateScale();
+				}
+					break;
+				case 5:
+				{
+					// teleporter
+					if (Main.keyDown) {
+						animation = 4;
+						time = 0;
+						animate();
+					}
+					else {
+						updateAir();
+					}
+				}
+					break;
+				case 6:
+				{
 					animation = 4;
 					time = 0;
 					animate();
 				}
-				else {
-					updateAir();
-				}
-			}
 				break;
-			case 6:
-			{
-				animation = 4;
-				time = 0;
-				animate();
-			}
-			break;
+				}
 			}
 		}
 		else {
@@ -176,34 +186,53 @@ public class Character extends Hitbox {
 	}
 	
 	private void updateWater() {
+		double bufspeed;
 		if(Main.keyRight){
 			this.speed[1] = this.speed[1] + waterAcceleration;
 		}
 		if(Main.keyLeft) {
-			this.speed[1] = this.speed[1] - waterAcceleration - this.speed[1] * waterFricCoef;
+			this.speed[1] = this.speed[1] - waterAcceleration;
 		}
+		this.speed[1] = this.speed[1]- this.speed[1] * waterFricCoef;
+		
+
+		bufspeed = this.speed[0];
+		this.speed[0] = 0;
+		tMin = 1;
+		for (int i = 0 ; i < Main.nbSceneries ; i++) {
+			intersect(Main.sceneries[i]);
+			if(tMin<1) {
+				this.speed[1] = 0;
+				break;
+			}
+		}
+		this.position[1] = this.position[1] + this.speed[1];
+		
+		this.speed[0] = bufspeed;
+		bufspeed = this.speed[1];
+		this.speed[1] = 0;
 		if(Main.keyUp) {
-			this.speed[0] = this.speed[0] - 2*waterAcceleration - this.speed[0] * waterFricCoef;
+			this.speed[0] = this.speed[0] - 1.5*waterAcceleration;
 		}
 		if(Main.keyDown) {
-			this.speed[0] = this.speed[0] + waterAcceleration - this.speed[0] * waterFricCoef;
+			this.speed[0] = this.speed[0] + waterAcceleration;
 		}
 		
 		this.speed[0] = this.speed[0]- this.speed[0] * waterFricCoef;
-		this.speed[1] = this.speed[1]- this.speed[1] * waterFricCoef;
 		
 		tMin = 1;
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
 			intersect(Main.sceneries[i]);
 			if(tMin<1) {
 				this.speed[0] = 0;
-				this.speed[1] = 0;
-				return;
+				break;
 			}
 		}
-
+		
 		this.position[0] = this.position[0] + this.speed[0];
-		this.position[1] = this.position[1] + this.speed[1];
+		
+		this.speed[1] = bufspeed;
+		
 		if(isIn().type != 1) {
 			this.speed[0] = - jumpSpeed;
 			nbJump = 1;
@@ -220,6 +249,19 @@ public class Character extends Hitbox {
 		if(Main.keyLeft) {
 			this.speed[1] = - moveSpeed;
 		}
+		
+		tMin = 1;
+		for (int i = 0 ; i < Main.nbSceneries ; i++) {
+			intersect(Main.sceneries[i]);
+			if(tMin<1) {
+				this.speed[1] = 0;
+				break;
+			}
+		}
+
+		this.position[1] = this.position[1] + this.speed[1];
+		
+		
 		if(Main.keyUp) {
 			this.speed[0] = - moveSpeed;
 		}
@@ -227,16 +269,18 @@ public class Character extends Hitbox {
 			this.speed[0] = moveSpeed;
 		}
 		
+
 		tMin = 1;
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
 			intersect(Main.sceneries[i]);
 			if(tMin<1) {
-				return;
+				this.speed[0] = 0;
+				break;
 			}
 		}
 
+
 		this.position[0] = this.position[0] + this.speed[0];
-		this.position[1] = this.position[1] + this.speed[1];
 	}
 	
 	private void move() {
@@ -252,10 +296,7 @@ public class Character extends Hitbox {
 	}
 	
 	private void updateState() {
-		if (Main.debug[7] && Main.keySpace == true) {
-			debugFly();
-		}
-		else {
+		
 			if (contactTop())
 			{
 				state = 2;
@@ -335,7 +376,7 @@ public class Character extends Hitbox {
 					}
 				}
 			}
-		}
+		
 		
 		if (Main.debug[2]) {
 			System.out.println("State : " + state + "   [Character][updateState]");
