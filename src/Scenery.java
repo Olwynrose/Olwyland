@@ -5,7 +5,7 @@ public class Scenery extends Hitbox {
 	private int nbTrajectory;
 	public int time;			// frame number
 	public double period;
-	public short type; 		
+	public short typeMove; 		
 	/* 0: fixed, 1: opentrajectory, 2: loop */
 
 
@@ -17,11 +17,12 @@ public class Scenery extends Hitbox {
 		
 		period = 150;
 		time = 0;
-		type = 0;
+		type = 1;
+		typeMove = 0;
 	}
 	
 	public void update() throws InterruptedException{
-		switch(type){
+		switch(typeMove){
 		case 0:
 		{
 			

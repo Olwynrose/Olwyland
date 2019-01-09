@@ -45,7 +45,7 @@ public class Main {
 		areas = new Area[1000];
 		nbAreas = 0;
 		
-		Debug.testMap(5);
+		Debug.testMap(6);
 		screen = new Display();
 		screen.window.addKeyListener(new KeyListener() {
 			  public void keyTyped(KeyEvent e) {}

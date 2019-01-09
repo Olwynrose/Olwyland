@@ -121,10 +121,22 @@ public class Display {
 		}
 		
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
-			for(int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++)
-			segment(Main.sceneries[i].getOnePoint(j, 0)-transi, Main.sceneries[i].getOnePoint(j, 1)-transj, 
-					Main.sceneries[i].getOnePoint(j+1, 0)-transi, Main.sceneries[i].getOnePoint(j+1, 1)-transj,
-					255, 255, 255);
+			if(Main.sceneries[i].type == 1)
+			{
+				for(int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++)
+				segment(Main.sceneries[i].getOnePoint(j, 0)-transi, Main.sceneries[i].getOnePoint(j, 1)-transj, 
+						Main.sceneries[i].getOnePoint(j+1, 0)-transi, Main.sceneries[i].getOnePoint(j+1, 1)-transj,
+						255, 255, 255);
+			}
+			else {
+				if(Main.sceneries[i].type == 2)
+				{
+					for(int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++)
+						segment(Main.sceneries[i].getOnePoint(j, 0)-transi, Main.sceneries[i].getOnePoint(j, 1)-transj, 
+								Main.sceneries[i].getOnePoint(j+1, 0)-transi, Main.sceneries[i].getOnePoint(j+1, 1)-transj,
+								255, 255, 0);
+				}
+			}
 		}
 	}
 	
@@ -200,7 +212,7 @@ public class Display {
 					{
 					case 1:
 					{
-						img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+						img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 						img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 						img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 					}
@@ -381,6 +393,7 @@ public class Display {
   	  	if(key == 38)
   	  	{
   	  		Main.keyUp = false;
+  	  		Main.mainChar.keyJump = true;
   	  	}
   	  	if(key == 40)
   	  	{

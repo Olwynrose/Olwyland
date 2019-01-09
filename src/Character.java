@@ -29,6 +29,10 @@ public class Character extends Hitbox {
 	public int times[];
 	public int nbTimes;
 	
+	public boolean keyJump;	// to verify if the jump has been released
+	private int nbJump;			// count the number of successive jumps
+	private int maxNbJump;
+	
 	public Character() {
 		width = 35;
 		height = 55;
@@ -46,6 +50,9 @@ public class Character extends Hitbox {
 		inactiveLeft = 0;
 		inactiveRight = 0;
 		inactiveJump = 0;
+		keyJump = true;
+		nbJump = 0;
+		maxNbJump = 1;
 		
 		checkPoint = new double[2];
 		checkPoint[0] = 100;
@@ -86,6 +93,7 @@ public class Character extends Hitbox {
 			case 1:
 			{
 				// water
+				
 			}
 				break;
 			case 2:
@@ -107,6 +115,7 @@ public class Character extends Hitbox {
 			case 4:
 			{
 				// scale
+				
 			}
 				break;
 			case 5:
@@ -157,7 +166,7 @@ public class Character extends Hitbox {
 		if (inactiveJump > 0) {
 			inactiveJump--;
 		}
-	}
+	} 
 	
 	private void move() {
 		tMin = 1;
@@ -294,23 +303,27 @@ public class Character extends Hitbox {
 	private boolean contactFloor() {
 		double t = -1;
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
-			for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
-				t = lineIntersection(1, 0, 
-						position[0] + points[0][0] - 0.5, position[1] + points[0][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
-				if (t >= 0 && t <= 1) {
-					cosFloorSlope = Math.abs(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) / 
-							Math.sqrt((Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) + 
-									+ (Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])*(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1]));
-					if(Math.signum(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*
-							Math.signum(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])<0) {
-						cosFloorSlope = - cosFloorSlope;
+			if(Main.sceneries[i].type > 0)
+			{
+				for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
+					t = lineIntersection(1, 0, 
+							position[0] + points[0][0] - 0.5, position[1] + points[0][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+					if (t >= 0 && t <= 1) {
+						cosFloorSlope = Math.abs(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) / 
+								Math.sqrt((Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) + 
+										+ (Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])*(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1]));
+						if(Math.signum(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*
+								Math.signum(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])<0) {
+							cosFloorSlope = - cosFloorSlope;
+						}
+						if (Main.debug[3]) {
+							System.out.println("cosFloorSlope : " + cosFloorSlope + "   [Character][contactFloor]");
+						}
+						nbJump = 0;
+						return true;
 					}
-					if (Main.debug[3]) {
-						System.out.println("cosFloorSlope : " + cosFloorSlope + "   [Character][contactFloor]");
-					}
-					return true;
 				}
 			}
 		}
@@ -320,13 +333,16 @@ public class Character extends Hitbox {
 	private boolean contactBotLeft() {
 		tMin = 1;
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
-			for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
-				t = lineIntersection(points[4][0] - points[0][0], points[4][1] - points[0][1], 
-						position[0] + points[0][0], position[1] + points[0][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
-				if (t >= 0 && t < 1) {
-					return true;
+			if(Main.sceneries[i].type == 1)
+			{
+				for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
+					t = lineIntersection(points[4][0] - points[0][0], points[4][1] - points[0][1], 
+							position[0] + points[0][0], position[1] + points[0][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+					if (t >= 0 && t < 1) {
+						return true;
+					}
 				}
 			}
 		}
@@ -336,13 +352,16 @@ public class Character extends Hitbox {
 	private boolean contactBotRight() {
 		tMin = 1;
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
-			for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
-				t = lineIntersection(points[1][0] - points[0][0], points[1][1] - points[0][1], 
-						position[0] + points[0][0], position[1] + points[0][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
-				if (t >= 0 && t < 1) {
-					return true;
+			if(Main.sceneries[i].type == 1)
+			{
+				for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
+					t = lineIntersection(points[1][0] - points[0][0], points[1][1] - points[0][1], 
+							position[0] + points[0][0], position[1] + points[0][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+					if (t >= 0 && t < 1) {
+						return true;
+					}
 				}
 			}
 		}
@@ -353,20 +372,23 @@ public class Character extends Hitbox {
 		tMin = 1;
 		for (int i = 0 ; i < Main.nbSceneries ; i++)
 		{
-			for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
-				t = lineIntersection(1, 1, 
-						position[0] + points[3][0]-0.5, position[1] + points[3][1]-0.5,
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
-				if (t >= 0 && t < 1) {
-					return true;
-				}
-				t = lineIntersection(points[3][0] - points[4][0], points[3][1] - points[4][1], 
-						position[0] + points[4][0], position[1] + points[4][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
-				if (t >= 0 && t < 1) {
-					return true;
+			if(Main.sceneries[i].type == 1)
+			{
+				for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
+					t = lineIntersection(1, 1, 
+							position[0] + points[3][0]-0.5, position[1] + points[3][1]-0.5,
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+					if (t >= 0 && t < 1) {
+						return true;
+					}
+					t = lineIntersection(points[3][0] - points[4][0], points[3][1] - points[4][1], 
+							position[0] + points[4][0], position[1] + points[4][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+					if (t >= 0 && t < 1) {
+						return true;
+					}
 				}
 			}
 		}
@@ -376,20 +398,23 @@ public class Character extends Hitbox {
 	private boolean contactRight() {
 		tMin = 1;
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
-			for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
-				t = lineIntersection(-1, 1, 
-						position[0] + points[2][0]+0.5, position[1] + points[2][1]-0.5,
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
-				if (t >= 0 && t < 1) {
-					return true;
-				}
-				t = lineIntersection(points[2][0] - points[1][0], points[2][1] - points[1][1], 
-						position[0] + points[1][0], position[1] + points[1][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
-				if (t >= 0 && t < 1) {
-					return true;
+			if(Main.sceneries[i].type == 1)
+			{
+				for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
+					t = lineIntersection(-1, 1, 
+							position[0] + points[2][0]+0.5, position[1] + points[2][1]-0.5,
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+					if (t >= 0 && t < 1) {
+						return true;
+					}
+					t = lineIntersection(points[2][0] - points[1][0], points[2][1] - points[1][1], 
+							position[0] + points[1][0], position[1] + points[1][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+					if (t >= 0 && t < 1) {
+						return true;
+					}
 				}
 			}
 		}
@@ -399,27 +424,30 @@ public class Character extends Hitbox {
 	private boolean contactTop() {
 		tMin = 1;
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
-			for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
-				t = lineIntersection(1, 0, 
-						position[0] + points[2][0] - 0.5, position[1] + points[2][1]-0.5,
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
-				if (t >= 0 && t < 1) {
-					return true;
-				}
-				t = lineIntersection(1, 0, 
-						position[0] + points[3][0] - 0.5, position[1] + points[3][1]+0.5,
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
-				if (t >= 0 && t < 1) {
-					return true;
-				}
-				t = lineIntersection(points[2][0] - points[3][0], points[2][1] - points[3][1] - 1, 
-						position[0] + points[3][0], position[1] + points[3][1] + 0.5,
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
-				if (t >= 0 && t < 1) {
-					return true;
+			if(Main.sceneries[i].type == 1)
+			{
+				for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
+					t = lineIntersection(1, 0, 
+							position[0] + points[2][0] - 0.5, position[1] + points[2][1]-0.5,
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+					if (t >= 0 && t < 1) {
+						return true;
+					}
+					t = lineIntersection(1, 0, 
+							position[0] + points[3][0] - 0.5, position[1] + points[3][1]+0.5,
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+					if (t >= 0 && t < 1) {
+						return true;
+					}
+					t = lineIntersection(points[2][0] - points[3][0], points[2][1] - points[3][1] - 1, 
+							position[0] + points[3][0], position[1] + points[3][1] + 0.5,
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+					if (t >= 0 && t < 1) {
+						return true;
+					}
 				}
 			}
 		}
@@ -430,20 +458,23 @@ public class Character extends Hitbox {
 
 		tMin = 1;
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
-			for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
-				t = lineIntersection(1, 0, 
-						position[0] + points[4][0] - 0.5, position[1] + points[4][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
-				if (t >= 0 && t < 1) {
-					cosFloorSlope = Math.abs(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) / 
-							Math.sqrt((Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) + 
-									+ (Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])*(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1]));
-					if(Math.signum(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*
-							Math.signum(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])<0) {
-						cosFloorSlope = - cosFloorSlope;
+			if(Main.sceneries[i].type == 1)
+			{
+				for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
+					t = lineIntersection(1, 0, 
+							position[0] + points[4][0] - 0.5, position[1] + points[4][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+					if (t >= 0 && t < 1) {
+						cosFloorSlope = Math.abs(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) / 
+								Math.sqrt((Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) + 
+										+ (Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])*(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1]));
+						if(Math.signum(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*
+								Math.signum(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])<0) {
+							cosFloorSlope = - cosFloorSlope;
+						}
+						return true;
 					}
-					return true;
 				}
 			}
 		}
@@ -454,20 +485,23 @@ public class Character extends Hitbox {
 	private boolean contactSlideRight() {
 		tMin = 1;
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
-			for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
-				t = lineIntersection(1, 0, 
-						position[0] + points[1][0] - 0.5, position[1] + points[1][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
-						Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
-				if (t >= 0 && t < 1) {
-					cosFloorSlope = Math.abs(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) / 
-						Math.sqrt((Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) + 
-								+ (Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])*(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1]));
-				if(Math.signum(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*
-						Math.signum(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])<0) {
-					cosFloorSlope = - cosFloorSlope;
-				}
-					return true;
+			if(Main.sceneries[i].type == 1)
+			{
+				for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
+					t = lineIntersection(1, 0, 
+							position[0] + points[1][0] - 0.5, position[1] + points[1][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+							Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+					if (t >= 0 && t < 1) {
+						cosFloorSlope = Math.abs(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) / 
+							Math.sqrt((Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0]) + 
+									+ (Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])*(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1]));
+					if(Math.signum(Main.sceneries[i].points[j+1][0] - Main.sceneries[i].points[j][0])*
+							Math.signum(Main.sceneries[i].points[j+1][1] - Main.sceneries[i].points[j][1])<0) {
+						cosFloorSlope = - cosFloorSlope;
+					}
+						return true;
+					}
 				}
 			}
 		}
@@ -489,6 +523,11 @@ public class Character extends Hitbox {
 		}
 		if(Main.keyLeft && inactiveLeft == 0){
 			this.speed[1] = - moveSpeed;
+		}
+		if(Main.keyUp && inactiveJump == 0 && nbJump < maxNbJump && keyJump){
+			nbJump = nbJump + 1;
+			keyJump = false;
+			this.speed[0] = - jumpSpeed;
 		}
 	}
 	
@@ -516,13 +555,16 @@ public class Character extends Hitbox {
 			this.speed[1] = - Math.sqrt(1 - Math.pow(cosFloorSlope, 2)) * moveSpeed;
 			this.speed[0] = - cosFloorSlope * moveSpeed;
 		}
-		if(Main.keyUp && inactiveJump == 0) {
+		if(Main.keyUp && inactiveJump == 0 && keyJump) {
 			this.speed[0] = - jumpSpeed;
+			nbJump = 1;
+			keyJump = false;
 		}
 	}
 	
 	private void reboundBotLeft() {
 		inactiveLeft = inactiveTime + 1;
+		nbJump = 1;
 		inactiveRight = 4;
 		this.speed[0] = -3;
 		this.speed[1] = 5;
@@ -532,6 +574,7 @@ public class Character extends Hitbox {
 
 	private void reboundBotRight() {
 		inactiveRight = inactiveTime + 1;
+		nbJump = 1;
 		inactiveLeft = 4;
 		this.speed[0] = -3;
 		this.speed[1] = -5;
@@ -541,6 +584,7 @@ public class Character extends Hitbox {
 	
 	private void reboundLeft() {
 		inactiveLeft = inactiveTime + 1;
+		nbJump = 1;
 		inactiveRight = 4;
 		this.speed[0] = -2;
 		this.speed[1] = 3;
@@ -550,6 +594,7 @@ public class Character extends Hitbox {
 	
 	private void reboundRight() {
 		inactiveRight = inactiveTime + 1;
+		nbJump = 1;
 		inactiveLeft = 4;
 		this.speed[0] = -2;
 		this.speed[1] = -3;
@@ -558,6 +603,7 @@ public class Character extends Hitbox {
 	}
 	
 	private void reboundTop() {
+		nbJump = 1;
 		this.speed[0] = 3;
 		this.position[0] = this.position[0] + 0.01;
 	}
@@ -566,15 +612,16 @@ public class Character extends Hitbox {
 		inactiveLeft = 2 * inactiveTime;
 		
 		double speedNorm;
-		speedNorm = -Math.sqrt(1-cosFloorSlope*cosFloorSlope)*this.speed[1] - cosFloorSlope*this.speed[0];
+		speedNorm = -Math.sqrt(1-cosFloorSlope*cosFloorSlope)*this.speed[1] - cosFloorSlope*this.speed[0] - 1;
 		
 		this.speed[1] = -Math.sqrt(1-cosFloorSlope*cosFloorSlope)*(speedNorm*(1-frictionCoef) - slideCoef*Main.gravity*Math.abs(cosFloorSlope));
 		this.speed[0] = -cosFloorSlope*(speedNorm*(1-frictionCoef) - slideCoef*Main.gravity*Math.abs(cosFloorSlope));
 		
-		if(Main.keyUp && inactiveJump == 0) {
+		if(Main.keyUp && inactiveJump == 0 && keyJump) {
 			this.speed[0] = -jumpSpeed;
 			this.speed[1] = 0.2 * jumpSpeed;
-			inactiveJump = 2 * inactiveTime;
+			nbJump = 1;
+			keyJump = false;
 		}
 	}
 	
@@ -582,15 +629,16 @@ public class Character extends Hitbox {
 		inactiveRight = 2 * inactiveTime;
 
 		double speedNorm;
-		speedNorm = Math.sqrt(1-cosFloorSlope*cosFloorSlope)*this.speed[1] + cosFloorSlope*this.speed[0];
+		speedNorm = Math.sqrt(1-cosFloorSlope*cosFloorSlope)*this.speed[1] + cosFloorSlope*this.speed[0] + 1;
 		
 		this.speed[1] = Math.sqrt(1-cosFloorSlope*cosFloorSlope)*(speedNorm - slideCoef*Main.gravity*Math.abs(cosFloorSlope));
 		this.speed[0] = cosFloorSlope*(speedNorm - slideCoef*Main.gravity*Math.abs(cosFloorSlope));
 		
-		if(Main.keyUp && inactiveJump == 0) {
+		if(Main.keyUp && inactiveJump == 0 && keyJump) {
 			this.speed[0] = -jumpSpeed;
 			this.speed[1] = - 0.2 * jumpSpeed;
-			inactiveJump = 2 * inactiveTime;
+			nbJump = 1;
+			keyJump = false;
 		}
 	}
 	

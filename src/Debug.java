@@ -72,7 +72,7 @@ public class Debug {
 				
 				Main.sceneries[2].setOnePoint(0, 0, 0);
 				Main.sceneries[2].setOnePoint(1, 0, 100);
-				Main.sceneries[2].type = 2;
+				Main.sceneries[2].typeMove = 2;
 				
 				Main.sceneries[2].newTrajectory(5);
 				Main.sceneries[2].setOneTrajectory(0, 250, 160);
@@ -86,7 +86,7 @@ public class Debug {
 				
 				Main.sceneries[3].setOnePoint(0, 0, 0);
 				Main.sceneries[3].setOnePoint(1, 0, 70);
-				Main.sceneries[3].type = 2;
+				Main.sceneries[3].typeMove = 2;
 				
 				Main.sceneries[3].newTrajectory(5);
 	
@@ -156,7 +156,7 @@ public class Debug {
 				
 				Main.sceneries[6].setOnePoint(0, 0, 0);
 				Main.sceneries[6].setOnePoint(1, 0, 50);
-				Main.sceneries[6].type = 1;
+				Main.sceneries[6].typeMove = 1;
 				Main.sceneries[6].period = 120;
 				Main.sceneries[6].newTrajectory(2);
 	
@@ -168,7 +168,7 @@ public class Debug {
 				
 				Main.sceneries[7].setOnePoint(0, 0, 0);
 				Main.sceneries[7].setOnePoint(1, 0, 50);
-				Main.sceneries[7].type = 1;
+				Main.sceneries[7].typeMove = 1;
 				Main.sceneries[7].period = 120;
 				Main.sceneries[7].newTrajectory(2);
 	
@@ -180,7 +180,7 @@ public class Debug {
 				
 				Main.sceneries[8].setOnePoint(0, 0, 0);
 				Main.sceneries[8].setOnePoint(1, 0, 50);
-				Main.sceneries[8].type = 2;
+				Main.sceneries[8].typeMove = 2;
 				Main.sceneries[8].period = 120;
 				Main.sceneries[8].newTrajectory(4);
 	
@@ -195,7 +195,7 @@ public class Debug {
 				
 				Main.sceneries[9].setOnePoint(0, 0, 0);
 				Main.sceneries[9].setOnePoint(1, 0, 50);
-				Main.sceneries[9].type = 2;
+				Main.sceneries[9].typeMove = 2;
 				Main.sceneries[9].period = 200;
 				Main.sceneries[9].newTrajectory(6);
 	
@@ -211,7 +211,7 @@ public class Debug {
 				
 				Main.sceneries[10].setOnePoint(0, 0, 0);
 				Main.sceneries[10].setOnePoint(1, 0, 50);
-				Main.sceneries[10].type = 2;
+				Main.sceneries[10].typeMove = 2;
 				Main.sceneries[10].period = 200;
 				Main.sceneries[10].time = 50;
 				Main.sceneries[10].newTrajectory(6);
@@ -228,7 +228,7 @@ public class Debug {
 				
 				Main.sceneries[11].setOnePoint(0, 0, 0);
 				Main.sceneries[11].setOnePoint(1, 0, 50);
-				Main.sceneries[11].type = 2;
+				Main.sceneries[11].typeMove = 2;
 				Main.sceneries[11].period = 200;
 				Main.sceneries[11].time = 100;
 				Main.sceneries[11].newTrajectory(6);
@@ -245,7 +245,7 @@ public class Debug {
 				
 				Main.sceneries[12].setOnePoint(0, 0, 0);
 				Main.sceneries[12].setOnePoint(1, 0, 50);
-				Main.sceneries[12].type = 2;
+				Main.sceneries[12].typeMove = 2;
 				Main.sceneries[12].period = 200;
 				Main.sceneries[12].time = 150;
 				Main.sceneries[12].newTrajectory(6);
@@ -316,7 +316,7 @@ public class Debug {
 				
 				Main.sceneries[6].setOnePoint(0, 0, 0);
 				Main.sceneries[6].setOnePoint(1, 0, 50);
-				Main.sceneries[6].type = 1;
+				Main.sceneries[6].typeMove = 1;
 				Main.sceneries[6].period = 120;
 				Main.sceneries[6].newTrajectory(2);
 	
@@ -328,7 +328,7 @@ public class Debug {
 				
 				Main.sceneries[7].setOnePoint(0, 0, 0);
 				Main.sceneries[7].setOnePoint(1, 0, 50);
-				Main.sceneries[7].type = 1;
+				Main.sceneries[7].typeMove = 1;
 				Main.sceneries[7].period = 120;
 				Main.sceneries[7].newTrajectory(2);
 	
@@ -340,7 +340,7 @@ public class Debug {
 				
 				Main.sceneries[8].setOnePoint(0, 0, 0);
 				Main.sceneries[8].setOnePoint(1, 0, 50);
-				Main.sceneries[8].type = 2;
+				Main.sceneries[8].typeMove = 2;
 				Main.sceneries[8].period = 120;
 				Main.sceneries[8].newTrajectory(4);
 	
@@ -355,7 +355,7 @@ public class Debug {
 				
 				Main.sceneries[9].setOnePoint(0, 0, 0);
 				Main.sceneries[9].setOnePoint(1, 0, 50);
-				Main.sceneries[9].type = 2;
+				Main.sceneries[9].typeMove = 2;
 				Main.sceneries[9].period = 200;
 				Main.sceneries[9].newTrajectory(6);
 	
@@ -371,7 +371,7 @@ public class Debug {
 				
 				Main.sceneries[10].setOnePoint(0, 0, 0);
 				Main.sceneries[10].setOnePoint(1, 0, 50);
-				Main.sceneries[10].type = 2;
+				Main.sceneries[10].typeMove = 2;
 				Main.sceneries[10].period = 200;
 				Main.sceneries[10].time = 50;
 				Main.sceneries[10].newTrajectory(6);
@@ -388,7 +388,7 @@ public class Debug {
 				
 				Main.sceneries[11].setOnePoint(0, 0, 0);
 				Main.sceneries[11].setOnePoint(1, 0, 50);
-				Main.sceneries[11].type = 2;
+				Main.sceneries[11].typeMove = 2;
 				Main.sceneries[11].period = 200;
 				Main.sceneries[11].time = 100;
 				Main.sceneries[11].newTrajectory(6);
@@ -405,7 +405,7 @@ public class Debug {
 				
 				Main.sceneries[12].setOnePoint(0, 0, 0);
 				Main.sceneries[12].setOnePoint(1, 0, 50);
-				Main.sceneries[12].type = 2;
+				Main.sceneries[12].typeMove = 2;
 				Main.sceneries[12].period = 200;
 				Main.sceneries[12].time = 150;
 				Main.sceneries[12].newTrajectory(6);
@@ -480,7 +480,7 @@ public class Debug {
 				
 				Main.sceneries[6].setOnePoint(0, 0, 0);
 				Main.sceneries[6].setOnePoint(1, 0, 50);
-				Main.sceneries[6].type = 1;
+				Main.sceneries[6].typeMove = 1;
 				Main.sceneries[6].period = 120;
 				Main.sceneries[6].newTrajectory(2);
 	
@@ -492,7 +492,7 @@ public class Debug {
 				
 				Main.sceneries[7].setOnePoint(0, 0, 0);
 				Main.sceneries[7].setOnePoint(1, 0, 50);
-				Main.sceneries[7].type = 1;
+				Main.sceneries[7].typeMove = 1;
 				Main.sceneries[7].period = 120;
 				Main.sceneries[7].newTrajectory(2);
 	
@@ -504,7 +504,7 @@ public class Debug {
 				
 				Main.sceneries[8].setOnePoint(0, 0, 0);
 				Main.sceneries[8].setOnePoint(1, 0, 50);
-				Main.sceneries[8].type = 2;
+				Main.sceneries[8].typeMove = 2;
 				Main.sceneries[8].period = 120;
 				Main.sceneries[8].newTrajectory(4);
 	
@@ -519,7 +519,7 @@ public class Debug {
 				
 				Main.sceneries[9].setOnePoint(0, 0, 0);
 				Main.sceneries[9].setOnePoint(1, 0, 50);
-				Main.sceneries[9].type = 2;
+				Main.sceneries[9].typeMove = 2;
 				Main.sceneries[9].period = 200;
 				Main.sceneries[9].newTrajectory(6);
 	
@@ -535,7 +535,7 @@ public class Debug {
 				
 				Main.sceneries[10].setOnePoint(0, 0, 0);
 				Main.sceneries[10].setOnePoint(1, 0, 50);
-				Main.sceneries[10].type = 2;
+				Main.sceneries[10].typeMove = 2;
 				Main.sceneries[10].period = 200;
 				Main.sceneries[10].time = 50;
 				Main.sceneries[10].newTrajectory(6);
@@ -552,7 +552,7 @@ public class Debug {
 				
 				Main.sceneries[11].setOnePoint(0, 0, 0);
 				Main.sceneries[11].setOnePoint(1, 0, 50);
-				Main.sceneries[11].type = 2;
+				Main.sceneries[11].typeMove = 2;
 				Main.sceneries[11].period = 200;
 				Main.sceneries[11].time = 100;
 				Main.sceneries[11].newTrajectory(6);
@@ -569,7 +569,7 @@ public class Debug {
 				
 				Main.sceneries[12].setOnePoint(0, 0, 0);
 				Main.sceneries[12].setOnePoint(1, 0, 50);
-				Main.sceneries[12].type = 2;
+				Main.sceneries[12].typeMove = 2;
 				Main.sceneries[12].period = 200;
 				Main.sceneries[12].time = 150;
 				Main.sceneries[12].newTrajectory(6);
@@ -658,7 +658,7 @@ public class Debug {
 				
 				Main.sceneries[6].setOnePoint(0, 0, 0);
 				Main.sceneries[6].setOnePoint(1, 0, 50);
-				Main.sceneries[6].type = 1;
+				Main.sceneries[6].typeMove = 1;
 				Main.sceneries[6].period = 120;
 				Main.sceneries[6].newTrajectory(2);
 	
@@ -670,7 +670,7 @@ public class Debug {
 				
 				Main.sceneries[7].setOnePoint(0, 0, 0);
 				Main.sceneries[7].setOnePoint(1, 0, 50);
-				Main.sceneries[7].type = 1;
+				Main.sceneries[7].typeMove = 1;
 				Main.sceneries[7].period = 120;
 				Main.sceneries[7].newTrajectory(2);
 	
@@ -682,7 +682,7 @@ public class Debug {
 				
 				Main.sceneries[8].setOnePoint(0, 0, 0);
 				Main.sceneries[8].setOnePoint(1, 0, 50);
-				Main.sceneries[8].type = 2;
+				Main.sceneries[8].typeMove = 2;
 				Main.sceneries[8].period = 120;
 				Main.sceneries[8].newTrajectory(4);
 	
@@ -697,7 +697,7 @@ public class Debug {
 				
 				Main.sceneries[9].setOnePoint(0, 0, 0);
 				Main.sceneries[9].setOnePoint(1, 0, 50);
-				Main.sceneries[9].type = 2;
+				Main.sceneries[9].typeMove = 2;
 				Main.sceneries[9].period = 200;
 				Main.sceneries[9].newTrajectory(6);
 	
@@ -713,7 +713,7 @@ public class Debug {
 				
 				Main.sceneries[10].setOnePoint(0, 0, 0);
 				Main.sceneries[10].setOnePoint(1, 0, 50);
-				Main.sceneries[10].type = 2;
+				Main.sceneries[10].typeMove = 2;
 				Main.sceneries[10].period = 200;
 				Main.sceneries[10].time = 50;
 				Main.sceneries[10].newTrajectory(6);
@@ -730,7 +730,7 @@ public class Debug {
 				
 				Main.sceneries[11].setOnePoint(0, 0, 0);
 				Main.sceneries[11].setOnePoint(1, 0, 50);
-				Main.sceneries[11].type = 2;
+				Main.sceneries[11].typeMove = 2;
 				Main.sceneries[11].period = 200;
 				Main.sceneries[11].time = 100;
 				Main.sceneries[11].newTrajectory(6);
@@ -747,7 +747,7 @@ public class Debug {
 				
 				Main.sceneries[12].setOnePoint(0, 0, 0);
 				Main.sceneries[12].setOnePoint(1, 0, 50);
-				Main.sceneries[12].type = 2;
+				Main.sceneries[12].typeMove = 2;
 				Main.sceneries[12].period = 200;
 				Main.sceneries[12].time = 150;
 				Main.sceneries[12].newTrajectory(6);
@@ -803,7 +803,7 @@ public class Debug {
 				Main.sceneries[15].setOnePoint(0, 0, 0);
 				Main.sceneries[15].setOnePoint(1, 0, 90);
 				
-				Main.sceneries[15].type = 1;
+				Main.sceneries[15].typeMove = 1;
 				Main.sceneries[15].period = 100;
 				Main.sceneries[15].time = 0;
 				

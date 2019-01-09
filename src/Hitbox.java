@@ -5,6 +5,8 @@ public class Hitbox {
 	public double[] position;
 	public double[] speed;
 	public int nbPoints;
+	public short type; 		
+	/* 0: not visible, 1: solid, 2: plateform */
 	
 	protected double s;
 	protected double t;
@@ -39,13 +41,30 @@ public class Hitbox {
 		double t; 
 		
 		for (int i = 0 ; i < nbPoints ; i++) {
-			for (int j = 0 ; j < hitbox.getNbPoints() - 1 ; j++) {
-				t = lineIntersection(speed[0], speed[1], 
-						position[0] + points[i][0], position[1] + points[i][1],
-						hitbox.position[0] + hitbox.points[j][0], hitbox.position[1] + hitbox.points[j][1],
-						hitbox.position[0] + hitbox.points[j+1][0], hitbox.position[1] + hitbox.points[j+1][1]);
-				if (t >= 0 && t <= tMin) {
-					tMin = t;
+			if(hitbox.type == 1)
+			{
+				for (int j = 0 ; j < hitbox.getNbPoints() - 1 ; j++) {
+					t = lineIntersection(speed[0], speed[1], 
+							position[0] + points[i][0], position[1] + points[i][1],
+							hitbox.position[0] + hitbox.points[j][0], hitbox.position[1] + hitbox.points[j][1],
+							hitbox.position[0] + hitbox.points[j+1][0], hitbox.position[1] + hitbox.points[j+1][1]);
+					if (t >= 0 && t <= tMin) {
+						tMin = t;
+					}
+				}
+			}
+			else {
+				if(hitbox.type == 2 && i == 0 && speed[0] > 0)
+				{
+					for (int j = 0 ; j < hitbox.getNbPoints() - 1 ; j++) {
+						t = lineIntersection(speed[0], speed[1], 
+								position[0] + points[i][0], position[1] + points[i][1],
+								hitbox.position[0] + hitbox.points[j][0], hitbox.position[1] + hitbox.points[j][1],
+								hitbox.position[0] + hitbox.points[j+1][0], hitbox.position[1] + hitbox.points[j+1][1]);
+						if (t >= 0 && t <= tMin) {
+							tMin = t;
+						}
+					}
 				}
 			}
 		}
