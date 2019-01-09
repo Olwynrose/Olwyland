@@ -15,6 +15,9 @@ public class Character extends Hitbox {
 	private double frictionCoef;	// friction coefficient
 	private double cosFloorSlope;	// angle of the floor segment you stand on (rad)
 	private double slideCoef;
+	private double waterAcceleration;
+	private double waterSpeed;
+	private double waterFricCoef;
 	
 	private int inactiveTime;
 	private int inactiveJump;	
@@ -45,6 +48,10 @@ public class Character extends Hitbox {
 		jumpSpeed = Math.sqrt(2 * Main.gravity * maxJump);
 		frictionCoef = Main.gravity / maxSpeed;
 		slideCoef = 0.8;
+		
+		waterAcceleration = 1;
+		waterSpeed = 10;
+		waterFricCoef = waterAcceleration / waterSpeed;
 		
 		inactiveTime = 10;
 		inactiveLeft = 0;
@@ -93,7 +100,7 @@ public class Character extends Hitbox {
 			case 1:
 			{
 				// water
-				
+				updateWater();
 			}
 				break;
 			case 2:
@@ -115,7 +122,7 @@ public class Character extends Hitbox {
 			case 4:
 			{
 				// scale
-				
+				updateScale();
 			}
 				break;
 			case 5:
@@ -166,7 +173,71 @@ public class Character extends Hitbox {
 		if (inactiveJump > 0) {
 			inactiveJump--;
 		}
-	} 
+	}
+	
+	private void updateWater() {
+		if(Main.keyRight){
+			this.speed[1] = this.speed[1] + waterAcceleration;
+		}
+		if(Main.keyLeft) {
+			this.speed[1] = this.speed[1] - waterAcceleration - this.speed[1] * waterFricCoef;
+		}
+		if(Main.keyUp) {
+			this.speed[0] = this.speed[0] - 2*waterAcceleration - this.speed[0] * waterFricCoef;
+		}
+		if(Main.keyDown) {
+			this.speed[0] = this.speed[0] + waterAcceleration - this.speed[0] * waterFricCoef;
+		}
+		
+		this.speed[0] = this.speed[0]- this.speed[0] * waterFricCoef;
+		this.speed[1] = this.speed[1]- this.speed[1] * waterFricCoef;
+		
+		tMin = 1;
+		for (int i = 0 ; i < Main.nbSceneries ; i++) {
+			intersect(Main.sceneries[i]);
+			if(tMin<1) {
+				this.speed[0] = 0;
+				this.speed[1] = 0;
+				return;
+			}
+		}
+
+		this.position[0] = this.position[0] + this.speed[0];
+		this.position[1] = this.position[1] + this.speed[1];
+		if(isIn().type != 1) {
+			this.speed[0] = - jumpSpeed;
+			nbJump = 1;
+			keyJump = false;
+		}
+	}
+	
+	private void updateScale() {
+		this.speed[0] = 0;
+		this.speed[1] = 0;
+		if(Main.keyRight){
+			this.speed[1] = moveSpeed;
+		}
+		if(Main.keyLeft) {
+			this.speed[1] = - moveSpeed;
+		}
+		if(Main.keyUp) {
+			this.speed[0] = - moveSpeed;
+		}
+		if(Main.keyDown) {
+			this.speed[0] = moveSpeed;
+		}
+		
+		tMin = 1;
+		for (int i = 0 ; i < Main.nbSceneries ; i++) {
+			intersect(Main.sceneries[i]);
+			if(tMin<1) {
+				return;
+			}
+		}
+
+		this.position[0] = this.position[0] + this.speed[0];
+		this.position[1] = this.position[1] + this.speed[1];
+	}
 	
 	private void move() {
 		tMin = 1;
