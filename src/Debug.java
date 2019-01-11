@@ -1,7 +1,8 @@
+import java.io.IOException;
 
 public class Debug {
 
-	public static void testMap(int num) {
+	public static void testMap(int num) throws InterruptedException, IOException {
 		
 		switch(num){
 			case 0:
@@ -1086,12 +1087,79 @@ public class Debug {
 				Main.sceneries[19].setOnePoint(0, 260, 2400);
 				Main.sceneries[19].setOnePoint(1, 260, 2500);
 				Main.sceneries[19].type = 2;
+
+				//========================================================
+				Main.areas[Main.nbAreas] = new Area(7, 260, 3050, 50, 20);
+				Main.nbAreas = Main.nbAreas + 1;
+				//========================================================
+				Main.sceneries[Main.nbSceneries] = new Scenery(5);
+				Main.sceneries[Main.nbSceneries].setOnePoint(0, -50, 3150);
+				Main.sceneries[Main.nbSceneries].setOnePoint(1, -50, 3800);
+				Main.sceneries[Main.nbSceneries].setOnePoint(2, -250, 3800);
+				Main.sceneries[Main.nbSceneries].setOnePoint(3, -250, 3500);
+				Main.sceneries[Main.nbSceneries].setOnePoint(4, -150, 3500);
+				Main.nbSceneries = Main.nbSceneries + 1;
+				//========================================================
+				Main.sceneries[Main.nbSceneries] = new Scenery(2);
+				Main.sceneries[Main.nbSceneries].setOnePoint(0, -50, 3500);
+				Main.sceneries[Main.nbSceneries].setOnePoint(1, -150, 3500);
+				Main.areas[Main.nbAreas] = new Area(8, -100, 3250, 50, 50);
+				Main.areas[Main.nbAreas].indHB = Main.nbSceneries;
+				Main.nbAreas = Main.nbAreas + 1;
+				Main.areas[Main.nbAreas] = new Area(8, -100, 3650, 50, 50);
+				Main.areas[Main.nbAreas].indHB = Main.nbSceneries;
+				Main.nbAreas = Main.nbAreas + 1;
+
+				Main.nbSceneries = Main.nbSceneries + 1;
+				//========================================================
+				
+			}
+			break;
+			case 7:
+			{
+				Main.hitboxFileImage = "files/HB_Egouts_dessin1.png";
+				Main.backgroundFileImage = "files/HB_Egouts_dessin1.png";
+				Main.rappImage = 2;
+				Main.interpol = 2;
+				new ImageToHitbox();
+				Main.mainChar.checkPoint[0] = 620;
+				Main.mainChar.checkPoint[1] = 7770;
+				Main.mainChar.position[0] = Main.mainChar.checkPoint[0];
+				Main.mainChar.position[1] = Main.mainChar.checkPoint[1];
+				
+
+				Main.areas[Main.nbAreas] = new Area(1, 5072, 876, 4000-876,5465-5072);
+				Main.nbAreas = Main.nbAreas + 1;
+
+				//========================================================
+				Main.sceneries[Main.nbSceneries] = new Scenery(2);
+				Main.sceneries[Main.nbSceneries].setOnePoint(0, 0, 0);
+				Main.sceneries[Main.nbSceneries].setOnePoint(1, 0, 50);
+				Main.sceneries[Main.nbSceneries].type = 2;
+				
+				Main.nbSceneries = Main.nbSceneries + 1;
 				//========================================================
 				Main.sceneries[Main.nbSceneries] = new Scenery(2);
 				Main.sceneries[Main.nbSceneries].setOnePoint(0, 200, 2400);
 				Main.sceneries[Main.nbSceneries].setOnePoint(1, 200, 2500);
 				Main.sceneries[Main.nbSceneries].type = 2;
+				Main.sceneries[Main.nbSceneries].typeMove = 1;
+				Main.sceneries[Main.nbSceneries].period = 100;
+				Main.sceneries[Main.nbSceneries].time = 0;
 				
+				Main.sceneries[Main.nbSceneries].newTrajectory(2);
+				Main.sceneries[Main.nbSceneries].setOneTrajectory(0, 1310, 1230);
+				Main.sceneries[Main.nbSceneries].setOneTrajectory(1, 1310, 1820);
+				
+				Main.nbSceneries = Main.nbSceneries + 1;
+				//========================================================
+				Main.sceneries[Main.nbSceneries] = new Scenery(2);
+				Main.sceneries[Main.nbSceneries].setOnePoint(0, 1100, 5700);
+				Main.sceneries[Main.nbSceneries].setOnePoint(1, 1100, 5760);
+				Main.sceneries[Main.nbSceneries].type = 3;
+				Main.sceneries[Main.nbSceneries].typeMove = 3;
+				Main.sceneries[Main.nbSceneries].period = 200;
+				Main.sceneries[Main.nbSceneries].time = 0;
 				Main.nbSceneries = Main.nbSceneries + 1;
 			}
 			break;

@@ -5,7 +5,7 @@ public class Scenery extends Hitbox {
 	private int nbTrajectory;
 	public int time;			// frame number
 	public double period;
-	public short typeMove; 		
+	public int typeMove; 		
 	/* 0: fixed, 1: opentrajectory, 2: loop, 3: disappear */
 
 

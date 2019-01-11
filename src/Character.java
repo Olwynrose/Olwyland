@@ -154,6 +154,31 @@ public class Character extends Hitbox {
 					animate();
 				}
 				break;
+				case 7:
+				{
+					// trampoline
+					updateTrampoline();
+				}
+				break;
+				case 8:
+				{
+					// switch HB
+					if (Main.keyDown ) {
+						if(time <= 0) {
+							Main.sceneries[isIn().indHB].type = (Main.sceneries[isIn().indHB].type + 1) %2;
+							time = 20;
+						}
+						else {
+							time = time - 1;
+						}
+					}
+					else {
+						time = 0;
+					}
+					
+					updateAir();
+				}
+				break;
 				}
 			}
 		}
@@ -280,6 +305,25 @@ public class Character extends Hitbox {
 		}
 
 
+		this.position[0] = this.position[0] + this.speed[0];
+	}
+	
+	private void updateTrampoline() {
+		
+
+		this.speed[1] = 0;
+		if(Main.keyRight){
+			this.speed[1] = moveSpeed;
+		}
+		if(Main.keyLeft) {
+			this.speed[1] = - moveSpeed;
+		}
+		if(Main.keyUp && this.keyJump && Math.abs(this.speed[0])<1) {
+			this.speed[0] = - jumpSpeed;
+		}
+		this.speed[0] = -Math.abs(this.speed[0])*isIn().speedMultJump;
+		
+		this.position[1] = this.position[1] + this.speed[1];
 		this.position[0] = this.position[0] + this.speed[0];
 	}
 	
@@ -642,7 +686,6 @@ public class Character extends Hitbox {
 			this.speed[0] = - jumpSpeed;
 		}
 	}
-	
 	
 	private void walk() {
 		// Reset of the walk speed to stop if any key is pressed
