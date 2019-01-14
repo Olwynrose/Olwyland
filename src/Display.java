@@ -32,8 +32,8 @@ public class Display {
 		window = new JFrame();
 		pan = new JPanel();
 		lab = new JLabel();
-		idim = 620;
-		jdim = 920;
+		idim = 720;
+		jdim = 1080;
 		margini = 0.3*(double)idim;
 		marginj = 0.3*(double)jdim;
 		transi = 0;
@@ -102,9 +102,11 @@ public class Display {
 	}
 	
 	public void background() {
-		for(int i = 0 ; i < idim ; i++)
+		int i, j, ii, jj, di, dj;
+
+		for (i=0; i<idim; i++)
 		{
-			for (int j = 0 ; j < jdim ; j++)
+			for (j=0; j<jdim; j++)
 			{
 				img[i][j][0] = 0;
 				img[i][j][1] = 0;
@@ -206,8 +208,8 @@ public class Display {
 	
 	public void areas() {
 		for (int n = 0 ; n < Main.nbAreas ; n++) {
-			for(int i = (int)Math.max(0, Main.areas[n].position[0] - transi) ; i < (int)Math.min(idim, Main.areas[n].position[0] + Main.areas[n].height - transi); i++) {
-				for(int j = (int)Math.max(0, Main.areas[n].position[1] - transj) ; j < (int)Math.min(jdim, Main.areas[n].position[1] + Main.areas[n].width - transj); j++) {
+			for(int i = (int)Math.max(0, Main.areas[n].getPositionI() - transi) ; i < (int)Math.min(idim, Main.areas[n].getPositionI() + Main.areas[n].getHeight() - transi); i++) {
+				for(int j = (int)Math.max(0, Main.areas[n].getPositionJ() - transj) ; j < (int)Math.min(jdim, Main.areas[n].getPositionJ() + Main.areas[n].getWidth() - transj); j++) {
 					switch (Main.areas[n].type)
 					{
 					case 1:
@@ -220,7 +222,7 @@ public class Display {
 					case 2:
 					{
 						img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
-						img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
+						img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (127 * (100 - coefTransparency)) / 100;
 						img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 					}
 					break;
@@ -250,6 +252,20 @@ public class Display {
 						img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 						img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 						img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+					}
+					break;
+					case 7:
+					{
+						img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
+						img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+						img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
+					}
+					break;
+					case 8:
+					{
+						img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+						img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
+						img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 					}
 					break;
 					}

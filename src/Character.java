@@ -36,9 +36,11 @@ public class Character extends Hitbox {
 	private int nbJump;			// count the number of successive jumps
 	private int maxNbJump;
 	
+	private int indArea;		// indice of 
+	
 	public Character() {
-		width = 35;
-		height = 55;
+		width = 45;
+		height = 65;
 		tanAlpha = 0.75;
 		
 		state = 0;
@@ -70,6 +72,8 @@ public class Character extends Hitbox {
 		times = new int[10];
 		nbTimes = 0;
 		
+		indArea = 0;
+		
 		if (Main.debug[4]) {
 			System.out.println("friction coefficient : " + frictionCoef + "   [Character][Character]");
 		}
@@ -97,7 +101,7 @@ public class Character extends Hitbox {
 				debugFly();
 			}
 			else {
-				areaType = isIn().type;
+				areaType = isIn();
 				
 				switch(areaType) {
 				case 0:
@@ -152,6 +156,31 @@ public class Character extends Hitbox {
 					animation = 4;
 					time = 0;
 					animate();
+				}
+				break;
+				case 7:
+				{
+					// trampoline
+					updateTrampoline();
+				}
+				break;
+				case 8:
+				{
+					// switch HB
+					if (Main.keyDown ) {
+						if(time <= 0) {
+							Main.sceneries[Main.areas[indArea].getIndHB()].type = (Main.sceneries[Main.areas[indArea].getIndHB()].type + 1) %2;
+							time = 20;
+						}
+						else {
+							time = time - 1;
+						}
+					}
+					else {
+						time = 0;
+					}
+					
+					updateAir();
 				}
 				break;
 				}
@@ -233,7 +262,7 @@ public class Character extends Hitbox {
 		
 		this.speed[1] = bufspeed;
 		
-		if(isIn().type != 1) {
+		if(Main.areas[indArea].type != 1) {
 			this.speed[0] = - jumpSpeed;
 			nbJump = 1;
 			keyJump = false;
@@ -280,6 +309,33 @@ public class Character extends Hitbox {
 		}
 
 
+		this.position[0] = this.position[0] + this.speed[0];
+	}
+	
+	private void updateTrampoline() {
+		
+
+		this.speed[1] = 0;
+		if(Main.keyRight){
+			this.speed[1] = moveSpeed;
+		}
+		if(Main.keyLeft) {
+			this.speed[1] = - moveSpeed;
+		}
+		if(Math.abs(this.speed[0])<1)
+		{
+			if(Main.keyUp && this.keyJump) {
+				this.speed[0] = - jumpSpeed;
+				nbJump = maxNbJump;
+			}
+		}
+		else {
+			this.speed[0] = -Math.abs(this.speed[0])*Main.areas[indArea].getSpeedMultJump()-jumpSpeed;
+			nbJump = maxNbJump;
+			
+		}
+		
+		this.position[1] = this.position[1] + this.speed[1];
 		this.position[0] = this.position[0] + this.speed[0];
 	}
 	
@@ -643,7 +699,6 @@ public class Character extends Hitbox {
 		}
 	}
 	
-	
 	private void walk() {
 		// Reset of the walk speed to stop if any key is pressed
 		this.speed[0] = 0;
@@ -828,21 +883,24 @@ public class Character extends Hitbox {
 		Main.screen.centerChar();
 	}
 	
-	private Area isIn() {
+	private int isIn() {
 		
 		for (int i = 0 ; i < Main.nbAreas ; i++) {
-			if (this.position[0] > Main.areas[i].position[0] 
-					&& this.position[0] < Main.areas[i].position[0] + Main.areas[i].height 
-					&& this.position[1] > Main.areas[i].position[1] 
-					&& this.position[1] < Main.areas[i].position[1] + Main.areas[i].width) {
+			if (Main.areas[i].isIn(this.position[0], this.position[1]))
+			{
 				if (Main.debug[8]) {
 					System.out.println("Entry in area type : " + Main.areas[i].type + "   [Character][isIn]");
 				}
-				return Main.areas[i];
+				indArea = i;
+				return Main.areas[i].type;
 			}
 		}
-		return new Area(0,0,0,0,0);
+		indArea = -1;
+		return 0;
 	}
+	
+	
+	
 	
 	private void animate() {
 		
@@ -980,14 +1038,14 @@ public class Character extends Hitbox {
 	}
 	
 	private void teleport() {
-		int indTp = isIn().indTp;
-		double mult = isIn().speedMultTp;
+		int indTp = Main.areas[indArea].getIndTp();
+		double mult = Main.areas[indArea].getSpeedMultTp();
 
 		this.speed[0] = mult * this.speed[0];
 		this.speed[1] = mult * this.speed[1];
 		
-		this.position[0] = Main.areas[indTp].position[0] + Main.areas[indTp].height / 2;
-		this.position[1] = Main.areas[indTp].position[1] + Main.areas[indTp].width / 2;
+		this.position[0] = Main.areas[indTp].getPositionI() + Main.areas[indTp].getHeight() / 2;
+		this.position[1] = Main.areas[indTp].getPositionJ() + Main.areas[indTp].getWidth() / 2;
 		Main.screen.centerChar();
 	}
 }

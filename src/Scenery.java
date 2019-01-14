@@ -1,3 +1,8 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class Scenery extends Hitbox {
 	
@@ -5,7 +10,7 @@ public class Scenery extends Hitbox {
 	private int nbTrajectory;
 	public int time;			// frame number
 	public double period;
-	public short typeMove; 		
+	public int typeMove; 		
 	/* 0: fixed, 1: opentrajectory, 2: loop, 3: disappear */
 
 
@@ -14,6 +19,12 @@ public class Scenery extends Hitbox {
 		this.points = new double[npts][2];
 		this.position = new double[2];
 		this.speed = new double[2];
+		
+		this.idim = 0;
+		this.jdim = 0;
+		this.transi = 0;
+		this.transj = 0;
+		
 		
 		period = 150;
 		time = 0;
@@ -155,5 +166,4 @@ public class Scenery extends Hitbox {
 			this.position[1] = j;
 		}
 	}
-	
 }

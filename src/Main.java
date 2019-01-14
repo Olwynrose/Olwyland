@@ -29,7 +29,6 @@ public class Main {
 	
 	public static void main(String[] args) throws InterruptedException, IOException {
 		long tic, toc;
-		
 		debug = new boolean[50];
 		//debug[1] = true; 		//print the compute time
 		//debug[2] = true;		//print the state of the character
@@ -41,7 +40,7 @@ public class Main {
 		//debug[8] = true;		//print the area the character enters in
 		debug[9] = true;		//display the areas
 		debug[10] = true;		//display the hitboxes
-		debug[11] = false;		//display character position
+		//debug[11] = true;		//display character position
 		
 		mainChar = new Character();
 		maxNbSceneries = 1000;
@@ -50,14 +49,8 @@ public class Main {
 		areas = new Area[maxNbSceneries];
 		nbAreas = 0;
 		
-		//Debug.testMap(6);
-		hitboxFileImage = "files/HB_Egouts_dessin1.png";
-		rappImage = 1.8;
-		new ImageToHitbox();
-		mainChar.checkPoint[0] = 550;
-		mainChar.checkPoint[1] = 6980;
-		mainChar.position[0] = 550;
-		mainChar.position[1] = 6980;
+		Debug.testMap(1);
+		
 		
 		screen = new Display();
 		screen.window.addKeyListener(new KeyListener() {

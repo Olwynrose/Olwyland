@@ -1,7 +1,8 @@
+import java.io.IOException;
 
 public class Debug {
 
-	public static void testMap(int num) {
+	public static void testMap(int num) throws InterruptedException, IOException {
 		
 		switch(num){
 			case 0:
@@ -95,6 +96,9 @@ public class Debug {
 				Main.sceneries[3].setOneTrajectory(2, 420, 100);
 				Main.sceneries[3].setOneTrajectory(3, 420, 50);
 				Main.sceneries[3].setOneTrajectory(4, 200, 50);
+				Main.sceneries[3].transi = 40;
+				Main.sceneries[3].transj = 70;
+				
 			}
 			break;
 			case 2:
@@ -777,20 +781,20 @@ public class Debug {
 				//========================================================
 				Main.nbAreas = 3;
 				Main.areas[2] = new Area(5, 100, 30, 50, 100);
-				Main.areas[2].indTp = 3;
+				Main.areas[2].setIndTp(3);
 				//========================================================
 				Main.nbAreas = 4;
 				Main.areas[3] = new Area(0, 550, 1170, 50, 100);
-				Main.areas[3].indTp = 2;
+				Main.areas[3].setIndTp(2);
 				//========================================================
 				Main.nbAreas = (5);
 				Main.areas[4] = new Area(5, 650, 1600, 50, 100);
-				Main.areas[4].indTp = 2;
+				Main.areas[4].setIndTp(2);
 				//========================================================
 				Main.nbAreas = (6);
 				Main.areas[5] = new Area(6, 1000, -300, 100, 50);
-				Main.areas[5].indTp = 3;
-				Main.areas[5].speedMultTp = -3;
+				Main.areas[5].setIndTp(3);
+				Main.areas[5].setSpeedMultTp(-3);
 				//========================================================
 				Main.nbSceneries = 15;
 				Main.sceneries[14] = new Scenery(2);
@@ -813,12 +817,12 @@ public class Debug {
 				//========================================================
 				Main.nbAreas = 7;
 				Main.areas[6] = new Area(6, 600, 1000, 100, 50);
-				Main.areas[6].indTp = 7;
-				Main.areas[6].speedMultTp = 1;
+				Main.areas[6].setIndTp(7);
+				Main.areas[6].setSpeedMultTp(1);
 				Main.nbAreas = 8;
 				Main.areas[7] = new Area(0, 100, 1000, 100, 50);
-				Main.areas[7].indTp = 6;
-				Main.areas[7].speedMultTp = -3;
+				Main.areas[7].setIndTp(6);
+				Main.areas[7].setSpeedMultTp(-3);
 				
 			}
 			break;
@@ -1000,20 +1004,20 @@ public class Debug {
 				//========================================================
 				Main.nbAreas = 3;
 				Main.areas[2] = new Area(5, 100, 30, 50, 100);
-				Main.areas[2].indTp = 3;
+				Main.areas[2].setIndTp(3);
 				//========================================================
 				Main.nbAreas = 4;
 				Main.areas[3] = new Area(0, 550, 1170, 50, 100);
-				Main.areas[3].indTp = 2;
+				Main.areas[3].setIndTp(2);
 				//========================================================
 				Main.nbAreas = 5;
 				Main.areas[4] = new Area(5, 650, 1600, 50, 100);
-				Main.areas[4].indTp = 2;
+				Main.areas[4].setIndTp(2);
 				//========================================================
 				Main.nbAreas = 6;
 				Main.areas[5] = new Area(6, 1000, -300, 100, 50);
-				Main.areas[5].indTp = 3;
-				Main.areas[5].speedMultTp = -3;
+				Main.areas[5].setIndTp(3);
+				Main.areas[5].setSpeedMultTp(-3);
 				//========================================================
 				Main.nbSceneries = 15;
 				Main.sceneries[14] = new Scenery(2);
@@ -1037,12 +1041,12 @@ public class Debug {
 				//========================================================
 				Main.nbAreas = 7;
 				Main.areas[6] = new Area(6, 1000, 1100, 100, 50);
-				Main.areas[6].indTp = 7;
-				Main.areas[6].speedMultTp = 1;
+				Main.areas[6].setIndTp(7);
+				Main.areas[6].setSpeedMultTp(1);
 				Main.nbAreas = 8;
 				Main.areas[7] = new Area(0, 200, 1900, 0, 0);
-				Main.areas[7].indTp = 6;
-				Main.areas[7].speedMultTp = 0;
+				Main.areas[7].setIndTp(6);
+				Main.areas[7].setSpeedMultTp(0);
 				
 				//========================================================
 				Main.nbAreas = 9;
@@ -1086,13 +1090,32 @@ public class Debug {
 				Main.sceneries[19].setOnePoint(0, 260, 2400);
 				Main.sceneries[19].setOnePoint(1, 260, 2500);
 				Main.sceneries[19].type = 2;
+
+				//========================================================
+				Main.areas[Main.nbAreas] = new Area(7, 260, 3050, 50, 20);
+				Main.nbAreas = Main.nbAreas + 1;
+				//========================================================
+				Main.sceneries[Main.nbSceneries] = new Scenery(5);
+				Main.sceneries[Main.nbSceneries].setOnePoint(0, -50, 3150);
+				Main.sceneries[Main.nbSceneries].setOnePoint(1, -50, 3800);
+				Main.sceneries[Main.nbSceneries].setOnePoint(2, -250, 3800);
+				Main.sceneries[Main.nbSceneries].setOnePoint(3, -250, 3500);
+				Main.sceneries[Main.nbSceneries].setOnePoint(4, -150, 3500);
+				Main.nbSceneries = Main.nbSceneries + 1;
 				//========================================================
 				Main.sceneries[Main.nbSceneries] = new Scenery(2);
-				Main.sceneries[Main.nbSceneries].setOnePoint(0, 200, 2400);
-				Main.sceneries[Main.nbSceneries].setOnePoint(1, 200, 2500);
-				Main.sceneries[Main.nbSceneries].type = 2;
-				
+				Main.sceneries[Main.nbSceneries].setOnePoint(0, -50, 3500);
+				Main.sceneries[Main.nbSceneries].setOnePoint(1, -150, 3500);
+				Main.areas[Main.nbAreas] = new Area(8, -100, 3250, 50, 50);
+				Main.areas[Main.nbAreas].setIndHB(Main.nbSceneries);
+				Main.nbAreas = Main.nbAreas + 1;
+				Main.areas[Main.nbAreas] = new Area(8, -100, 3650, 50, 50);
+				Main.areas[Main.nbAreas].setIndHB(Main.nbSceneries);
+				Main.nbAreas = Main.nbAreas + 1;
+
 				Main.nbSceneries = Main.nbSceneries + 1;
+				//========================================================
+				
 			}
 			break;
 		}

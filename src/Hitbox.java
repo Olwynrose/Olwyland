@@ -5,8 +5,11 @@ public class Hitbox {
 	public double[] position;
 	public double[] speed;
 	public int nbPoints;
-	public short type; 		
+	public int type; 		
 	/* 0: not visible, 1: solid, 2: plateform */
+	public int idim, jdim;
+	public int transi, transj;
+	public int[][][] img;
 	
 	protected double s;
 	protected double t;
