@@ -166,4 +166,37 @@ public class Scenery extends Hitbox {
 			this.position[1] = j;
 		}
 	}
+	
+	public void setImage(String fileImage) {
+		// loading image
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File(fileImage));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.img = convertTo2DUsingGetRGB(img);
+		this.idim = this.img.length;
+		this.jdim = this.img[0].length;
+		img = null;
+	}
+	
+	private static int[][][] convertTo2DUsingGetRGB(BufferedImage image) 
+	{
+		int width = image.getWidth();
+		int height = image.getHeight();
+		int[][][] result = new int[height][width][3];
+		//Color coul;
+
+		for (int row = 0; row < height; row++) {
+			for (int col = 0; col < width; col++) {
+				int clr=  image.getRGB(col,row); 
+				result[row][col][0]   = (clr & 0x00ff0000) >> 16;
+			result[row][col][1]  = (clr & 0x0000ff00) >> 8;
+			result[row][col][2]   =  clr & 0x000000ff;
+			}
+		}
+		return result;
+	} // fin convert
 }
