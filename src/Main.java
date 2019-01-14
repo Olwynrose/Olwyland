@@ -85,9 +85,6 @@ public class Main {
 			if (debug[1]) {
 				System.out.println("Computing time : " + (toc-tic) + "   [Main]");
 			}
-
-		}
-
+		}		
 	}
-
 }
