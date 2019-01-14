@@ -17,14 +17,20 @@ public class Display {
 	private JLabel lab;
 	private ImageIcon ii;
 	private int[][][] img;
+	private int[][][] img_map;
 	private int[] arrayimage;
 	
 	public int idim;
 	public int jdim;
+	public int idim_map;
+	public int jdim_map;
 	private double margini, marginj;
 	private double transi, transj;
 	public int translationType;
 	/* 0: no translation, 1: following, 2:centered */
+	
+	double inter3[][];		// Interpolation coefficients 3x3
+	double inter2[][];		// Interpolation coefficients 2x2
 
 	private int coefTransparency;
 	
@@ -62,6 +68,64 @@ public class Display {
 		pan.validate();
 
 		window.setContentPane(pan);
+		
+		// bilinear interpolation coefficients  
+
+		inter3 = new double[4][4];
+		inter2 = new double[3][3];
+		
+		inter3[0][0] = 1.0;
+		inter3[0][1] = 2.0/3.0;
+		inter3[0][2] = 1.0/3.0;
+		inter3[0][3] = 0.0;
+		inter3[1][0] = 2.0/3.0;
+		inter3[1][1] = 4.0/9.0;
+		inter3[1][2] = 2.0/9.0;
+		inter3[1][3] = 0;
+		inter3[2][0] = 1.0/3.0;
+		inter3[2][1] = 2.0/9.0;
+		inter3[2][2] = 1.0/9.0;
+		inter3[2][3] = 0;
+		inter3[3][0] = 0;
+		inter3[3][1] = 0;
+		inter3[3][2] = 0;
+		inter3[3][3] = 0;
+		
+		inter2[0][0] = 1.0;
+		inter2[0][1] = 0.5;
+		inter2[0][2] = 0.0;
+		inter2[1][0] = 0.5;
+		inter2[1][1] = 0.25;
+		inter2[1][2] = 0.0;
+		inter2[2][0] = 0.0;
+		inter2[2][1] = 0.0;
+		inter2[2][2] = 0.0;
+		
+		// map loading
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File(Main.backgroundFileImage));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		img_map = convertTo2DUsingGetRGB(img);
+
+		img = null;
+
+		idim_map = img_map.length;
+		jdim_map = img_map[0].length;	
+		if(Main.interpol == 3)
+		{
+			idim_map = 3*idim_map-3;
+			jdim_map = 3*jdim_map-3;
+		}
+		if(Main.interpol == 2)
+		{
+			idim_map = 2*idim_map-2;
+			jdim_map = 2*jdim_map-2;
+		}
+		
 	}
 	
 	public void global() {
@@ -108,11 +172,75 @@ public class Display {
 		{
 			for (j=0; j<jdim; j++)
 			{
-				img[i][j][0] = 0;
-				img[i][j][1] = 0;
-				img[i][j][2] = 0;
+				if(Main.interpol == 3)
+				{
+					ii = (i-(int)transi)/3;
+					jj = (j-(int)transj)/3;
+					di = (i-(int)transi) % 3;
+					dj = (j-(int)transj) % 3;
+					img[i][j][0] = (int) ( ((double)img_map[ii][jj][0])*inter3[di][dj]+
+							((double)img_map[ii+1][jj][0])*inter3[3-di][dj]+
+							((double)img_map[ii][jj+1][0])*inter3[di][3-dj]+
+							((double)img_map[ii+1][jj+1][0])*inter3[3-di][3-dj]);
+					img[i][j][1] = (int) ( ((double)img_map[ii][jj][1])*inter3[di][dj]+
+							((double)img_map[ii+1][jj][1])*inter3[3-di][dj]+
+							((double)img_map[ii][jj+1][1])*inter3[di][3-dj]+
+							((double)img_map[ii+1][jj+1][1])*inter3[3-di][3-dj]);
+					img[i][j][2] = (int) ( ((double)img_map[ii][jj][2])*inter3[di][dj]+
+							((double)img_map[ii+1][jj][2])*inter3[3-di][dj]+
+							((double)img_map[ii][jj+1][2])*inter3[di][3-dj]+
+							((double)img_map[ii+1][jj+1][2])*inter3[3-di][3-dj]);
+					
+				}
+				else
+				{
+					if (Main.interpol == 2)
+					{
+						ii = (i+(int)transi)/2;
+						jj = (j+(int)transj)/2;
+						di = (i+(int)transi) % 2;
+						dj = (j+(int)transj) % 2;
+						
+						if(ii>0 && ii<idim_map/2-2 && jj>0 && jj<jdim_map/2-2)
+						{
+							img[i][j][0] = (int) ( ((double)img_map[ii][jj][0])*inter2[di][dj]+
+									((double)img_map[ii+1][jj][0])*inter2[2-di][dj]+
+									((double)img_map[ii][jj+1][0])*inter2[di][2-dj]+
+									((double)img_map[ii+1][jj+1][0])*inter2[2-di][2-dj]);
+							img[i][j][1] = (int) ( ((double)img_map[ii][jj][1])*inter2[di][dj]+
+									((double)img_map[ii+1][jj][1])*inter2[2-di][dj]+
+									((double)img_map[ii][jj+1][1])*inter2[di][2-dj]+
+									((double)img_map[ii+1][jj+1][1])*inter2[2-di][2-dj]);
+							img[i][j][2] = (int) ( ((double)img_map[ii][jj][2])*inter2[di][dj]+
+									((double)img_map[ii+1][jj][2])*inter2[2-di][dj]+
+									((double)img_map[ii][jj+1][2])*inter2[di][2-dj]+
+									((double)img_map[ii+1][jj+1][2])*inter2[2-di][2-dj]);
+						}
+						else {
+							img[i][j][0] = 0;
+							img[i][j][1] = 0;
+							img[i][j][2] = 0;
+						}
+					}
+					else {
+						ii = (i+(int)transi);
+						jj = (j+(int)transj);
+						if(ii>0 && ii<idim_map && jj>0 && jj<jdim_map)
+						{
+							img[i][j][0] = img_map[ii][jj][0];
+							img[i][j][1] = img_map[ii][jj][1];
+							img[i][j][2] = img_map[ii][jj][2];
+						}
+						else {
+							img[i][j][0] = 0;
+							img[i][j][1] = 0;
+							img[i][j][2] = 0;
+						}
+					}
+				}
 			}
 		}
+		
 	}
 
 	public void hitbox() {
