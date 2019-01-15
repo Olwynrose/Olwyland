@@ -44,6 +44,8 @@ public class Main {
 		debug[9] = true;		//display the areas
 		debug[10] = true;		//display the hitboxes
 		//debug[11] = true;		//display character position
+		debug[12] = true;		//print the parameters of the detected areas
+		//debug[13] = true;		//print 
 
 		mainChar = new Character();
 		maxNbSceneries = 1000;
@@ -52,9 +54,9 @@ public class Main {
 		areas = new Area[maxNbSceneries];
 		nbAreas = 0;
 
-		Debug.testMap(6);
-
-
+		//Debug.testMap(6);
+		Map.load(1);
+		
 		screen = new Display();
 		screen.window.addKeyListener(new KeyListener() {
 			  public void keyTyped(KeyEvent e) {}
