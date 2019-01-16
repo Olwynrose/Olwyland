@@ -203,6 +203,22 @@ public class ImageToHitbox {
 		
 		idim = img.length;
 		jdim = img[0].length;
+		for(i=0; i<idim; i++) {
+			img[i][0][0] = 255;
+			img[i][0][1] = 255;
+			img[i][0][2] = 255;
+			img[i][jdim-1][0] = 255;
+			img[i][jdim-1][1] = 255;
+			img[i][jdim-1][2] = 255;
+		}
+		for(j=0; j<jdim; j++) {
+			img[0][j][0] = 255;
+			img[0][j][1] = 255;
+			img[0][j][2] = 255;
+			img[idim-1][j][0] = 255;
+			img[idim-1][j][1] = 255;
+			img[idim-1][j][2] = 255;
+		}
 		
 		coord = new int[idim * jdim][2];
 
@@ -291,6 +307,8 @@ public class ImageToHitbox {
 		int i0, i1, j0, j1;
 		int[][][] imgTexture;
 		int idimTexture, jdimTexture;
+		
+		
 		// opening of the texture file
 		BufferedImage bufferedImg = null;
 		try {
@@ -850,6 +868,7 @@ public class ImageToHitbox {
 		boolean cond;
 		boolean in;
 		boolean out;
+		int maxIter = idim*jdim-1;
 
 		ind = 0;
 		buf_i = 0;
@@ -860,7 +879,6 @@ public class ImageToHitbox {
 		while (cond) {
 			ii = coord[ind][0];
 			jj = coord[ind][1];
-
 
 			//buf_i = 0;
 			buf_i = buf_i + 5; // pour partir dans la direction opposée
@@ -1119,7 +1137,7 @@ public class ImageToHitbox {
 			if (coord[ind][0] == coord[0][0] && coord[ind][1] == coord[0][1]) {
 				cond = false;
 			}
-			if (ind == idim*jdim -1) // debug
+			if (ind == maxIter) // debug
 			{
 
 				for (int p=0; p<idim*jdim; p++)

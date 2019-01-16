@@ -46,7 +46,7 @@ public class Main {
 		debug[9] = true;		//display the areas
 		debug[10] = true;		//display the hitboxes
 		//debug[11] = true;		//display character position
-		//debug[12] = true;		//print the parameters of the detected areas
+		debug[12] = true;		//print the parameters of the detected areas
 		//debug[13] = true;		//print 
 		debug[14] = true;		//print the parameters of the detected moving hitboxes
 		debug[15] = true;		//display the character hitbox
@@ -60,7 +60,7 @@ public class Main {
 		nbAreas = 0;
 
 		//Debug.testMap(6);
-		Map.load(1);
+		Map.load(2);
 		
 		screen = new Display();
 		screen.window.addKeyListener(new KeyListener() {
