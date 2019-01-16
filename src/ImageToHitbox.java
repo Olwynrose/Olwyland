@@ -43,7 +43,7 @@ public class ImageToHitbox {
 	
 	public void getArea(String fileName) {
 		int i, j;
-		int color;
+		int color, colorG;
 		int ind;
 		
 		int i0, j0, i1, j1; 
@@ -81,7 +81,7 @@ public class ImageToHitbox {
 				color = colorMatch(i, j, 0);
 
 				if (color != nbColor - 1) {
-					
+					colorG = colorMatch(i, j, 1);
 					ind = connectedComponent(i, j, color);
 					if (ind > 10) {
 						if (Main.debug[12]) {
@@ -149,7 +149,13 @@ public class ImageToHitbox {
 						if (errEll > errRect) {
 							// creation of a new rectangle
 							Main.areas[Main.nbAreas] = new Area(colorToAreaType(color), i0, j0, (j1-j0), (i1-i0));
+							
+							// trampoline
+							if(colorToAreaType(color) == 7) {
+								Main.areas[Main.nbAreas].setSpeedMultTp(colorToAreaJumpSpeed(colorG));
+							}
 							Main.nbAreas = Main.nbAreas + 1;
+							
 							if (Main.debug[12]) {
 								System.out.println("Area n°" + Main.nbAreas + " : rectangle");
 								System.out.println("type : " + colorToAreaType(color));
@@ -159,6 +165,12 @@ public class ImageToHitbox {
 						else {
 							// creation of a new ellipse
 							Main.areas[Main.nbAreas] = area;
+							
+							// trampoline
+							if(colorToAreaType(color) == 7) {
+								Main.areas[Main.nbAreas].setSpeedMultTp(colorToAreaJumpSpeed(colorG));
+							}
+							
 							Main.nbAreas = Main.nbAreas + 1;
 							if (Main.debug[12]) {
 								System.out.println("Area n°" + Main.nbAreas + " : ellipse");
@@ -172,7 +184,6 @@ public class ImageToHitbox {
 			}
 		}
 	}
-	
 	
 	public void getHitbox(String fileName) {
 		int i, j;
@@ -226,6 +237,51 @@ public class ImageToHitbox {
 				}
 			}
 		}
+	}
+	
+	public void getHitboxLine(String fileName) {
+		int i, j;
+		int color;
+		int ind;
+		
+		// opening of the texture file
+		BufferedImage bufferedImg = null;
+		try {
+			bufferedImg = ImageIO.read(new File(fileName));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		img = convertTo2DUsingGetRGB(bufferedImg);
+		bufferedImg = null;
+		
+		idim = img.length;
+		jdim = img[0].length;
+				
+		coord = new int[idim * jdim][2];
+
+		for (i = 0; i < idim; i++) {
+			for (j = 0; j < jdim; j++) {
+				color = colorMatch(i, j, 0);
+
+				if (color != nbColor - 1) {
+					
+					ind = connectedComponent(i, j, color);
+					if (ind > 100) {
+						ind = getTrajectory();
+						if (ind > 20) {
+							ind = simplifyContour(ind);
+
+							Main.sceneries[Main.nbSceneries] = new Scenery(2);
+							Main.sceneries[Main.nbSceneries].type = 2;
+								Main.sceneries[Main.nbSceneries].setOnePoint(0, Main.rappImage*(double) coord[0][0], Main.rappImage*(double) coord[0][1]);
+								Main.sceneries[Main.nbSceneries].setOnePoint(1, Main.rappImage*(double) coord[ind-1][0], Main.rappImage*(double) coord[ind-1][1]);
+							Main.nbSceneries = Main.nbSceneries + 1;
+						}
+					}
+				}
+			}
+		}
+		
 	}
 	
 	public void getMovingHitbox(String fileNameTrajectory, String fileNameHitbox, String fileNameTexture) {
