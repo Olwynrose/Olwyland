@@ -20,6 +20,7 @@ public class Map {
 			
 			// load map image
 			Main.backgroundFileImage = "files/Olwyland_maptest_image.png";
+			Main.foregroundFileImage = "files/testForeground.png";
 			
 			// generate map areas from images
 			ImageToHitbox Im2Hb = new ImageToHitbox();

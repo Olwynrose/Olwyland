@@ -652,6 +652,7 @@ public class ImageToHitbox {
 	}
 	
 	private int colorToAreaType(int color) {
+		/* red chanel */
 		switch (color) {
 		case 0: {
 			// nothing
@@ -673,19 +674,60 @@ public class ImageToHitbox {
 			// scale
 			return 4;
 		}
+		case 5: {
+			// trampoline
+			return 7;
+		}
+		}
+		return 0;
+	}
+	
+	private double colorToAreaJumpSpeed(int color) {
+		/* green chanel */
+		switch (color) {
+		case 0: {
+			return 1.5;
+		}
+		case 1: {
+			return 2;
+		}
+		case 2: {
+			return 2.5;
+		}
+		case 3: {
+			return 3;
+		}
+		case 4: {
+			return 3.5;
+		}
+		case 5: {
+			return 4;
+		}
+		case 6: {
+			return 4.5;
+		}
+		case 7: {
+			return 5;
+		}
+		case 8: {
+			return 5.5;
+		}
 		}
 		return 0;
 	}
 	
 	private int colorToMovingHBType(int color) {
+		/* red chanel */
 		return color/4;
 	}
 	
 	private int colorToMovingHBMoveType(int color) {
+		/* red chanel */
 		return (color/2)%2+1;
 	}
 	
 	private int colorToMovingHBDirection(int color) {
+		/* red chanel */
 		/*
 		 * 0 : left to right or top to bottom
 		 * 1 : right to left or bottom to top
@@ -694,6 +736,7 @@ public class ImageToHitbox {
 	}
 	
 	private double colorToMovingHBPeriod(int color) {
+		/* green chanel */
 		switch (color) {
 		case 0: {
 			return 50;
@@ -739,6 +782,7 @@ public class ImageToHitbox {
 	}
 	
 	private int colorToMovingHBPlatformNumber(int color) {
+		/* blue chanel */
 		return color+1;
 	}
 	

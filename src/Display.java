@@ -17,13 +17,16 @@ public class Display {
 	private JLabel lab;
 	private ImageIcon ii;
 	private int[][][] img;
-	private int[][][] img_map;
+	private int[][][] imgBackground;
+	private int[][][] imgForeground;
 	private int[] arrayimage;
 
 	public int idim;
 	public int jdim;
 	public int idim_map;
 	public int jdim_map;
+	public int idim_fore;
+	public int jdim_fore;
 	private double margini, marginj;
 	private double transi, transj;
 	public int translationType;
@@ -109,12 +112,12 @@ public class Display {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		img_map = convertTo2DUsingGetRGB(img);
+		imgBackground = convertTo2DUsingGetRGB(img);
 
 		img = null;
 
-		idim_map = img_map.length;
-		jdim_map = img_map[0].length;
+		idim_map = imgBackground.length;
+		jdim_map = imgBackground[0].length;
 		if(Main.interpol == 3)
 		{
 			idim_map = 3*idim_map-3;
@@ -124,6 +127,37 @@ public class Display {
 		{
 			idim_map = 2*idim_map-2;
 			jdim_map = 2*jdim_map-2;
+		}
+		
+		// foreground loading
+		if(Main.foregroundFileImage.length()>0) {
+			img = null;
+			try {
+				img = ImageIO.read(new File(Main.foregroundFileImage));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			imgForeground = convertTo2DUsingGetRGB(img);
+	
+			img = null;
+	
+			idim_fore = imgForeground.length;
+			jdim_fore = imgForeground[0].length;
+			if(Main.interpol == 3)
+			{
+				idim_fore = 3*idim_fore-3;
+				jdim_fore = 3*jdim_fore-3;
+			}
+			if(Main.interpol == 2)
+			{
+				idim_fore = 2*idim_fore-2;
+				jdim_fore = 2*jdim_fore-2;
+			}
+		}
+		else {
+			idim_fore = 0;
+			jdim_fore = 0;
 		}
 
 	}
@@ -142,7 +176,7 @@ public class Display {
 			hitbox();
 		}
 		animations();
-
+		foreground();
 		int i, j, k;
 		for(i = 0; i < idim ; i++)
 		{
@@ -178,18 +212,18 @@ public class Display {
 					jj = (j-(int)transj)/3;
 					di = (i-(int)transi) % 3;
 					dj = (j-(int)transj) % 3;
-					img[i][j][0] = (int) ( ((double)img_map[ii][jj][0])*inter3[di][dj]+
-							((double)img_map[ii+1][jj][0])*inter3[3-di][dj]+
-							((double)img_map[ii][jj+1][0])*inter3[di][3-dj]+
-							((double)img_map[ii+1][jj+1][0])*inter3[3-di][3-dj]);
-					img[i][j][1] = (int) ( ((double)img_map[ii][jj][1])*inter3[di][dj]+
-							((double)img_map[ii+1][jj][1])*inter3[3-di][dj]+
-							((double)img_map[ii][jj+1][1])*inter3[di][3-dj]+
-							((double)img_map[ii+1][jj+1][1])*inter3[3-di][3-dj]);
-					img[i][j][2] = (int) ( ((double)img_map[ii][jj][2])*inter3[di][dj]+
-							((double)img_map[ii+1][jj][2])*inter3[3-di][dj]+
-							((double)img_map[ii][jj+1][2])*inter3[di][3-dj]+
-							((double)img_map[ii+1][jj+1][2])*inter3[3-di][3-dj]);
+					img[i][j][0] = (int) ( ((double)imgBackground[ii][jj][0])*inter3[di][dj]+
+							((double)imgBackground[ii+1][jj][0])*inter3[3-di][dj]+
+							((double)imgBackground[ii][jj+1][0])*inter3[di][3-dj]+
+							((double)imgBackground[ii+1][jj+1][0])*inter3[3-di][3-dj]);
+					img[i][j][1] = (int) ( ((double)imgBackground[ii][jj][1])*inter3[di][dj]+
+							((double)imgBackground[ii+1][jj][1])*inter3[3-di][dj]+
+							((double)imgBackground[ii][jj+1][1])*inter3[di][3-dj]+
+							((double)imgBackground[ii+1][jj+1][1])*inter3[3-di][3-dj]);
+					img[i][j][2] = (int) ( ((double)imgBackground[ii][jj][2])*inter3[di][dj]+
+							((double)imgBackground[ii+1][jj][2])*inter3[3-di][dj]+
+							((double)imgBackground[ii][jj+1][2])*inter3[di][3-dj]+
+							((double)imgBackground[ii+1][jj+1][2])*inter3[3-di][3-dj]);
 
 				}
 				else
@@ -203,18 +237,18 @@ public class Display {
 
 						if(ii>0 && ii<idim_map/2-2 && jj>0 && jj<jdim_map/2-2)
 						{
-							img[i][j][0] = (int) ( ((double)img_map[ii][jj][0])*inter2[di][dj]+
-									((double)img_map[ii+1][jj][0])*inter2[2-di][dj]+
-									((double)img_map[ii][jj+1][0])*inter2[di][2-dj]+
-									((double)img_map[ii+1][jj+1][0])*inter2[2-di][2-dj]);
-							img[i][j][1] = (int) ( ((double)img_map[ii][jj][1])*inter2[di][dj]+
-									((double)img_map[ii+1][jj][1])*inter2[2-di][dj]+
-									((double)img_map[ii][jj+1][1])*inter2[di][2-dj]+
-									((double)img_map[ii+1][jj+1][1])*inter2[2-di][2-dj]);
-							img[i][j][2] = (int) ( ((double)img_map[ii][jj][2])*inter2[di][dj]+
-									((double)img_map[ii+1][jj][2])*inter2[2-di][dj]+
-									((double)img_map[ii][jj+1][2])*inter2[di][2-dj]+
-									((double)img_map[ii+1][jj+1][2])*inter2[2-di][2-dj]);
+							img[i][j][0] = (int) ( ((double)imgBackground[ii][jj][0])*inter2[di][dj]+
+									((double)imgBackground[ii+1][jj][0])*inter2[2-di][dj]+
+									((double)imgBackground[ii][jj+1][0])*inter2[di][2-dj]+
+									((double)imgBackground[ii+1][jj+1][0])*inter2[2-di][2-dj]);
+							img[i][j][1] = (int) ( ((double)imgBackground[ii][jj][1])*inter2[di][dj]+
+									((double)imgBackground[ii+1][jj][1])*inter2[2-di][dj]+
+									((double)imgBackground[ii][jj+1][1])*inter2[di][2-dj]+
+									((double)imgBackground[ii+1][jj+1][1])*inter2[2-di][2-dj]);
+							img[i][j][2] = (int) ( ((double)imgBackground[ii][jj][2])*inter2[di][dj]+
+									((double)imgBackground[ii+1][jj][2])*inter2[2-di][dj]+
+									((double)imgBackground[ii][jj+1][2])*inter2[di][2-dj]+
+									((double)imgBackground[ii+1][jj+1][2])*inter2[2-di][2-dj]);
 						}
 						else {
 							img[i][j][0] = 0;
@@ -227,9 +261,9 @@ public class Display {
 						jj = (j+(int)transj);
 						if(ii>0 && ii<idim_map && jj>0 && jj<jdim_map)
 						{
-							img[i][j][0] = img_map[ii][jj][0];
-							img[i][j][1] = img_map[ii][jj][1];
-							img[i][j][2] = img_map[ii][jj][2];
+							img[i][j][0] = imgBackground[ii][jj][0];
+							img[i][j][1] = imgBackground[ii][jj][1];
+							img[i][j][2] = imgBackground[ii][jj][2];
 						}
 						else {
 							img[i][j][0] = 0;
@@ -263,6 +297,87 @@ public class Display {
 			}
 		}
 
+	}
+	
+	public void foreground() {
+		int i, j, ii, jj, di, dj;
+
+		for (i=0; i<idim; i++)
+		{
+			for (j=0; j<jdim; j++)
+			{
+				if(Main.interpol == 3)
+				{
+					ii = (i-(int)transi)/3;
+					jj = (j-(int)transj)/3;
+					if( ii>0 && ii<idim_fore/3-3 && jj>0 && jj<jdim_fore/3-3) {
+							if(!(imgForeground[ii][jj][0] > 251 &&
+									imgForeground[ii][jj][1] < 4  &&
+									imgForeground[ii][jj][2] > 251 ) ) {
+						
+							di = (i-(int)transi) % 3;
+							dj = (j-(int)transj) % 3;
+							img[i][j][0] = (int) ( ((double)imgForeground[ii][jj][0])*inter3[di][dj]+
+									((double)imgForeground[ii+1][jj][0])*inter3[3-di][dj]+
+									((double)imgForeground[ii][jj+1][0])*inter3[di][3-dj]+
+									((double)imgForeground[ii+1][jj+1][0])*inter3[3-di][3-dj]);
+							img[i][j][1] = (int) ( ((double)imgForeground[ii][jj][1])*inter3[di][dj]+
+									((double)imgForeground[ii+1][jj][1])*inter3[3-di][dj]+
+									((double)imgForeground[ii][jj+1][1])*inter3[di][3-dj]+
+									((double)imgForeground[ii+1][jj+1][1])*inter3[3-di][3-dj]);
+							img[i][j][2] = (int) ( ((double)imgForeground[ii][jj][2])*inter3[di][dj]+
+									((double)imgForeground[ii+1][jj][2])*inter3[3-di][dj]+
+									((double)imgForeground[ii][jj+1][2])*inter3[di][3-dj]+
+									((double)imgForeground[ii+1][jj+1][2])*inter3[3-di][3-dj]);
+						}
+					}
+				}
+				else
+				{
+					if (Main.interpol == 2)
+					{
+						ii = (i+(int)transi)/2;
+						jj = (j+(int)transj)/2;
+
+						if(ii>0 && ii<idim_fore/2-2 && jj>0 && jj<jdim_fore/2-2) {
+								if(!(imgForeground[ii][jj][0] > 251 &&
+										imgForeground[ii][jj][1] < 4  &&
+										imgForeground[ii][jj][2] > 251 )){
+
+								di = (i+(int)transi) % 2;
+								dj = (j+(int)transj) % 2;
+								img[i][j][0] = (int) ( ((double)imgForeground[ii][jj][0])*inter2[di][dj]+
+										((double)imgForeground[ii+1][jj][0])*inter2[2-di][dj]+
+										((double)imgForeground[ii][jj+1][0])*inter2[di][2-dj]+
+										((double)imgForeground[ii+1][jj+1][0])*inter2[2-di][2-dj]);
+								img[i][j][1] = (int) ( ((double)imgForeground[ii][jj][1])*inter2[di][dj]+
+										((double)imgForeground[ii+1][jj][1])*inter2[2-di][dj]+
+										((double)imgForeground[ii][jj+1][1])*inter2[di][2-dj]+
+										((double)imgForeground[ii+1][jj+1][1])*inter2[2-di][2-dj]);
+								img[i][j][2] = (int) ( ((double)imgForeground[ii][jj][2])*inter2[di][dj]+
+										((double)imgForeground[ii+1][jj][2])*inter2[2-di][dj]+
+										((double)imgForeground[ii][jj+1][2])*inter2[di][2-dj]+
+										((double)imgForeground[ii+1][jj+1][2])*inter2[2-di][2-dj]);
+							}
+						}
+					}
+					else {
+						ii = (i+(int)transi);
+						jj = (j+(int)transj);
+						if(ii>0 && ii<idim_fore && jj>0 && jj<jdim_fore) {
+							if(!(imgForeground[ii][jj][0] > 251 &&
+										imgForeground[ii][jj][1] < 4  &&
+										imgForeground[ii][jj][2] > 251 ))
+							{
+								img[i][j][0] = imgForeground[ii][jj][0];
+								img[i][j][1] = imgForeground[ii][jj][1];
+								img[i][j][2] = imgForeground[ii][jj][2];
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public void hitbox() {

@@ -26,12 +26,14 @@ public class Main {
 	static boolean[] debug;
 	static String hitboxFileImage;
 	static String backgroundFileImage;
+	static String foregroundFileImage;
 	static double rappImage;
 	static int interpol;
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 		long tic, toc;
 		Main.backgroundFileImage = "files/blk.png";
+		Main.foregroundFileImage = "";
 		debug = new boolean[50];
 		//debug[1] = true; 		//print the compute time
 		//debug[2] = true;		//print the state of the character
