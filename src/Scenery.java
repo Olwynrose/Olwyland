@@ -11,7 +11,7 @@ public class Scenery extends Hitbox {
 	public int time;			// frame number
 	public double period;
 	public int typeMove; 		
-	/* 0: fixed, 1: opentrajectory, 2: loop, 3: disappear */
+	/* 0: fixed, 1: RoundTrip, 2: loop, 3: disappear */
 
 
 	public Scenery(int npts) {
@@ -165,6 +165,11 @@ public class Scenery extends Hitbox {
 			this.position[0] = i;
 			this.position[1] = j;
 		}
+	}
+	
+	public double getOneTrajectory(int ind, int k) {
+		return trajectory[ind][k];
+		
 	}
 	
 	public void setImage(String fileImage) {

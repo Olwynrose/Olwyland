@@ -137,7 +137,7 @@ public class Display {
 		{
 			areas();
 		}
-		if (Main.debug[10])
+		if (Main.debug[10] || Main.debug[15])
 		{
 			hitbox();
 		}
@@ -266,27 +266,31 @@ public class Display {
 	}
 
 	public void hitbox() {
-		for (int i = 0 ; i < Main.mainChar.getNbPoints() - 1 ; i++) {
-			segment(Main.mainChar.getOnePoint(i, 0)-transi, Main.mainChar.getOnePoint(i, 1)-transj,
-					Main.mainChar.getOnePoint(i+1, 0)-transi, Main.mainChar.getOnePoint(i+1, 1)-transj,
-					255, 55, 255);
-		}
-
-		for (int i = 0 ; i < Main.nbSceneries ; i++) {
-			if(Main.sceneries[i].type == 1)
-			{
-				for(int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++)
-				segment(Main.sceneries[i].getOnePoint(j, 0)-transi, Main.sceneries[i].getOnePoint(j, 1)-transj,
-						Main.sceneries[i].getOnePoint(j+1, 0)-transi, Main.sceneries[i].getOnePoint(j+1, 1)-transj,
-						255, 255, 255);
+		if (Main.debug[15]) {
+			for (int i = 0 ; i < Main.mainChar.getNbPoints() - 1 ; i++) {
+				segment(Main.mainChar.getOnePoint(i, 0)-transi, Main.mainChar.getOnePoint(i, 1)-transj,
+						Main.mainChar.getOnePoint(i+1, 0)-transi, Main.mainChar.getOnePoint(i+1, 1)-transj,
+						255, 55, 255);
 			}
-			else {
-				if(Main.sceneries[i].type == 2)
+		}
+		
+		if (Main.debug[10]) {
+			for (int i = 0 ; i < Main.nbSceneries ; i++) {
+				if(Main.sceneries[i].type == 1)
 				{
 					for(int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++)
-						segment(Main.sceneries[i].getOnePoint(j, 0)-transi, Main.sceneries[i].getOnePoint(j, 1)-transj,
-								Main.sceneries[i].getOnePoint(j+1, 0)-transi, Main.sceneries[i].getOnePoint(j+1, 1)-transj,
-								255, 255, 0);
+					segment(Main.sceneries[i].getOnePoint(j, 0)-transi, Main.sceneries[i].getOnePoint(j, 1)-transj,
+							Main.sceneries[i].getOnePoint(j+1, 0)-transi, Main.sceneries[i].getOnePoint(j+1, 1)-transj,
+							255, 255, 255);
+				}
+				else {
+					if(Main.sceneries[i].type == 2)
+					{
+						for(int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++)
+							segment(Main.sceneries[i].getOnePoint(j, 0)-transi, Main.sceneries[i].getOnePoint(j, 1)-transj,
+									Main.sceneries[i].getOnePoint(j+1, 0)-transi, Main.sceneries[i].getOnePoint(j+1, 1)-transj,
+									255, 255, 0);
+					}
 				}
 			}
 		}

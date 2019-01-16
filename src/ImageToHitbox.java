@@ -33,11 +33,13 @@ public class ImageToHitbox {
 		blueChan = new int[nbColor];
 		
 		for (int n = 0 ; n < nbColor ; n++) {
-			redChan[n] = (255*n)/nbColor;
-			greenChan[n] = (255*n)/nbColor;
-			blueChan[n] = (255*n)/nbColor;
+			redChan[n] = (255*n)/(nbColor-1);
+			greenChan[n] = (255*n)/(nbColor-1);
+			blueChan[n] = (255*n)/(nbColor-1);
 		}
 	}
+	
+	
 	
 	public void getArea(String fileName) {
 		int i, j;
@@ -146,7 +148,7 @@ public class ImageToHitbox {
 						
 						if (errEll > errRect) {
 							// creation of a new rectangle
-							Main.areas[Main.nbAreas] = new Area(colorToAreaType(color), ci, cj, (j1-j0), (i1-i0));
+							Main.areas[Main.nbAreas] = new Area(colorToAreaType(color), i0, j0, (j1-j0), (i1-i0));
 							Main.nbAreas = Main.nbAreas + 1;
 							if (Main.debug[12]) {
 								System.out.println("Area n°" + Main.nbAreas + " : rectangle");
@@ -170,6 +172,268 @@ public class ImageToHitbox {
 			}
 		}
 	}
+	
+	
+	public void getHitbox(String fileName) {
+		int i, j;
+		int color;
+		int ind;
+		
+		
+		// opening of the file
+		BufferedImage bufferedImg = null;
+		try {
+			bufferedImg = ImageIO.read(new File(fileName));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		img = convertTo2DUsingGetRGB(bufferedImg);
+		bufferedImg = null;
+		
+		idim = img.length;
+		jdim = img[0].length;
+		
+		coord = new int[idim * jdim][2];
+
+		for (i = 0; i < idim; i++) {
+			for (j = 0; j < jdim; j++) {
+				color = colorMatch(i, j, 0);
+
+				if (color != nbColor - 1) {
+					
+					ind = connectedComponent(i, j, color);
+					if (ind > 100) {
+						ind = getContour();
+						if (ind > 20) {
+							ind = simplifyContour(ind);
+							
+							Main.sceneries[Main.nbSceneries] = new Scenery(ind);
+							Main.sceneries[Main.nbSceneries].type = 1;
+							ind = ind - 1;
+							for (int n = 0; n < ind; n++) {
+								Main.sceneries[Main.nbSceneries].setOnePoint(n, Main.rappImage*(double) coord[n][0], Main.rappImage*(double) coord[n][1]);
+							}
+							Main.sceneries[Main.nbSceneries].setOnePoint(ind, Main.rappImage*(double) coord[0][0], Main.rappImage*(double) coord[0][1]);
+	
+							Main.nbSceneries = Main.nbSceneries + 1;
+							
+							if (Main.debug[12]) {
+								System.out.println("Hitbox n°" + Main.nbSceneries + " : " + ind + " edges");
+							}
+						}
+					}
+					supprConnectedComponent();
+				}
+			}
+		}
+	}
+	
+	public void getMovingHitbox(String fileNameTrajectory, String fileNameHitbox, String fileNameTexture) {
+		int i, j;
+		int color, colorR, colorG, colorB;
+		int ind;
+		int i0, i1, j0, j1;
+		int[][][] imgTexture;
+		int idimTexture, jdimTexture;
+		// opening of the texture file
+		BufferedImage bufferedImg = null;
+		try {
+			bufferedImg = ImageIO.read(new File(fileNameTexture));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		img = convertTo2DUsingGetRGB(bufferedImg);
+		bufferedImg = null;
+		
+		idim = img.length;
+		jdim = img[0].length;
+		
+		i0 = idim;
+		i1 = 0;
+		j0 = jdim;
+		j1 = 0;
+		for(i=0 ; i<idim ; i++) {
+			for(j=0 ; j<jdim ; j++) {
+				if(!(img[i][j][0] > 251 &&
+						img[i][j][1] < 4  &&
+						img[i][j][2] > 251 )) {
+					if(i<i0) {
+						i0 = i;
+					}
+					if(j<j0) {
+						j0 = j;
+					}
+					if(i>i1) {
+						i1 = i;
+					}
+					if(j>j1) {
+						j1 = j;
+					}
+				}
+			}
+		}
+		
+		idimTexture = i1 - i0;
+		jdimTexture = j1 - j0;
+		imgTexture = new int[idimTexture][jdimTexture][3];
+		for(i=0 ; i<idimTexture ; i++) {
+			for(j=0 ; j<jdimTexture ; j++) {
+				imgTexture[i][j][0] = img[i+i0][j+j0][0];
+				imgTexture[i][j][1] = img[i+i0][j+j0][1];
+				imgTexture[i][j][2] = img[i+i0][j+j0][2];
+			}
+		}
+		
+		System.out.println("texture loaded");
+				
+		// opening of the hitbox file
+		bufferedImg = null;
+		try {
+			bufferedImg = ImageIO.read(new File(fileNameHitbox));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		img = convertTo2DUsingGetRGB(bufferedImg);
+		bufferedImg = null;
+		
+		idim = img.length;
+		jdim = img[0].length;
+		
+		coord = new int[idim * jdim][2];
+		double[][] coordHB = new double[1000][2];
+		int indHB = 0;
+
+		for (i = 0; i < idim; i++) {
+			for (j = 0; j < jdim; j++) {
+				color = colorMatch(i, j, 0);
+
+				if (color != nbColor - 1) {
+					
+					ind = connectedComponent(i, j, color);
+					if (ind > 40) {
+						ind = getContour();
+						if (ind > 10) {
+							ind = simplifyContour(ind);
+							
+							//ind = ind;
+							indHB = ind;
+							for (int n = 0; n < ind; n++) {
+								coordHB[n][0] = Main.rappImage*(double) coord[n][0];
+								coordHB[n][1] = Main.rappImage*(double) coord[n][1];
+							}
+							System.out.println("ind : "+ ind);
+						}
+					}
+					supprConnectedComponent();
+				}
+			}
+		} // End hitbox
+		System.out.println("hitbox loaded");
+		
+		
+		// opening of the Trajectory file
+		bufferedImg = null;
+		try {
+			bufferedImg = ImageIO.read(new File(fileNameTrajectory));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		img = convertTo2DUsingGetRGB(bufferedImg);
+		bufferedImg = null;
+		
+		idim = img.length;
+		jdim = img[0].length;
+		
+		coord = new int[idim * jdim][2];
+
+		for (i = 0; i < idim; i++) {
+			for (j = 0; j < jdim; j++) {
+				colorR = colorMatch(i, j, 0);
+
+				if (colorR != nbColor - 1) {
+					colorG = colorMatch(i, j, 1);
+					colorB = colorMatch(i, j, 2);
+					
+					ind = connectedComponent(i, j, colorR);
+					if (ind > 100) {
+						ind = getTrajectory();
+						if (ind > 20) {
+							ind = simplifyContour(ind);
+							
+							for(int nb=0; nb<colorToMovingHBPlatformNumber(colorB);nb++) {
+								Main.sceneries[Main.nbSceneries] = new Scenery(indHB);
+								Main.sceneries[Main.nbSceneries].type = colorToMovingHBType(colorR);
+								Main.sceneries[Main.nbSceneries].typeMove = colorToMovingHBMoveType(colorR);
+								Main.sceneries[Main.nbSceneries].period = colorToMovingHBPeriod(colorG);
+								Main.sceneries[Main.nbSceneries].time = nb*(int)Math.floor(colorToMovingHBPeriod(colorG))/colorToMovingHBPlatformNumber(colorB);
+								
+								Main.sceneries[Main.nbSceneries].newTrajectory(ind);
+								
+								if (Math.abs(coord[ind][0]-coord[0][0]) > Math.abs(coord[ind][1]-coord[0][1])) {
+									if ((coord[ind][0] - coord[0][0] > 0 && colorToMovingHBDirection(colorR) == 0)
+											|| (coord[ind][0] - coord[0][0] < 0 && colorToMovingHBDirection(colorR) == 1))
+									{
+										for (int n = 0; n < ind; n++) {
+											Main.sceneries[Main.nbSceneries].setOneTrajectory(n, Main.rappImage*(double) coord[n][0], Main.rappImage*(double) coord[n][1]);	
+										}
+									}
+									else {
+										for (int n = 0; n < ind; n++) {
+											Main.sceneries[Main.nbSceneries].setOneTrajectory((ind-1)-n, Main.rappImage*(double) coord[n][0], Main.rappImage*(double) coord[n][1]);
+										}
+									}
+								}
+								else {
+									if ((coord[ind][1] - coord[0][1] > 0 && colorToMovingHBDirection(colorR) == 0)
+											|| (coord[ind][1] - coord[0][1] < 0 && colorToMovingHBDirection(colorR) == 1))
+									{
+										for (int n = 0; n < ind; n++) {
+											Main.sceneries[Main.nbSceneries].setOneTrajectory(n, Main.rappImage*(double) coord[n][0], Main.rappImage*(double) coord[n][1]);	
+										}
+									}
+									else {
+										for (int n = 0; n < ind; n++) {
+											Main.sceneries[Main.nbSceneries].setOneTrajectory((ind-1)-n, Main.rappImage*(double) coord[n][0], Main.rappImage*(double) coord[n][1]);
+										}
+									}
+								}
+
+								for(int iHB=0; iHB<indHB; iHB++) {
+									Main.sceneries[Main.nbSceneries].setOnePoint(iHB, coordHB[iHB][0] - Main.sceneries[Main.nbSceneries].getOneTrajectory(0,0)
+											, coordHB[iHB][1] - Main.sceneries[Main.nbSceneries].getOneTrajectory(0,1));
+								}
+								Main.sceneries[Main.nbSceneries].transi = - i0 + (int)Main.sceneries[Main.nbSceneries].getOneTrajectory(0,0);
+								Main.sceneries[Main.nbSceneries].transj = - j0 + (int)Main.sceneries[Main.nbSceneries].getOneTrajectory(0,1);
+								Main.sceneries[Main.nbSceneries].img = new int[idimTexture][jdimTexture][3];
+								Main.sceneries[Main.nbSceneries].idim = idimTexture;
+								Main.sceneries[Main.nbSceneries].jdim = jdimTexture;
+								for(int ii=0 ; ii<idimTexture ; ii++) {
+									for(int jj=0 ; jj<jdimTexture ; jj++) {
+										Main.sceneries[Main.nbSceneries].img[ii][jj][0] = imgTexture[ii][jj][0];
+										Main.sceneries[Main.nbSceneries].img[ii][jj][1] = imgTexture[ii][jj][1];
+										Main.sceneries[Main.nbSceneries].img[ii][jj][2] = imgTexture[ii][jj][2];
+									}
+								}
+								
+								if (Main.debug[14]) {
+									System.out.println("Hitbox n°" + Main.nbSceneries);
+									System.out.println("Type: " + Main.sceneries[Main.nbSceneries].type + " - colorR: " + colorR);
+									System.out.println("TypeMove: " + Main.sceneries[Main.nbSceneries].typeMove);
+									System.out.println("Period: " + Main.sceneries[Main.nbSceneries].period + " - colorG: " + colorG);
+									System.out.println("Time: " + Main.sceneries[Main.nbSceneries].time + " - colorB: " + colorB);
+								
+								}
+
+								Main.nbSceneries = Main.nbSceneries + 1;
+							}
+						}
+					}
+					supprConnectedComponent();
+				}
+			}
+		}
+	}
+	
 	
 	private static int[][][] convertTo2DUsingGetRGB(BufferedImage image) {
 		int width = image.getWidth();
@@ -390,25 +654,95 @@ public class ImageToHitbox {
 	private int colorToAreaType(int color) {
 		switch (color) {
 		case 0: {
+			// nothing
 			return 0;
 		}
 		case 1: {
+			// water
 			return 1;
 		}
 		case 2: {
+			// lava
 			return 2;
 		}
 		case 3: {
+			// void
 			return 3;
 		}
 		case 4: {
+			// scale
 			return 4;
 		}
 		}
 		return 0;
 	}
 	
-	private int get_contour() {
+	private int colorToMovingHBType(int color) {
+		return color/4;
+	}
+	
+	private int colorToMovingHBMoveType(int color) {
+		return (color/2)%2+1;
+	}
+	
+	private int colorToMovingHBDirection(int color) {
+		/*
+		 * 0 : left to right or top to bottom
+		 * 1 : right to left or bottom to top
+		 */
+		return color%2;
+	}
+	
+	private double colorToMovingHBPeriod(int color) {
+		switch (color) {
+		case 0: {
+			return 50;
+		}
+		case 1: {
+			return 75;
+		}
+		case 2: {
+			return 100;
+		}
+		case 3: {
+			return 125;
+		}
+		case 4: {
+			return 150;
+		}
+		case 5: {
+			return 175;
+		}
+		case 6: {
+			return 200;
+		}
+		case 7: {
+			return 250;
+		}
+		case 8: {
+			return 300;
+		}
+		case 9: {
+			return 350;
+		}
+		case 10: {
+			return 400;
+		}
+		case 11: {
+			return 500;
+		}
+		case 12: {
+			return 600;
+		}
+		}
+		return 1;
+	}
+	
+	private int colorToMovingHBPlatformNumber(int color) {
+		return color+1;
+	}
+	
+	private int getContour() {
 		int ind; // indice courant
 		int ii, jj;
 		int buf_i; // c est pour savoir dans quelle direction ton bord etait (a l iteration d avant)
@@ -697,7 +1031,7 @@ public class ImageToHitbox {
 		return ind;
 	} 
 
-	private int simplif_contour(int nb_coord) throws InterruptedException 
+	private int simplifyContour(int nb_coord)
 	{
 		int nb_coord_true; // nombre de coord à true
 		int i0, i1;
@@ -738,7 +1072,7 @@ public class ImageToHitbox {
 
 				for (int i = i0 + 1; i < i1; i++) 
 				{
-					dist = dist2DroiteToPoint((double)coord[i0][0], (double)coord[i0][1], (double)coord[i1][0], (double)coord[i1][1], (double)coord[i][0],	(double)coord[i][1]);
+					dist = dist2LineToPoint((double)coord[i0][0], (double)coord[i0][1], (double)coord[i1][0], (double)coord[i1][1], (double)coord[i][0],	(double)coord[i][1]);
 
 					if (dist > buf_dist) 
 					{
@@ -777,7 +1111,7 @@ public class ImageToHitbox {
 		return nb_coord_true;
 	}
 
-	private void suppr_compo_connexe()
+	private void supprConnectedComponent()
 	{
 		for (int i=0; i<idim; i++)
 		{
@@ -794,6 +1128,123 @@ public class ImageToHitbox {
 		}
 	}
 
+	private int getTrajectory() {
+		int ind = 0;
+		int indRev1, indRev2;
+		int coordi, coordj;
+		int n, buf_n, init_n;
+		
+		int[][] deltaP = new int[20][2];
+		
+		for(int k=0 ; k<5 ; k++) {
+			deltaP[k][0] = -3;
+			deltaP[k][1] = k-2;
+		}
+		for(int k=0 ; k<5 ; k++) {
+			deltaP[k+5][0] = k-2;
+			deltaP[k+5][1] = 3;
+		}
+		for(int k=0 ; k<5 ; k++) {
+			deltaP[k+10][0] = 3;
+			deltaP[k+10][1] = 2-k;
+		}
+		for(int k=0 ; k<5 ; k++) {
+			deltaP[k+15][0] = 2-k;
+			deltaP[k+15][1] = -3;
+		}
+		n = 0;
+		buf_n = 10;
+		// coord[0] already contains a pixel in the trajectory
+		
+		n = getNextTrajPoint(coord[ind][0], coord[ind][1], deltaP, buf_n);
+		ind = ind + 1;
+		coord[ind][0] = coord[ind-1][0] + deltaP[n][0];
+		coord[ind][1] = coord[ind-1][1] + deltaP[n][1];
+		buf_n = n;
+		init_n = n;
+		n = 0;
+		
+		while(n > -1) {
+			n = getNextTrajPoint(coord[ind][0], coord[ind][1], deltaP, buf_n);
+			if(n > -1) {
+				ind = ind + 1;
+				coord[ind][0] = coord[ind-1][0] + deltaP[n][0];
+				coord[ind][1] = coord[ind-1][1] + deltaP[n][1];
+			}
+			buf_n = n;
+			
+		}
+
+		indRev1 = 0;
+		indRev2 = ind;
+		n = getNextTrajPoint(coord[0][0], coord[0][1], deltaP, init_n-10);
+		ind = ind + 1;
+		coord[ind][0] = coord[0][0] + deltaP[n][0];
+		coord[ind][1] = coord[0][1] + deltaP[n][1];
+		buf_n = n;
+		while(n > -1) {
+			n = getNextTrajPoint(coord[ind][0], coord[ind][1], deltaP, buf_n);
+			if(n > -1) {
+				ind = ind + 1;
+				coord[ind][0] = coord[ind-1][0] + deltaP[n][0];
+				coord[ind][1] = coord[ind-1][1] + deltaP[n][1];
+			}
+			buf_n = n;
+			
+		}
+		
+		while(indRev1<indRev2) {
+			coordi = coord[indRev1][0];
+			coordj = coord[indRev1][1];
+			
+			coord[indRev1][0] = coord[indRev2][0];
+			coord[indRev1][1] = coord[indRev2][1];
+			
+			coord[indRev2][0] = coordi;
+			coord[indRev2][1] = coordj;
+			indRev1 = indRev1 + 1;
+			indRev2 = indRev2 - 1;
+		}
+		
+		
+		return ind;
+	}
+	
+	private int getNextTrajPoint(int i, int j, int[][] deltaP, int buf_n) {
+		
+		int minErr, err;
+		int new_n;
+		
+		minErr = 10; // max error is 9
+		new_n = 0;
+		
+		for(int n=0 ; n<20 ; n++) {
+			err = 0;
+			for(int ii=-1 ; ii<2 ; ii++) {
+				for(int jj=-1 ; jj<2 ; jj++) {
+					if(i+deltaP[n][0]+ii>=0 && i+deltaP[n][0]+ii<idim && j+deltaP[n][1]+jj>=0 && j+deltaP[n][1]+jj<jdim) {
+						if(img[i+deltaP[n][0]+ii][j+deltaP[n][1]+jj][0]<257) {
+							err = err + 1;
+						}
+						if(((20+n-buf_n)%20)>5 && ((20+n-buf_n)%20)<15) {
+							err = err + 1;
+						}
+					}
+				}
+			}
+			if(err<minErr) {
+				new_n = n;
+				minErr = err;
+			}
+		}
+		if(minErr<6) {
+			return new_n;
+		}
+		else {
+			return -1;
+		}
+	}
+	
 	private int get_ligne()
 	{
 		int ind = 0;
@@ -813,7 +1264,7 @@ public class ImageToHitbox {
 		return ind;
 	}
 	
-	private double dist2DroiteToPoint(double ax,double ay,double bx,double by,double cx,double cy)
+	private double dist2LineToPoint(double ax,double ay,double bx,double by,double cx,double cy)
 	{
 		/** Renvoie la distance au carré du point C à la droite (AB) */
 		double dist2;
@@ -827,4 +1278,6 @@ public class ImageToHitbox {
 		
 		return dist2;
 	}
+
+	
 } 

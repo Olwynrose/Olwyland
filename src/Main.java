@@ -41,11 +41,14 @@ public class Main {
 		//debug[6] = true;		//print the inactivity time of the left/right/jump keys
 		debug[7] = true;		//activates the fly mode (maintain space bar to fly without caring of the hitboxes)
 		//debug[8] = true;		//print the area the character enters in
-		debug[9] = true;		//display the areas
-		debug[10] = true;		//display the hitboxes
+		//debug[9] = true;		//display the areas
+		//debug[10] = true;		//display the hitboxes
 		//debug[11] = true;		//display character position
-		debug[12] = true;		//print the parameters of the detected areas
+		//debug[12] = true;		//print the parameters of the detected areas
 		//debug[13] = true;		//print 
+		debug[14] = true;		//print the parameters of the detected moving hitboxes
+		debug[15] = true;		//display the character hitbox
+
 
 		mainChar = new Character();
 		maxNbSceneries = 1000;
