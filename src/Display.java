@@ -389,6 +389,26 @@ public class Display {
 			}
 		}
 		
+		if (Main.debug[16]) {
+			for(int n = 0 ; n< Main.maxNbMobs ; n++) {
+				if(Main.mobs[n].type>0) {
+					for (int i = 0 ; i < Main.mobs[n].getNbPoints() - 1 ; i++) {
+						if(Main.mobs[n].attack) {
+						segment(Main.mobs[n].getOnePoint(i, 0)-transi, Main.mobs[n].getOnePoint(i, 1)-transj,
+								Main.mobs[n].getOnePoint(i+1, 0)-transi, Main.mobs[n].getOnePoint(i+1, 1)-transj,
+								255, 0, 0);
+						}
+						else {
+
+							segment(Main.mobs[n].getOnePoint(i, 0)-transi, Main.mobs[n].getOnePoint(i, 1)-transj,
+									Main.mobs[n].getOnePoint(i+1, 0)-transi, Main.mobs[n].getOnePoint(i+1, 1)-transj,
+									255, 255, 0);
+						}
+					}
+				}
+			}
+		}
+		
 		if (Main.debug[10]) {
 			for (int i = 0 ; i < Main.nbSceneries ; i++) {
 				if(Main.sceneries[i].type == 1)

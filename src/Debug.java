@@ -1045,7 +1045,7 @@ public class Debug {
 				Main.areas[6].setIndTp(7);
 				Main.areas[6].setSpeedMultTp(1);
 				Main.nbAreas = 8;
-				Main.areas[7] = new Area(0, 200, 1900, 0, 0);
+				Main.areas[7] = new Area(0, 200, 3000, 0, 0);
 				Main.areas[7].setIndTp(6);
 				Main.areas[7].setSpeedMultTp(0);
 
@@ -1091,7 +1091,21 @@ public class Debug {
 				Main.sceneries[19].setOnePoint(0, 260, 2400);
 				Main.sceneries[19].setOnePoint(1, 260, 2500);
 				Main.sceneries[19].type = 2;
+				//========================================================
+				Main.sceneries[Main.nbSceneries] = new Scenery(2);
+				Main.sceneries[Main.nbSceneries].setOnePoint(0, 0, 0);
+				Main.sceneries[Main.nbSceneries].setOnePoint(1, -10, 50);
 
+				Main.sceneries[Main.nbSceneries].type = 2;
+				Main.sceneries[Main.nbSceneries].typeMove = 1;
+				Main.sceneries[Main.nbSceneries].period = 100;
+				Main.sceneries[Main.nbSceneries].time = 0;
+
+				Main.sceneries[Main.nbSceneries].newTrajectory(2);
+				Main.sceneries[Main.nbSceneries].setOneTrajectory(0, 300, 2900);
+				Main.sceneries[Main.nbSceneries].setOneTrajectory(1, 320, 2900);
+				Main.nbSceneries = Main.nbSceneries + 1;
+				
 				//========================================================
 				Main.areas[Main.nbAreas] = new Area(7, 260, 3050, 50, 20);
 				Main.nbAreas = Main.nbAreas + 1;
@@ -1110,7 +1124,7 @@ public class Debug {
 				Main.areas[Main.nbAreas] = new Area(8, -100, 3250, 50, 50);
 				Main.areas[Main.nbAreas].setIndHB(Main.nbSceneries);
 				Main.nbAreas = Main.nbAreas + 1;
-				Main.areas[Main.nbAreas] = new Area(8, -100, 3650, 50, 50);
+				Main.areas[Main.nbAreas] = new Area(8, -100, 3550, 50, 50);
 				Main.areas[Main.nbAreas].setIndHB(Main.nbSceneries);
 				Main.nbAreas = Main.nbAreas + 1;
 
@@ -1119,6 +1133,18 @@ public class Debug {
 				Main.areas[Main.nbAreas] = new Area(1, 50, 500, 0, 0);
 				Main.areas[Main.nbAreas].setEllipse(200, 70, -1.1);
 				Main.nbAreas = Main.nbAreas + 1;
+				
+				/* Mobs */
+				
+				double ci = -100;
+				double cj = 3550;
+				for(int indmob = 0; indmob < 25 ; indmob++) {
+					Main.mobs[indmob] = new Mob(1);
+					Main.mobs[indmob].checkPoint[0] = ci;
+					Main.mobs[indmob].checkPoint[1] = cj;
+					Main.mobs[indmob].position[0] = ci;
+					Main.mobs[indmob].position[1] = cj;
+				}
 			}
 			break;
 			case 7:

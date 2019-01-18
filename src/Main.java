@@ -13,6 +13,9 @@ public class Main {
 
 	static Area[] areas;
 	static int nbAreas;
+	
+	static Mob[] mobs;
+	static int maxNbMobs;
 
 	static double gravity = 3.5;
 
@@ -50,17 +53,23 @@ public class Main {
 		//debug[13] = true;		//print 
 		debug[14] = true;		//print the parameters of the detected moving hitboxes
 		debug[15] = true;		//display the character hitbox
+		debug[16] = true;		//display the mobs hitbox
 
 
 		mainChar = new Character();
 		maxNbSceneries = 1000;
+		maxNbMobs = 100;
 		sceneries = new Scenery[maxNbSceneries];
 		nbSceneries = 0;
 		areas = new Area[maxNbSceneries];
 		nbAreas = 0;
+		mobs = new Mob[maxNbMobs];
+		for(int i = 0; i<maxNbMobs ; i++) {
+			mobs[i] = new Mob(0);
+		}
 
-		//Debug.testMap(6);
-		Map.load(2);
+		Debug.testMap(6);
+		//Map.load(2);
 		
 		screen = new Display();
 		screen.window.addKeyListener(new KeyListener() {
@@ -79,6 +88,9 @@ public class Main {
 			tic = System.currentTimeMillis();
 
 			mainChar.update();
+			for(int n=0 ; n<maxNbMobs ; n++){
+				mobs[n].update();
+			}
 			for(indScene=0 ; indScene<nbSceneries ; indScene++){
 				sceneries[indScene].update();
 			}

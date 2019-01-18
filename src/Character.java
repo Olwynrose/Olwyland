@@ -36,7 +36,7 @@ public class Character extends Hitbox {
 	private int nbJump;			// count the number of successive jumps
 	private int maxNbJump;
 
-	private int indArea;		// indice of
+	private int indArea;		// indice of the current area
 
 	public Character() {
 		width = 45;
