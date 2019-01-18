@@ -16,7 +16,12 @@ public class Main {
 	
 	static Mob[] mobs;
 	static int maxNbMobs;
+	
+	static Shot[] friendlyShots;
+	static int maxNbShots;
 
+	static Shot[] ennemyShots;
+	
 	static double gravity = 3.5;
 
 	// KEYS
@@ -44,7 +49,7 @@ public class Main {
 		//debug[4] = true;		//print the friction coefficient of the air (defined by the max fall speed)
 		//debug[5] = true;		//print the jump speed
 		//debug[6] = true;		//print the inactivity time of the left/right/jump keys
-		debug[7] = true;		//activates the fly mode (maintain space bar to fly without caring of the hitboxes)
+		//debug[7] = true;		//activates the fly mode (maintain space bar to fly without caring of the hitboxes)
 		//debug[8] = true;		//print the area the character enters in
 		debug[9] = true;		//display the areas
 		debug[10] = true;		//display the hitboxes
@@ -54,6 +59,7 @@ public class Main {
 		debug[14] = true;		//print the parameters of the detected moving hitboxes
 		debug[15] = true;		//display the character hitbox
 		debug[16] = true;		//display the mobs hitbox
+		debug[17] = true;		//display the shots hitbox
 
 
 		mainChar = new Character();
@@ -66,6 +72,13 @@ public class Main {
 		mobs = new Mob[maxNbMobs];
 		for(int i = 0; i<maxNbMobs ; i++) {
 			mobs[i] = new Mob(0);
+		}
+		maxNbShots = 200;
+		friendlyShots = new Shot[maxNbShots];
+		ennemyShots = new Shot[maxNbShots];
+		for(int i = 0; i<maxNbShots ; i++) {
+			friendlyShots[i] = new Shot();
+			ennemyShots[i] = new Shot();
 		}
 
 		Debug.testMap(6);
@@ -88,6 +101,9 @@ public class Main {
 			tic = System.currentTimeMillis();
 
 			mainChar.update();
+			for(int n=0 ; n<maxNbShots ; n++){
+				friendlyShots[n].update();
+			}
 			for(int n=0 ; n<maxNbMobs ; n++){
 				mobs[n].update();
 			}

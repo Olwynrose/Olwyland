@@ -393,17 +393,36 @@ public class Display {
 			for(int n = 0 ; n< Main.maxNbMobs ; n++) {
 				if(Main.mobs[n].type>0) {
 					for (int i = 0 ; i < Main.mobs[n].getNbPoints() - 1 ; i++) {
-						if(Main.mobs[n].attack) {
-						segment(Main.mobs[n].getOnePoint(i, 0)-transi, Main.mobs[n].getOnePoint(i, 1)-transj,
-								Main.mobs[n].getOnePoint(i+1, 0)-transi, Main.mobs[n].getOnePoint(i+1, 1)-transj,
-								255, 0, 0);
-						}
-						else {
-
+						if(Main.mobs[n].hp<=0) {
 							segment(Main.mobs[n].getOnePoint(i, 0)-transi, Main.mobs[n].getOnePoint(i, 1)-transj,
 									Main.mobs[n].getOnePoint(i+1, 0)-transi, Main.mobs[n].getOnePoint(i+1, 1)-transj,
-									255, 255, 0);
+									100, 100, 100);
 						}
+						else {
+							if(Main.mobs[n].attack) {
+							segment(Main.mobs[n].getOnePoint(i, 0)-transi, Main.mobs[n].getOnePoint(i, 1)-transj,
+									Main.mobs[n].getOnePoint(i+1, 0)-transi, Main.mobs[n].getOnePoint(i+1, 1)-transj,
+									255, 0, 0);
+							}
+							else {
+	
+								segment(Main.mobs[n].getOnePoint(i, 0)-transi, Main.mobs[n].getOnePoint(i, 1)-transj,
+										Main.mobs[n].getOnePoint(i+1, 0)-transi, Main.mobs[n].getOnePoint(i+1, 1)-transj,
+										255, 127, 0);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if (Main.debug[17]) {
+			for(int n = 0 ; n< Main.maxNbShots ; n++) {
+				if(Main.friendlyShots[n].type>0) {
+					for (int i = 0 ; i < Main.friendlyShots[n].getNbPoints() - 1 ; i++) {
+						segment(Main.friendlyShots[n].getOnePoint(i, 0)-transi, Main.friendlyShots[n].getOnePoint(i, 1)-transj,
+								Main.friendlyShots[n].getOnePoint(i+1, 0)-transi, Main.friendlyShots[n].getOnePoint(i+1, 1)-transj,
+								255, 255, 127);
 					}
 				}
 			}
@@ -668,6 +687,7 @@ public class Display {
   	  	if(key == 32)
   	  	{
   	  		Main.keySpace = false;
+  	  		Main.mainChar.keySpace = true;
   	  	}
 	}
 

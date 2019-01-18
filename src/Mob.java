@@ -1,5 +1,11 @@
 
 public class Mob extends Hitbox{
+	/* characteristics */
+	public double defence;
+	public double maxHp;
+	public double hp;
+	public double damages;
+	
 	/* Parameters */
 	private double width;
 	private double height;
@@ -56,6 +62,16 @@ public class Mob extends Hitbox{
 		tanAlpha = 0.75;
 		type = typeIn;
 
+
+		defence = 1;
+		switch(type) {
+		case 1:
+		{
+			defence = 10;
+			maxHp = 25;
+			hp = maxHp;
+		}
+		}
 		state = 0;
 		attack = false;
 		maxSpeed = 25;
@@ -139,72 +155,83 @@ public class Mob extends Hitbox{
 	
 	public void update() {
 		int areaType;
-
+		
+		
+		
 		if(this.type > 0) {
+			
 			if (animation == 0) {
-			areaType = isIn();
-			switch(areaType) {
-			case 0:
-			{
-				// air
-				updateAir();
-			}
-				break;
-			case 1:
-			{
-				// water
-				attack = false;
-				animation = 1;
-				time = 0;
-				animate();
-			}
-				break;
-			case 2:
-			{
-				// lava
-				attack = false;
-				animation = 1;
-				time = 0;
-				animate();
-			}
-				break;
-			case 3:
-			{
-				//void
-				attack = false;
-				animation = 1;
-				time = 0;
-				animate();
-			}
-				break;
-			case 4:
-			{
-				// scale
-				updateAir();
-			}
-				break;
-			case 5:
-			{
-				updateAir();
-			}
-				break;
-			case 6:
-			{
-				updateAir();
-			}
-			break;
-			case 7:
-			{
-				// trampoline
-				updateTrampoline();
-			}
-			break;
-			case 8:
-			{
-				updateAir();
-			}
-			break;
-			}
+				if(hp<=0) {
+					attack = false;
+					animation = 1;
+					time = 0;
+					animate();
+				}
+				else {
+					areaType = isIn();
+					switch(areaType) {
+					case 0:
+					{
+						// air
+						updateAir();
+					}
+						break;
+					case 1:
+					{
+						// water
+						attack = false;
+						animation = 1;
+						time = 0;
+						animate();
+					}
+						break;
+					case 2:
+					{
+						// lava
+						attack = false;
+						animation = 1;
+						time = 0;
+						animate();
+					}
+						break;
+					case 3:
+					{
+						//void
+						attack = false;
+						animation = 1;
+						time = 0;
+						animate();
+					}
+						break;
+					case 4:
+					{
+						// scale
+						updateAir();
+					}
+						break;
+					case 5:
+					{
+						updateAir();
+					}
+						break;
+					case 6:
+					{
+						updateAir();
+					}
+					break;
+					case 7:
+					{
+						// trampoline
+						updateTrampoline();
+					}
+					break;
+					case 8:
+					{
+						updateAir();
+					}
+					break;
+					}
+				}
 			}
 			else {
 				animate();
@@ -808,7 +835,6 @@ public class Mob extends Hitbox{
 			{
 				nbTimes = 0;
 				animation = 0;
-				Main.screen.translationType = 1;
 			}
 			time++;
 		}
@@ -906,6 +932,8 @@ public class Mob extends Hitbox{
 	}
 	
 	public void respawn() {
+		
+		hp = maxHp;
 		this.speed[0] = 0;
 		this.speed[1] = 0;
 

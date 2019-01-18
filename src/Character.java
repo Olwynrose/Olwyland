@@ -23,6 +23,7 @@ public class Character extends Hitbox {
 	private int inactiveJump;
 	private int inactiveLeft;
 	private int inactiveRight;
+	public int direction; 	/* -1: left, 1: Right */
 
 	public double[] checkPoint;
 
@@ -37,13 +38,19 @@ public class Character extends Hitbox {
 	private int maxNbJump;
 
 	private int indArea;		// indice of the current area
+	
+	public int weapon;
+	/* 1: simple shot */
+	public boolean keySpace;	// to verify if the jump has been released
 
 	public Character() {
 		width = 45;
 		height = 65;
 		tanAlpha = 0.75;
 
+		weapon = 1;
 		state = 0;
+		direction = 1;
 		maxSpeed = 25;
 		moveSpeed = 7;
 		maxJump = 90;
@@ -60,6 +67,7 @@ public class Character extends Hitbox {
 		inactiveRight = 0;
 		inactiveJump = 0;
 		keyJump = true;
+		keySpace = true;
 		nbJump = 0;
 		maxNbJump = 2;
 
@@ -194,6 +202,16 @@ public class Character extends Hitbox {
 
 	private void updateAir() {
 
+		if (Main.keySpace && keySpace) {
+			keySpace = false;
+			for(int i = 0 ; i < Main.maxNbShots ; i++) {
+				if(Main.friendlyShots[i].type == 0) {
+					Main.friendlyShots[i].fire(weapon, position[0]-30, position[1], 0, direction);
+					Main.friendlyShots[i].hitMob = true;
+					break;
+				}
+			}
+		}
 		updateState();
 		move();
 
@@ -688,9 +706,11 @@ public class Character extends Hitbox {
 
 		if(Main.keyRight && inactiveRight == 0){
 			this.speed[1] = moveSpeed;
+			direction = 1;
 		}
 		if(Main.keyLeft && inactiveLeft == 0){
 			this.speed[1] = - moveSpeed;
+			direction = -1;
 		}
 		if(Main.keyUp && inactiveJump == 0 && nbJump < maxNbJump && keyJump){
 			nbJump = nbJump + 1;
@@ -717,10 +737,12 @@ public class Character extends Hitbox {
 		if(Main.keyRight && inactiveRight == 0){
 			this.speed[1] = Math.sqrt(1 - Math.pow(cosFloorSlope, 2)) * moveSpeed;
 			this.speed[0] = cosFloorSlope * moveSpeed;
+			direction = 1;
 		}
 		if(Main.keyLeft && inactiveLeft == 0) {
 			this.speed[1] = - Math.sqrt(1 - Math.pow(cosFloorSlope, 2)) * moveSpeed;
 			this.speed[0] = - cosFloorSlope * moveSpeed;
+			direction = -1;
 		}
 		if(Main.keyUp && inactiveJump == 0 && keyJump) {
 			this.speed[0] = - jumpSpeed;
@@ -731,6 +753,7 @@ public class Character extends Hitbox {
 
 	private void reboundBotLeft() {
 		inactiveLeft = inactiveTime + 1;
+		direction = 1;
 		nbJump = 1;
 		inactiveRight = 4;
 		this.speed[0] = -3;
@@ -741,6 +764,7 @@ public class Character extends Hitbox {
 
 	private void reboundBotRight() {
 		inactiveRight = inactiveTime + 1;
+		direction = -1;
 		nbJump = 1;
 		inactiveLeft = 4;
 		this.speed[0] = -3;
@@ -751,6 +775,7 @@ public class Character extends Hitbox {
 
 	private void reboundLeft() {
 		inactiveLeft = inactiveTime + 1;
+		direction = 1;
 		nbJump = 1;
 		inactiveRight = 4;
 		this.speed[0] = -2;
@@ -761,6 +786,7 @@ public class Character extends Hitbox {
 
 	private void reboundRight() {
 		inactiveRight = inactiveTime + 1;
+		direction = -1;
 		nbJump = 1;
 		inactiveLeft = 4;
 		this.speed[0] = -2;
@@ -778,6 +804,7 @@ public class Character extends Hitbox {
 	private void slideLeft(){
 		inactiveLeft = 2 * inactiveTime;
 
+		direction = 1;
 		double speedNorm;
 		speedNorm = -Math.sqrt(1-cosFloorSlope*cosFloorSlope)*this.speed[1] - cosFloorSlope*this.speed[0] - 1;
 
@@ -795,6 +822,7 @@ public class Character extends Hitbox {
 	private void slideRight(){
 		inactiveRight = 2 * inactiveTime;
 
+		direction = -1;
 		double speedNorm;
 		speedNorm = Math.sqrt(1-cosFloorSlope*cosFloorSlope)*this.speed[1] + cosFloorSlope*this.speed[0] + 1;
 
@@ -820,10 +848,12 @@ public class Character extends Hitbox {
 		if(state == 9){
 			this.speed[1] = Math.sqrt(1-cosFloorSlope*cosFloorSlope)*moveSpeed/2;
 			this.speed[0] = cosFloorSlope*moveSpeed/2;
+			direction = 1;
 		}
 		else {
 			this.speed[1] = -Math.sqrt(1-cosFloorSlope*cosFloorSlope)*moveSpeed/2;
 			this.speed[0] = -cosFloorSlope*moveSpeed/2;
+			direction = -1;
 		}
 
 		if(Main.keyUp) {
