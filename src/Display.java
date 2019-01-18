@@ -175,8 +175,8 @@ public class Display {
 		{
 			hitbox();
 		}
-		animations();
 		foreground();
+		animations();
 		int i, j, k;
 		for(i = 0; i < idim ; i++)
 		{

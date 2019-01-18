@@ -48,7 +48,7 @@ public class ImageToHitbox {
 		
 		int i0, j0, i1, j1; 
 		double ci, cj;
-		double rSup; 
+		double rSup, rRect; 
 		
 		int errRect = 0;
 		int errEll = 0;
@@ -114,7 +114,14 @@ public class ImageToHitbox {
 						r2 = rSup;
 						theta = 0;
 						while (theta < Math.PI) {
-							r = getEllipseRadius(ci, cj, ci - rSup * Math.cos(theta), cj + rSup * Math.sin(theta));
+							rRect = rSup;
+							if(Math.abs(rSup * Math.cos(theta))>(i1-ci+1) ) {
+								rRect = (i1-ci+1)/Math.cos(theta);
+							}
+							if(Math.abs(rRect * Math.sin(theta))>(j1-cj+1) ) {
+								rRect = (j1-cj+1)/Math.sin(theta);
+							}
+							r = getEllipseRadius(ci, cj, ci - rRect * Math.cos(theta), cj + rRect * Math.sin(theta));
 							if (r > r1) {
 								thetaEllipse = theta;
 								r1 = r;

@@ -61,8 +61,8 @@ public class Map {
 				
 			System.out.println("hitbox ok");
 			// generate map areas from images
-			//Im2Hb.getArea("files/map_test2/Olwyland_maptest2_zone1.png");
-			//Im2Hb.getArea("files/map_test2/Olwyland_maptest2_zone2.png");
+			Im2Hb.getArea("files/map_test2/Olwyland_maptest2_zone1.png");
+			Im2Hb.getArea("files/map_test2/Olwyland_maptest2_zone2.png");
 
 			
 		}
