@@ -98,7 +98,24 @@ public class Character extends Hitbox {
 
 	public void update() {
 		int areaType;
-
+		if(Main.key1) {
+			weapon = 1;
+		}
+		if(Main.key2) {
+			weapon = 2;
+		}
+		if(Main.key3) {
+			weapon = 3;
+		}
+		if(Main.key4) {
+			weapon = 4;
+		}
+		if(Main.key5) {
+			weapon = 5;
+		}
+		if(Main.key6) {
+			weapon = 6;
+		}
 		if(Main.debug[11]) {
 			System.out.println(this.position[0] + " - " + this.position[1]);
 		}
@@ -202,11 +219,11 @@ public class Character extends Hitbox {
 
 	private void updateAir() {
 
-		if (Main.keySpace && keySpace) {
+		if (Main.keySpace && (keySpace || weapon == 4)) {
 			keySpace = false;
 			for(int i = 0 ; i < Main.maxNbShots ; i++) {
 				if(Main.friendlyShots[i].type == 0) {
-					Main.friendlyShots[i].fire(weapon, position[0]-30, position[1], 0, direction);
+					Main.friendlyShots[i].fire(weapon, position[0]-30, position[1], 0 , direction);
 					Main.friendlyShots[i].hitMob = true;
 					break;
 				}

@@ -30,6 +30,15 @@ public class Main {
 	static boolean keyRight;
 	static boolean keyLeft;
 	static boolean keySpace;
+	static boolean key1;
+	static boolean key2;
+	static boolean key3;
+	static boolean key4;
+	static boolean key5;
+	static boolean key6;
+	static boolean key7;
+	static boolean key8;
+
 
 	static boolean[] debug;
 	static String hitboxFileImage;
@@ -73,7 +82,7 @@ public class Main {
 		for(int i = 0; i<maxNbMobs ; i++) {
 			mobs[i] = new Mob(0);
 		}
-		maxNbShots = 200;
+		maxNbShots = 500;
 		friendlyShots = new Shot[maxNbShots];
 		ennemyShots = new Shot[maxNbShots];
 		for(int i = 0; i<maxNbShots ; i++) {

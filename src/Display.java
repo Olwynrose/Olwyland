@@ -664,6 +664,38 @@ public class Display {
 	  	{
 	  		Main.keySpace = true;
 	  	}
+  	  	if(key == 49)
+	  	{
+	  		Main.key1 = true;
+	  	}
+  	  	if(key == 50)
+	  	{
+	  		Main.key2 = true;
+	  	}
+  	  	if(key == 51)
+	  	{
+	  		Main.key3 = true;
+	  	}
+  	  	if(key == 52)
+	  	{
+	  		Main.key4 = true;
+	  	}
+  	  	if(key == 53)
+	  	{
+	  		Main.key5 = true;
+	  	}
+  	  	if(key == 54)
+	  	{
+	  		Main.key6 = true;
+	  	}
+  	  	if(key == 55)
+	  	{
+	  		Main.key7 = true;
+	  	}
+  	  	if(key == 56)
+	  	{
+	  		Main.key8 = true;
+	  	}
 	}
 
 	public void updateReleasedKeys(int key) {
@@ -689,6 +721,38 @@ public class Display {
   	  		Main.keySpace = false;
   	  		Main.mainChar.keySpace = true;
   	  	}
+  	  	if(key == 49)
+	  	{
+	  		Main.key1 = false;
+	  	}
+  	  	if(key == 50)
+	  	{
+	  		Main.key2 = false;
+	  	}
+  	  	if(key == 51)
+	  	{
+	  		Main.key3 = false;
+	  	}
+  	  	if(key == 52)
+	  	{
+	  		Main.key4 = false;
+	  	}
+  	  	if(key == 53)
+	  	{
+	  		Main.key5 = false;
+	  	}
+  	  	if(key == 54)
+	  	{
+	  		Main.key6 = false;
+	  	}
+  	  	if(key == 55)
+	  	{
+	  		Main.key7 = false;
+	  	}
+  	  	if(key == 56)
+	  	{
+	  		Main.key8 = false;
+	  	}
 	}
 
 	private void translation() {
