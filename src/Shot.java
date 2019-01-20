@@ -87,7 +87,7 @@ public class Shot extends Hitbox{
 					for (int i = 0 ; i < Main.maxNbMobs ; i++) {
 						intersect(Main.mobs[i]);
 						if(tMin < buf_tMin) {
-							Main.mobs[i].hp = Main.mobs[i].hp - damages / Main.mobs[i].defence;
+							Main.mobs[i].charac.hit(damages);
 							if(stopMob) {
 								break;
 							}
@@ -97,6 +97,7 @@ public class Shot extends Hitbox{
 						}
 					}
 				}
+				tMin = Math.min(tMin, buf_tMin);
 				this.position[0] = this.position[0] + 0.99*tMin*speed[0];
 				this.position[1] = this.position[1] + 0.99*tMin*speed[1];
 			}
@@ -129,7 +130,7 @@ public class Shot extends Hitbox{
 					if(hitMob) {
 						for (int j = 0 ; j < Main.maxNbMobs ; j++) {
 							if((Math.pow(Main.mobs[j].position[0]-position[0], 2)+Math.pow(Main.mobs[j].position[1]-position[1], 2))<Math.pow(rayAOE,2)) {
-								Main.mobs[j].hp = Main.mobs[j].hp - damages / Main.mobs[j].defence;
+								Main.mobs[j].charac.hit(damages);
 							}
 						}
 					}
@@ -140,7 +141,7 @@ public class Shot extends Hitbox{
 					if(hitMob) {
 						for (int j = 0 ; j < Main.maxNbMobs ; j++) {
 							if((Math.pow(Main.mobs[j].position[0]-position[0], 2)+Math.pow(Main.mobs[j].position[1]-position[1], 2))<Math.pow(rayAOE,2)) {
-								Main.mobs[j].hp = Main.mobs[j].hp - damages / Main.mobs[j].defence;
+								Main.mobs[j].charac.hit(damages);
 							}
 						}
 					}

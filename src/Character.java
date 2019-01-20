@@ -1,6 +1,9 @@
 
 public class Character extends Hitbox {
 
+	/* Characteristics */
+	Characteristics charac;
+	
 	/* Parameters */
 	private double width;
 	private double height;
@@ -48,6 +51,7 @@ public class Character extends Hitbox {
 		height = 65;
 		tanAlpha = 0.75;
 
+		type = 1;
 		weapon = 1;
 		state = 0;
 		direction = 1;
@@ -70,6 +74,11 @@ public class Character extends Hitbox {
 		keySpace = true;
 		nbJump = 0;
 		maxNbJump = 2;
+		
+		charac = new Characteristics();
+		charac.defence = 20;
+		charac.maxHp = 100;
+		charac.hp = charac.maxHp;
 
 		checkPoint = new double[2];
 		checkPoint[0] = 100;
@@ -120,6 +129,10 @@ public class Character extends Hitbox {
 			System.out.println(this.position[0] + " - " + this.position[1]);
 		}
 
+		if(charac.hp < 0 && animation == 0) {
+			animation = 1;
+			time = 0;
+		}
 
 		if (animation == 0) {
 			if (Main.debug[7] && Main.keySpace == true) {
@@ -146,6 +159,7 @@ public class Character extends Hitbox {
 					// lava
 					animation = 3;
 					time = 0;
+					charac.hp = 0;
 					animate();
 				}
 					break;
@@ -154,6 +168,7 @@ public class Character extends Hitbox {
 					//void
 					animation = 2;
 					time = 0;
+					charac.hp = 0;
 					animate();
 				}
 					break;
@@ -959,7 +974,6 @@ public class Character extends Hitbox {
 			times[1] = 2;
 			times[2] = 10;
 			nbTimes = 3;
-
 			if (time == times[0]+1)
 			{
 				respawn();
@@ -968,6 +982,7 @@ public class Character extends Hitbox {
 			{
 				nbTimes = 0;
 				animation = 0;
+				charac.hp = charac.maxHp;
 				Main.screen.translationType = 1;
 			}
 			time++;

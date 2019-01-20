@@ -1,10 +1,7 @@
 
 public class Mob extends Hitbox{
 	/* characteristics */
-	public double defence;
-	public double maxHp;
-	public double hp;
-	public double damages;
+	public Characteristics charac;
 	
 	/* Parameters */
 	private double width;
@@ -62,14 +59,13 @@ public class Mob extends Hitbox{
 		tanAlpha = 0.75;
 		type = typeIn;
 
-
-		defence = 1;
+		charac = new Characteristics();
 		switch(type) {
 		case 1:
 		{
-			defence = 10;
-			maxHp = 25;
-			hp = maxHp;
+			charac.defence = 10;
+			charac.maxHp = 25;
+			charac.hp = charac.maxHp;
 		}
 		}
 		state = 0;
@@ -161,7 +157,7 @@ public class Mob extends Hitbox{
 		if(this.type > 0) {
 			
 			if (animation == 0) {
-				if(hp<=0) {
+				if(charac.hp<=0) {
 					attack = false;
 					animation = 1;
 					time = 0;
@@ -243,6 +239,7 @@ public class Mob extends Hitbox{
 
 		decision();
 		updateState();
+		hit();
 		move();
 
 
@@ -933,7 +930,7 @@ public class Mob extends Hitbox{
 	
 	public void respawn() {
 		
-		hp = maxHp;
+		charac.hp = charac.maxHp;
 		this.speed[0] = 0;
 		this.speed[1] = 0;
 
@@ -964,5 +961,13 @@ public class Mob extends Hitbox{
 		this.speed[1] = tMin * this.speed[1];
 		this.position[0] = this.position[0] + this.speed[0] - 0.001;
 		this.position[1] = this.position[1] + this.speed[1];
+	}
+	
+	private void hit() {
+		tMin = 1;
+		intersect(Main.mainChar);
+		if(tMin<1) {
+			Main.mainChar.charac.hit(charac.damages);
+		}
 	}
 }
