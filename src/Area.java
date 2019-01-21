@@ -2,7 +2,7 @@
 public class Area {
 
 	private int type;
-	/* 1: water, 2: lava, 3: void, 4: scale, 5: teleporter, 6: auto-teleporter, 7: trampoline, 8: switch HB */
+	/* 1: water, 2: lava, 3: void, 4: scale, 5: teleporter, 6: auto-teleporter, 7: trampoline, 8: switch HB, 9: Check point */
 	private double[] position;
 	private double width;
 	private double height;

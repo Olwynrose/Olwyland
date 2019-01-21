@@ -800,60 +800,67 @@ public class Display {
 	private void colorPixel(int i, int j, int ind) {
 		switch (ind)
 		{
-		case 1:
+		case 1: // water
 		{
 			img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 			img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 			img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 		}
 		break;
-		case 2:
+		case 2: // lava
 		{
 			img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 			img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (127 * (100 - coefTransparency)) / 100;
 			img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 		}
 		break;
-		case 3:
+		case 3: // void
 		{
 			img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 			img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 			img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 		}
 		break;
-		case 4:
+		case 4: // scale
 		{
-			img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
-			img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
-			img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+			img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (200 * (100 - coefTransparency)) / 100;
+			img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (200 * (100 - coefTransparency)) / 100;
+			img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (200 * (100 - coefTransparency)) / 100;
 		}
 		break;
-		case 5:
+		case 5: // TP
 		{
 			img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 			img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 			img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 		}
 		break;
-		case 6:
+		case 6: // auto TP
 		{
 			img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 			img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 			img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 		}
 		break;
-		case 7:
+		case 7: // trampo
 		{
 			img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 			img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 			img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 		}
 		break;
-		case 8:
+		case 8: // switch
 		{
 			img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
 			img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
 			img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (0 * (100 - coefTransparency)) / 100;
+		}
+		break;
+		case 9: // check point
+		{
+			img[i][j][0] = (img[i][j][0] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+			img[i][j][1] = (img[i][j][1] * coefTransparency) / 100 + (255 * (100 - coefTransparency)) / 100;
+			img[i][j][2] = (img[i][j][2] * coefTransparency) / 100 + (100 * (100 - coefTransparency)) / 100;
 		}
 		break;
 		}

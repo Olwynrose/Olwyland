@@ -233,6 +233,26 @@ public class Character extends Hitbox {
 					updateAir();
 				}
 				break;
+				case 9:
+				{
+					// check point
+					if (Main.keyDown ) {
+						if(time <= 0) {
+							checkPoint[0] = Main.areas[indArea].getPositionI() + Main.areas[indArea].getHeight() / 2;
+							checkPoint[1] = Main.areas[indArea].getPositionJ() + Main.areas[indArea].getWidth() / 2;
+							time = 20;
+						}
+						else {
+							time = time - 1;
+						}
+					}
+					else {
+						time = 0;
+					}
+
+					updateAir();
+				}
+				break;
 				}
 			}
 		}

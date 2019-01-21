@@ -229,6 +229,11 @@ public class Mob extends Hitbox{
 						updateAir();
 					}
 					break;
+					case 9:
+					{
+						updateAir();
+					}
+					break;
 					}
 				}
 			}

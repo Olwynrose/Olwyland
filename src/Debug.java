@@ -1064,11 +1064,13 @@ public class Debug {
 				Main.sceneries[16].setOnePoint(6, 280, 3100);
 				//========================================================
 				Main.nbSceneries = 18;
-				Main.sceneries[17] = new Scenery(4);
+				Main.sceneries[17] = new Scenery(6);
 				Main.sceneries[17].setOnePoint(0, 0, 2500);
 				Main.sceneries[17].setOnePoint(1, 700, 2500);
 				Main.sceneries[17].setOnePoint(2, 700, 2900);
-				Main.sceneries[17].setOnePoint(3, 0, 2900);
+				Main.sceneries[17].setOnePoint(3, 150, 2900);
+				Main.sceneries[17].setOnePoint(4, 150, 2700);
+				Main.sceneries[17].setOnePoint(5, -700, 2700);
 				//========================================================
 				Main.nbAreas = 10;
 				Main.areas[9] = new Area(1, 315, 2100, 900, 495);
@@ -1108,6 +1110,13 @@ public class Debug {
 				
 				//========================================================
 				Main.areas[Main.nbAreas] = new Area(7, 260, 3050, 50, 20);
+				Main.nbAreas = Main.nbAreas + 1;
+				//========================================================
+				Main.areas[Main.nbAreas] = new Area(9, 100, 2750, 50, 50);
+				Main.nbAreas = Main.nbAreas + 1;
+
+				//========================================================
+				Main.areas[Main.nbAreas] = new Area(9, 150, 100, 50, 50);
 				Main.nbAreas = Main.nbAreas + 1;
 				//========================================================
 				Main.sceneries[Main.nbSceneries] = new Scenery(5);
