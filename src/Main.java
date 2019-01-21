@@ -77,7 +77,7 @@ public class Main {
 		debug[15] = true;		//display the character hitbox
 		debug[16] = true;		//display the mobs hitbox
 		debug[17] = true;		//display the shots hitbox
-		//debug[18] = true;		// infinite defence
+		debug[18] = true;		// infinite defence
 
 
 		mainChar = new Character();
@@ -148,6 +148,7 @@ public class Main {
 			mainChar.update();
 			for(int n=0 ; n<maxNbShots ; n++){
 				friendlyShots[n].update();
+				ennemyShots[n].update();
 			}
 			for(int n=0 ; n<maxNbMobs ; n++){
 				mobs[n].update();

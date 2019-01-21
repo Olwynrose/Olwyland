@@ -2,13 +2,14 @@
 public class Mob extends Hitbox{
 	/* characteristics */
 	public Characteristics charac;
+	public Weapon weapon;
 	
 	/* Parameters */
 	private double width;
 	private double height;
 	private double tanAlpha;
 	// this.type = type of the mob
-	/* 0:nothing, 1: slug */
+	/* 0:nothing, 1: slug, 2: gunMob */
 	private double detectRange;		// range in witch the mob start to attack the player
 	private double visionRange;		// range in witch the mob stop to attack the player
 
@@ -51,6 +52,8 @@ public class Mob extends Hitbox{
 	public boolean attack;
 	private int maxTimeMove;
 	private int timeMove;
+	private int maxTimeShot;
+	private int timeShot;
 
 	
 	public Mob(int typeIn) {
@@ -59,15 +62,7 @@ public class Mob extends Hitbox{
 		tanAlpha = 0.75;
 		type = typeIn;
 
-		charac = new Characteristics();
-		switch(type) {
-		case 1:
-		{
-			charac.defence = 10;
-			charac.maxHp = 25;
-			charac.hp = charac.maxHp;
-		}
-		}
+
 		state = 0;
 		attack = false;
 		maxSpeed = 25;
@@ -78,7 +73,37 @@ public class Mob extends Hitbox{
 		slideCoef = 0.8;
 		detectRange = 250;
 		visionRange = 1750;
-		maxTimeMove = 30;
+
+		weapon = new Weapon();
+		charac = new Characteristics();
+		charac.hitTime = 0;
+		switch(type) {
+		case 1:
+		{
+			charac.defence = 10;
+			charac.maxHp = 25;
+			charac.hp = charac.maxHp;
+			maxTimeMove = 30;
+		}
+		break;
+		case 2:
+		{
+			charac.defence = 10;
+			charac.maxHp = 50;
+			charac.hp = charac.maxHp;
+			width = 35;
+			height = 55;
+
+			weapon.type = 6;
+			maxTimeMove = 50;
+			maxTimeShot = 10;
+			timeShot = 0;
+			timeMove = maxTimeMove;
+			detectRange = 350;
+			visionRange = 850;
+		}
+		break;
+		}
 
 		waterAcceleration = 1;
 		waterSpeed = 7;
@@ -347,17 +372,20 @@ public class Mob extends Hitbox{
 	
 	private void decision() {
 		
+		if(Math.pow(Main.mainChar.position[0]-this.position[0],2)+Math.pow(Main.mainChar.position[1]-this.position[1],2)<Math.pow(detectRange,2)) {
+			attack = true;
+		}
+		if(Math.pow(Main.mainChar.position[0]-this.position[0],2)+Math.pow(Main.mainChar.position[1]-this.position[1],2)>Math.pow(visionRange,2)) {
+			attack = false;
+			timeMove = 0;
+			timeShot = maxTimeShot;
+			charac.hp = charac.maxHp;
+		}
 		switch(this.type) {
 		case 1:
 		{
 			double a = 0;
-			if(Math.pow(Main.mainChar.position[0]-this.position[0],2)+Math.pow(Main.mainChar.position[1]-this.position[1],2)<Math.pow(detectRange,2)) {
-				attack = true;
-			}
-			if(Math.pow(Main.mainChar.position[0]-this.position[0],2)+Math.pow(Main.mainChar.position[1]-this.position[1],2)>Math.pow(visionRange,2)) {
-				attack = false;
-				charac.hp = charac.maxHp;
-			}
+			
 			if (attack) {
 				if (timeMove>0) {
 					timeMove = timeMove - 1;
@@ -426,7 +454,31 @@ public class Mob extends Hitbox{
 			}
 		}
 		break;
+		case 2:
+		{
+			keyLeft = false;
+			keyRight = false;
+			keyUp = false;
+			
+			if(attack) {
+				if (timeMove>0) {
+					timeMove = timeMove - 1;
+					weapon.updateMob(false, position[0] - 30, position[1], Main.mainChar.position[0] - position[0] , Main.mainChar.position[1] - position[1]);
+				}
+				else {
+					if (timeShot>0) {
+						timeShot = timeShot - 1;
+						timeMove = 0;
+					}
+					else {
+						timeMove = maxTimeMove;
+						timeShot = maxTimeShot;
+					}
+					weapon.updateMob(true, position[0] - 30, position[1], Main.mainChar.position[0] - position[0] , Main.mainChar.position[1] - position[1]);
+				}
+			}
 		}
+		} // end switch
 		
 		
 	}
