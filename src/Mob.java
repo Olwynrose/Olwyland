@@ -152,7 +152,10 @@ public class Mob extends Hitbox{
 	public void update() {
 		int areaType;
 		
-		
+		charac.update();
+		if( charac.hp<charac.maxHp) {
+			attack = true;
+		}
 		
 		if(this.type > 0) {
 			
@@ -348,6 +351,7 @@ public class Mob extends Hitbox{
 			}
 			if(Math.pow(Main.mainChar.position[0]-this.position[0],2)+Math.pow(Main.mainChar.position[1]-this.position[1],2)>Math.pow(visionRange,2)) {
 				attack = false;
+				charac.hp = charac.maxHp;
 			}
 			if (attack) {
 				if (timeMove>0) {
@@ -931,6 +935,7 @@ public class Mob extends Hitbox{
 	public void respawn() {
 		
 		charac.hp = charac.maxHp;
+		attack = false;
 		this.speed[0] = 0;
 		this.speed[1] = 0;
 

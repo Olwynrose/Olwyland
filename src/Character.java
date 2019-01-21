@@ -45,7 +45,7 @@ public class Character extends Hitbox {
 	
 
 	public Character() {
-		width = 45;
+		width = 38;
 		height = 65;
 		tanAlpha = 0.75;
 
@@ -73,8 +73,13 @@ public class Character extends Hitbox {
 		maxNbJump = 2;
 		
 		charac = new Characteristics();
-		charac.defence = 20;
-		charac.maxHp = 100;
+		if(Main.debug[18]) {
+			charac.defence = 10000000000.0;
+		}
+		else {
+			charac.defence = 10;
+		}
+		charac.maxHp = 50;
 		charac.hp = charac.maxHp;
 
 		checkPoint = new double[2];
@@ -137,6 +142,8 @@ public class Character extends Hitbox {
 			time = 0;
 		}
 
+		charac.update();
+		
 		if (animation == 0) {
 			if (Main.debug[7] && Main.keySpace == true) {
 				debugFly();

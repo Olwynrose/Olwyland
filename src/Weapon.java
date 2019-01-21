@@ -15,7 +15,7 @@ public class Weapon {
 		maxTimes = new int[nbWeapons];
 		maxTimes[0] = 3; 	// simple shot
 		maxTimes[1] = 15; 	// bomb
-		maxTimes[2] = 20;	// sniper
+		maxTimes[2] = 10;	// sniper
 		maxTimes[3] = 0;	// fire
 		maxTimes[4] = 115;	// jack3 yeallow 3
 		maxTimes[5] = 3;	// simple machingun
@@ -90,6 +90,7 @@ public class Weapon {
 					if(Main.friendlyShots[i].type == 0) {
 						Main.friendlyShots[i].fire(1, posi, posj, diri, dirj);
 						Main.friendlyShots[i].hitMob = true;
+						Main.friendlyShots[i].damages = 150;
 						break;
 					}
 				}
@@ -99,14 +100,15 @@ public class Weapon {
 			{
 				double theta = Math.atan2(diri, dirj);
 				double rand_thata;
-				for(int j=0; j<5; j++) {
-					rand_thata = theta + 0.4*Math.random();
+				for(int j=0; j<7; j++) {
+					rand_thata = theta-0.3 + 0.6*Math.random();
 					diri = Math.sin(rand_thata);
 					dirj = Math.cos(rand_thata);
 					for(int i = 0 ; i < Main.maxNbShots ; i++) {
 						if(Main.friendlyShots[i].type == 0) {
 							Main.friendlyShots[i].fire(1, posi, posj, diri, dirj);
 							Main.friendlyShots[i].hitMob = true;
+							Main.friendlyShots[i].stopMob = false;
 							Main.friendlyShots[i].time = 10;
 							Main.friendlyShots[i].damages = 150;
 							break;

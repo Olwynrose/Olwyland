@@ -88,7 +88,7 @@ public class Shot extends Hitbox{
 						intersect(Main.mobs[i]);
 						if(tMin < buf_tMin) {
 							Main.mobs[i].charac.hit(damages);
-							if(stopMob) {
+							if(stopMob && Main.mobs[i].charac.hp>0) {
 								break;
 							}
 							else {
@@ -213,21 +213,42 @@ public class Shot extends Hitbox{
 		// sniper
 		case 3:
 		{
+			double buf_tMin;
 			stopMob = false;
 			double norm = Math.sqrt(Math.pow(speedi,2)+Math.pow(speedj,2));
 			rayAOE = 0;
 			damages = 1500;
-			time = 1;
+			time = 2;
 			this.position[0] = i0;
 			this.position[1] = j0;
 			this.speed[0] = 5000*speedi/norm;
 			this.speed[1] = 5000*speedj/norm;
+			this.nbPoints = 1;
+			this.points = new double[nbPoints][2];
+			this.points[0][0] = 0;
+			this.points[0][1] = 0;
+			
+			tMin = 1;
+			for (int i = 0 ; i < Main.nbSceneries ; i++) {
+				intersect(Main.sceneries[i]);
+			}
+			buf_tMin = tMin;
+			if(hitMob) {
+				for (int i = 0 ; i < Main.maxNbMobs ; i++) {
+					intersect(Main.mobs[i]);
+					if(tMin < buf_tMin) {
+						Main.mobs[i].charac.hit(damages);
+						tMin = 1;
+					}
+				}
+			}
+			tMin = buf_tMin;
 			this.nbPoints = 2;
 			this.points = new double[nbPoints][2];
 			this.points[0][0] = 0;
 			this.points[0][1] = 0;
-			this.points[1][0] = 1000*speedi/norm;
-			this.points[1][1] = 1000*speedj/norm;
+			this.points[1][0] = this.speed[0]*tMin*0.999;
+			this.points[1][1] = this.speed[1]*tMin*0.999;
 			
 		}
 		break;
