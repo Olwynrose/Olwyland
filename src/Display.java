@@ -7,8 +7,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import com.sun.glass.events.MouseEvent;
+
 import java.io.IOException;
 import java.awt.Color;
+import java.awt.Component;
 
 public class Display {
 
@@ -720,7 +724,7 @@ public class Display {
   	  	if(key == 32)
   	  	{
   	  		Main.keySpace = false;
-  	  		Main.mainChar.keySpace = true;
+  	  		Main.mainChar.weapon.keyShot = true;
   	  	}
   	  	if(key == 49)
 	  	{
@@ -754,6 +758,11 @@ public class Display {
 	  	{
 	  		Main.key8 = false;
 	  	}
+	}
+	public void updatePressedMouse(java.awt.event.MouseEvent arg0) {
+		Main.mouseI = (double) arg0.getY() + Main.screen.transi;
+		Main.mouseJ = (double) arg0.getX() + Main.screen.transj;
+		Main.mouseLeft = true;
 	}
 
 	private void translation() {

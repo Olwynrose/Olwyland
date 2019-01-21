@@ -193,8 +193,7 @@ public class Shot extends Hitbox{
 			time = 100;
 			damages = 500;
 			this.position[0] = i0;
-			this.position[1] = j0 + speedj;
-			this.speed[0] = -20;
+			this.position[1] = j0;
 			this.nbPoints = 4;
 			this.points = new double[nbPoints][2];
 			this.points[0][0] = 0;
@@ -205,12 +204,9 @@ public class Shot extends Hitbox{
 			this.points[2][1] = 4;
 			this.points[3][0] = 0;
 			this.points[3][1] = 0;
-			if(speedj>0) {
-				this.speed[1] = 25;
-			}
-			else {
-				this.speed[1] = -25;
-			}
+
+			this.speed[0] = speedi*0.2;
+			this.speed[1] = speedj*0.2;
 			
 		}
 		break;
@@ -221,7 +217,7 @@ public class Shot extends Hitbox{
 			double norm = Math.sqrt(Math.pow(speedi,2)+Math.pow(speedj,2));
 			rayAOE = 0;
 			damages = 1500;
-			time = 2;
+			time = 1;
 			this.position[0] = i0;
 			this.position[1] = j0;
 			this.speed[0] = 5000*speedi/norm;

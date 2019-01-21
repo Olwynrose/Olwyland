@@ -3,6 +3,7 @@ public class Character extends Hitbox {
 
 	/* Characteristics */
 	Characteristics charac;
+	Weapon weapon;
 	
 	/* Parameters */
 	private double width;
@@ -42,9 +43,6 @@ public class Character extends Hitbox {
 
 	private int indArea;		// indice of the current area
 	
-	public int weapon;
-	/* 1: simple shot */
-	public boolean keySpace;	// to verify if the jump has been released
 
 	public Character() {
 		width = 45;
@@ -52,7 +50,7 @@ public class Character extends Hitbox {
 		tanAlpha = 0.75;
 
 		type = 1;
-		weapon = 1;
+		weapon = new Weapon();
 		state = 0;
 		direction = 1;
 		maxSpeed = 25;
@@ -71,7 +69,6 @@ public class Character extends Hitbox {
 		inactiveRight = 0;
 		inactiveJump = 0;
 		keyJump = true;
-		keySpace = true;
 		nbJump = 0;
 		maxNbJump = 2;
 		
@@ -108,22 +105,28 @@ public class Character extends Hitbox {
 	public void update() {
 		int areaType;
 		if(Main.key1) {
-			weapon = 1;
+			weapon.type = 1;
 		}
 		if(Main.key2) {
-			weapon = 2;
+			weapon.type = 2;
 		}
 		if(Main.key3) {
-			weapon = 3;
+			weapon.type = 3;
 		}
 		if(Main.key4) {
-			weapon = 4;
+			weapon.type = 4;
 		}
 		if(Main.key5) {
-			weapon = 5;
+			weapon.type = 5;
 		}
 		if(Main.key6) {
-			weapon = 6;
+			weapon.type = 6;
+		}
+		if(Main.key7) {
+			weapon.type = 7;
+		}
+		if(Main.key8) {
+			weapon.type = 8;
 		}
 		if(Main.debug[11]) {
 			System.out.println(this.position[0] + " - " + this.position[1]);
@@ -233,20 +236,15 @@ public class Character extends Hitbox {
 	}
 
 	private void updateAir() {
-
-		if (Main.keySpace && (keySpace || weapon == 4)) {
-			keySpace = false;
-			for(int i = 0 ; i < Main.maxNbShots ; i++) {
-				if(Main.friendlyShots[i].type == 0) {
-					Main.friendlyShots[i].fire(weapon, position[0]-30, position[1], 0 , direction);
-					Main.friendlyShots[i].hitMob = true;
-					break;
-				}
-			}
-		}
+		int buf_dir;
 		updateState();
 		move();
 
+		buf_dir = weapon.update(position[0]-30, position[1], Main.mouseI-Main.mainChar.position[0] , Main.mouseJ-Main.mainChar.position[1]);
+		if(buf_dir != 0) {
+			direction = buf_dir;
+		}
+		
 		if (Main.debug[6]) {
 			System.out.println("inactiveLeft remaining time : " + inactiveLeft + "   [Character][updateAir]");
 			System.out.println("inactiveRight remaining time : " + inactiveRight + "   [Character][updateAir]");
@@ -312,7 +310,7 @@ public class Character extends Hitbox {
 
 		this.speed[1] = bufspeed;
 
-		if(Main.areas[indArea].getType() != 1) {
+		if(isIn() != 1) {
 			this.speed[0] = - jumpSpeed;
 			nbJump = 1;
 			keyJump = false;
@@ -755,6 +753,7 @@ public class Character extends Hitbox {
 		// Reset of the walk speed to stop if any key is pressed
 		this.speed[0] = 0;
 		this.speed[1] = 0;
+		keyJump = true;
 
 		if (inactiveLeft > 4) {
 			inactiveLeft = 4;
@@ -781,6 +780,7 @@ public class Character extends Hitbox {
 			nbJump = 1;
 			keyJump = false;
 		}
+		
 	}
 
 	private void reboundBotLeft() {
@@ -828,6 +828,7 @@ public class Character extends Hitbox {
 	}
 
 	private void reboundTop() {
+		inactiveJump = inactiveTime + 1;
 		nbJump = 1;
 		this.speed[0] = 3;
 		this.position[0] = this.position[0] + 0.01;

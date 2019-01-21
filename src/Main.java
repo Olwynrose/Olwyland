@@ -1,6 +1,10 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
+
+import com.sun.glass.events.MouseEvent;
 
 public class Main {
 
@@ -38,6 +42,10 @@ public class Main {
 	static boolean key6;
 	static boolean key7;
 	static boolean key8;
+	
+	static boolean mouseLeft;
+	static double mouseI;
+	static double mouseJ;
 
 
 	static boolean[] debug;
@@ -58,7 +66,7 @@ public class Main {
 		//debug[4] = true;		//print the friction coefficient of the air (defined by the max fall speed)
 		//debug[5] = true;		//print the jump speed
 		//debug[6] = true;		//print the inactivity time of the left/right/jump keys
-		//debug[7] = true;		//activates the fly mode (maintain space bar to fly without caring of the hitboxes)
+		debug[7] = true;		//activates the fly mode (maintain space bar to fly without caring of the hitboxes)
 		//debug[8] = true;		//print the area the character enters in
 		debug[9] = true;		//display the areas
 		debug[10] = true;		//display the hitboxes
@@ -105,6 +113,33 @@ public class Main {
 		    	  screen.updateReleasedKeys(key);
 		      }
 		});
+		
+		screen.window.addMouseListener( new MouseListener() 
+		{
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent arg0) {
+			}
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent arg0) {}
+			@Override
+			public void mouseExited(java.awt.event.MouseEvent arg0) {}
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent arg0) {
+				screen.updatePressedMouse(arg0);
+			}
+			@Override
+			public void mouseReleased(java.awt.event.MouseEvent arg0) {
+				mouseLeft = false;
+	  	  		Main.mainChar.weapon.keyShot = true;
+			}
+		} );
+		screen.window.addMouseMotionListener( new MouseMotionAdapter() 
+		{
+			public void mouseDragged(java.awt.event.MouseEvent e )
+			{
+				screen.updatePressedMouse(e);
+			}
+		} );
 
 		while(true) {
 			tic = System.currentTimeMillis();
