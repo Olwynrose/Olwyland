@@ -87,14 +87,21 @@ public class Shot extends Hitbox{
 					for (int i = 0 ; i < Main.maxNbMobs ; i++) {
 						intersect(Main.mobs[i]);
 						if(tMin < buf_tMin) {
-							Main.mobs[i].charac.hit(damages);
 							if(stopMob && Main.mobs[i].charac.hp>0) {
+								Main.mobs[i].charac.hit(damages);
 								break;
 							}
 							else {
+								Main.mobs[i].charac.hit(damages);
 								tMin = 1;
 							}
 						}
+					}
+				}
+				if(hitCharac) {
+					intersect(Main.mainChar);
+					if(tMin < buf_tMin) {
+						Main.mainChar.charac.hit(damages);
 					}
 				}
 				tMin = Math.min(tMin, buf_tMin);
@@ -117,8 +124,9 @@ public class Shot extends Hitbox{
 								Main.friendlyShots[i].fire(1, position[0], position[1], Math.cos(2*Math.PI*j/maxProjectiles) , Math.sin(2*Math.PI*j/maxProjectiles));
 								Main.friendlyShots[i].hitMob = true;
 								Main.friendlyShots[i].time = 4;
-								Main.friendlyShots[i].damages = 200;
+								Main.friendlyShots[i].damages = 400;
 								Main.friendlyShots[i].stopMob = false;
+								Main.friendlyShots[i].hitCharac = false;
 								break;
 							}
 						}
@@ -169,13 +177,14 @@ public class Shot extends Hitbox{
 		{
 			stopMob = true;
 			double norm = Math.sqrt(Math.pow(speedi,2)+Math.pow(speedj,2));
+			double a = 0.9 + 0.2*Math.random();
 			rayAOE = 0;
 			damages = 100;
 			time = 40;
 			this.position[0] = i0;
 			this.position[1] = j0;
-			this.speed[0] = 50*speedi/norm;
-			this.speed[1] = 50*speedj/norm;
+			this.speed[0] = a*50*speedi/norm;
+			this.speed[1] = a*50*speedj/norm;
 			this.nbPoints = 2;
 			this.points = new double[nbPoints][2];
 			this.points[0][0] = 0;
@@ -198,15 +207,15 @@ public class Shot extends Hitbox{
 			this.points = new double[nbPoints][2];
 			this.points[0][0] = 0;
 			this.points[0][1] = 0;
-			this.points[1][0] = -10;
+			this.points[1][0] = -9;
 			this.points[1][1] = -4;
-			this.points[2][0] = -10;
+			this.points[2][0] = -9;
 			this.points[2][1] = 4;
 			this.points[3][0] = 0;
 			this.points[3][1] = 0;
 
-			this.speed[0] = speedi*0.2;
-			this.speed[1] = speedj*0.2;
+			this.speed[0] = speedi*0.15;
+			this.speed[1] = speedj*0.15;
 			
 		}
 		break;
@@ -242,6 +251,13 @@ public class Shot extends Hitbox{
 					}
 				}
 			}
+			if(hitCharac) {
+				intersect(Main.mainChar);
+				if(tMin < buf_tMin) {
+					Main.mainChar.charac.hit(damages);
+					tMin = 1;
+				}
+			}
 			tMin = buf_tMin;
 			this.nbPoints = 2;
 			this.points = new double[nbPoints][2];
@@ -267,9 +283,9 @@ public class Shot extends Hitbox{
 			this.speed[1] = 9*speedj/norm;
 			this.nbPoints = 2;
 			this.points = new double[nbPoints][2];
-			this.points[0][0] = 20;
+			this.points[0][0] = 10;
 			this.points[0][1] = 0;
-			this.points[1][0] = -20;
+			this.points[1][0] = -10;
 			this.points[1][1] = 0;
 			
 		}

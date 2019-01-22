@@ -47,8 +47,8 @@ public class Display {
 		lab = new JLabel();
 		idim = 720;
 		jdim = 1080;
-		margini = 0.3*(double)idim;
-		marginj = 0.3*(double)jdim;
+		margini = 0.43*(double)idim;
+		marginj = 0.43*(double)jdim;
 		transi = 0;
 		transj = 0;
 		translationType = 1;
@@ -436,6 +436,15 @@ public class Display {
 					for (int i = 0 ; i < Main.friendlyShots[n].getNbPoints() - 1 ; i++) {
 						segment(Main.friendlyShots[n].getOnePoint(i, 0)-transi, Main.friendlyShots[n].getOnePoint(i, 1)-transj,
 								Main.friendlyShots[n].getOnePoint(i+1, 0)-transi, Main.friendlyShots[n].getOnePoint(i+1, 1)-transj,
+								255, 255, 127);
+					}
+				}
+			}
+			for(int n = 0 ; n< Main.maxNbShots ; n++) {
+				if(Main.ennemyShots[n].type>0) {
+					for (int i = 0 ; i < Main.ennemyShots[n].getNbPoints() - 1 ; i++) {
+						segment(Main.ennemyShots[n].getOnePoint(i, 0)-transi, Main.ennemyShots[n].getOnePoint(i, 1)-transj,
+								Main.ennemyShots[n].getOnePoint(i+1, 0)-transi, Main.ennemyShots[n].getOnePoint(i+1, 1)-transj,
 								255, 255, 127);
 					}
 				}

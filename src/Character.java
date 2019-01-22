@@ -2,8 +2,8 @@
 public class Character extends Hitbox {
 
 	/* Characteristics */
-	Characteristics charac;
-	Weapon weapon;
+	public Characteristics charac;
+	public Weapon weapon;
 	
 	/* Parameters */
 	private double width;
@@ -267,7 +267,7 @@ public class Character extends Hitbox {
 		updateState();
 		move();
 
-		buf_dir = weapon.update(position[0]-30, position[1], Main.mouseI-Main.mainChar.position[0] , Main.mouseJ-Main.mainChar.position[1]);
+		buf_dir = weapon.updateCharac(position[0]-40, position[1], Main.mouseI-Main.mainChar.position[0] , Main.mouseJ-Main.mainChar.position[1]);
 		if(buf_dir != 0) {
 			direction = buf_dir;
 		}

@@ -1147,13 +1147,37 @@ public class Debug {
 				
 				double ci = -100;
 				double cj = 3550;
-				for(int indmob = 0; indmob < 20 ; indmob++) {
+				int indmob;
+				for(indmob = 0; indmob < 20 ; indmob++) {
 					Main.mobs[indmob] = new Mob(1);
 					Main.mobs[indmob].checkPoint[0] = ci;
 					Main.mobs[indmob].checkPoint[1] = cj;
 					Main.mobs[indmob].position[0] = ci;
 					Main.mobs[indmob].position[1] = cj;
 				}
+
+				
+				
+				/* Arena */
+				
+				Main.areas[Main.nbAreas] = new Area(4, -200, -50, 50, 300);
+				Main.areas[Main.nbAreas].setIndHB(Main.nbSceneries);
+				Main.nbAreas = Main.nbAreas + 1;
+				
+				Main.sceneries[Main.nbSceneries] = new Scenery(5);
+				Main.sceneries[Main.nbSceneries].setOnePoint(0, -160, 0);
+				Main.sceneries[Main.nbSceneries].setOnePoint(1, -300, 600);
+				Main.sceneries[Main.nbSceneries].setOnePoint(2, -200, 600);
+				Main.sceneries[Main.nbSceneries].setOnePoint(3, -200, 2600);
+				Main.sceneries[Main.nbSceneries].setOnePoint(4, -600, 2600);
+				Main.nbSceneries = Main.nbSceneries + 1;
+				
+				
+				Main.mobs[indmob] = new Mob(2);
+				Main.mobs[indmob].checkPoint[0] = -202;
+				Main.mobs[indmob].checkPoint[1] = 1000;
+				Main.mobs[indmob].position[0] = Main.mobs[indmob].checkPoint[0];
+				Main.mobs[indmob].position[1] = Main.mobs[indmob].checkPoint[1];
 			}
 			break;
 			case 7:
