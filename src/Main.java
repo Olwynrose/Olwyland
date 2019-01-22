@@ -98,8 +98,8 @@ public class Main {
 			ennemyShots[i] = new Shot();
 		}
 
-		//Debug.testMap(6);
-		Map.load(3);
+		Debug.testMap(6);
+		//Map.load(3);
 		
 		screen = new Display();
 		screen.window.addKeyListener(new KeyListener() {

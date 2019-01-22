@@ -53,6 +53,8 @@ public class Mob extends Hitbox{
 	public boolean attack;
 	private int maxTimeMove;
 	private int timeMove;
+	private int maxTimeRelowed;
+	private int timeRelowed;
 	private int maxTimeShot;
 	private int timeShot;
 
@@ -73,7 +75,7 @@ public class Mob extends Hitbox{
 		slideCoef = 0.8;
 		detectRange = 250;
 		visionRange = 1750;
-		cpRange = 1000;
+		cpRange = 500;
 
 		weapon = new Weapon();
 		charac = new Characteristics();
@@ -96,8 +98,9 @@ public class Mob extends Hitbox{
 			height = 55;
 
 			weapon.type = 6;
-			maxTimeMove = 50;
+			maxTimeMove = 20;
 			maxTimeShot = 10;
+			maxTimeRelowed = 50;
 			timeShot = 0;
 			timeMove = maxTimeMove;
 			detectRange = 350;
@@ -378,8 +381,8 @@ public class Mob extends Hitbox{
 		}
 		if(Math.pow(Main.mainChar.position[0]-this.position[0],2)+Math.pow(Main.mainChar.position[1]-this.position[1],2)>Math.pow(visionRange,2)) {
 			attack = false;
-			timeMove = 0;
 			timeShot = maxTimeShot;
+			timeRelowed = 0;
 			charac.hp = charac.maxHp;
 		}
 
@@ -421,7 +424,7 @@ public class Mob extends Hitbox{
 					keyUp = false;
 				}
 			} 
-			else {
+			else { // if(attack)
 				if (timeMove>0) {
 					timeMove = timeMove - 1;
 				}
@@ -458,31 +461,127 @@ public class Mob extends Hitbox{
 		break;
 		case 2:
 		{
-			keyLeft = false;
-			keyRight = false;
-			keyUp = false;
-			
+			double distLim = 300;
 			if(attack) {
-				// fire
-				if (timeMove>0) {
-					timeMove = timeMove - 1;
+				// move
+				if (timeRelowed>0) {
+					timeRelowed = timeRelowed - 1;
 					weapon.updateMob(false, position[0] - 30, position[1], Main.mainChar.position[0]-10 - position[0] , Main.mainChar.position[1] - position[1]);
+					
+					
+					
 				}
 				else {
+					// fire
 					if (timeShot>0) {
 						timeShot = timeShot - 1;
-						timeMove = 0;
+						timeRelowed = 0;
 					}
 					else {
-						timeMove = maxTimeMove;
+						timeRelowed = maxTimeRelowed;
 						timeShot = maxTimeShot;
 					}
 					weapon.updateMob(true, position[0] - 30, position[1], Main.mainChar.position[0]-10 - position[0] , Main.mainChar.position[1] - position[1]);
 				}
+				
 				// move
+				if (timeMove>0) {
+					timeMove = timeMove - 1;
+				}
+				else {
+					if(checkPoint[1]+cpRange-position[1]<0) {
+						keyLeft = true;
+						keyRight = false;
+						timeMove = 5*maxTimeMove;
+					}
+					else if(checkPoint[1]-cpRange-position[1]>0) {
+						keyLeft = false;
+						keyRight = true;
+						timeMove = 5*maxTimeMove;
+					}
+					else {
+						a = Math.random();
+						if(position[1]-Main.mainChar.position[1]>0) {
+							System.out.println(Math.pow(Main.mainChar.position[1]-this.position[1]+distLim,2)/Math.pow(distLim,2));
+							if (a<Math.pow(Main.mainChar.position[1]-this.position[1]+distLim,2)/Math.pow(distLim,2)) {
+								if (this.position[1]-Main.mainChar.position[1]-distLim>0) {
+									keyLeft = true;
+									keyRight = false;
+									timeMove = maxTimeMove;
+								}
+								else {
+									keyLeft = false;
+									keyRight = true;
+									timeMove = maxTimeMove;
+								}
+							}
+							else {
+								keyLeft = false;
+								keyRight = false;
+								timeMove = maxTimeMove/4;
+							}
+						}
+						else { //position[1]-Main.mainChar.position[1]>0
+							if (a<Math.pow(Main.mainChar.position[1]-this.position[1]-distLim,2)/Math.pow(distLim,2)) {
+								if (this.position[1]-Main.mainChar.position[1]+distLim>0) {
+									keyLeft = true;
+									keyRight = false;
+									timeMove = maxTimeMove;
+								}
+								else {
+									keyLeft = false;
+									keyRight = true;
+									timeMove = maxTimeMove;
+								}
+							}
+							else {
+								keyLeft = false;
+								keyRight = false;
+								timeMove = maxTimeMove/4;
+							}
+						}
+					}
+				}
+
 				a = Math.random();
-				if() {
-					
+				if (a<0.05) {
+					keyUp = true;
+				}
+				else {
+					keyUp = false;
+				}
+			}
+			else { // if(attack)
+				if (timeMove>0) {
+					timeMove = timeMove - 1;
+				}
+				else {
+					a = Math.random();
+					if (a<0.05) {
+						a = Math.random();
+						if (a<0.5 + (position[1]-checkPoint[1])*0.5/cpRange) {
+							keyLeft = true;
+							keyRight = false;
+							timeMove = maxTimeMove;
+						}
+						else {
+							keyLeft = false;
+							keyRight = true;
+							timeMove = maxTimeMove;
+						}
+					}
+					else {
+						keyLeft = false;
+						keyRight = false;
+					}
+				}
+
+				a = Math.random();
+				if (a<0.01) {
+					keyUp = true;
+				}
+				else {
+					keyUp = false;
 				}
 			}
 		}

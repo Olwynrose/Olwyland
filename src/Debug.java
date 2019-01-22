@@ -1175,7 +1175,7 @@ public class Debug {
 				
 				Main.mobs[indmob] = new Mob(2);
 				Main.mobs[indmob].checkPoint[0] = -202;
-				Main.mobs[indmob].checkPoint[1] = 1000;
+				Main.mobs[indmob].checkPoint[1] = 1600;
 				Main.mobs[indmob].position[0] = Main.mobs[indmob].checkPoint[0];
 				Main.mobs[indmob].position[1] = Main.mobs[indmob].checkPoint[1];
 			}
