@@ -396,7 +396,6 @@ public class ImageToHitbox {
 						if (ind > 10) {
 							ind = simplifyContour(ind);
 							
-							//ind = ind;
 							indHB = ind;
 							for (int n = 0; n < ind; n++) {
 								coordHB[n][0] = Main.rappImage*(double) coord[n][0];

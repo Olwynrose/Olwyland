@@ -124,7 +124,7 @@ public class Shot extends Hitbox{
 								Main.friendlyShots[i].fire(1, position[0], position[1], Math.cos(2*Math.PI*j/maxProjectiles) , Math.sin(2*Math.PI*j/maxProjectiles));
 								Main.friendlyShots[i].hitMob = true;
 								Main.friendlyShots[i].time = 4;
-								Main.friendlyShots[i].damages = 200;
+								Main.friendlyShots[i].damages = 400;
 								Main.friendlyShots[i].stopMob = false;
 								Main.friendlyShots[i].hitCharac = false;
 								break;
@@ -214,8 +214,8 @@ public class Shot extends Hitbox{
 			this.points[3][0] = 0;
 			this.points[3][1] = 0;
 
-			this.speed[0] = speedi*0.2;
-			this.speed[1] = speedj*0.2;
+			this.speed[0] = speedi*0.15;
+			this.speed[1] = speedj*0.15;
 			
 		}
 		break;

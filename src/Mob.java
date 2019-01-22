@@ -12,6 +12,7 @@ public class Mob extends Hitbox{
 	/* 0:nothing, 1: slug, 2: gunMob */
 	private double detectRange;		// range in witch the mob start to attack the player
 	private double visionRange;		// range in witch the mob stop to attack the player
+	private double cpRange;			// maximum distance to the checkpoint
 
 	public int state; 				// state of the character
 	/* 0:fly, 1:floor, 2:top, 3:left, 4:right, 5: botleft, 6:botright, 7:slideleft, 8:slideright, 9: slidefloor*/
@@ -62,7 +63,6 @@ public class Mob extends Hitbox{
 		tanAlpha = 0.75;
 		type = typeIn;
 
-
 		state = 0;
 		attack = false;
 		maxSpeed = 25;
@@ -73,6 +73,7 @@ public class Mob extends Hitbox{
 		slideCoef = 0.8;
 		detectRange = 250;
 		visionRange = 1750;
+		cpRange = 1000;
 
 		weapon = new Weapon();
 		charac = new Characteristics();
@@ -381,10 +382,11 @@ public class Mob extends Hitbox{
 			timeShot = maxTimeShot;
 			charac.hp = charac.maxHp;
 		}
+
+		double a = 0;
 		switch(this.type) {
 		case 1:
 		{
-			double a = 0;
 			
 			if (attack) {
 				if (timeMove>0) {
@@ -461,9 +463,10 @@ public class Mob extends Hitbox{
 			keyUp = false;
 			
 			if(attack) {
+				// fire
 				if (timeMove>0) {
 					timeMove = timeMove - 1;
-					weapon.updateMob(false, position[0] - 30, position[1], Main.mainChar.position[0] - position[0] , Main.mainChar.position[1] - position[1]);
+					weapon.updateMob(false, position[0] - 30, position[1], Main.mainChar.position[0]-10 - position[0] , Main.mainChar.position[1] - position[1]);
 				}
 				else {
 					if (timeShot>0) {
@@ -474,7 +477,12 @@ public class Mob extends Hitbox{
 						timeMove = maxTimeMove;
 						timeShot = maxTimeShot;
 					}
-					weapon.updateMob(true, position[0] - 30, position[1], Main.mainChar.position[0] - position[0] , Main.mainChar.position[1] - position[1]);
+					weapon.updateMob(true, position[0] - 30, position[1], Main.mainChar.position[0]-10 - position[0] , Main.mainChar.position[1] - position[1]);
+				}
+				// move
+				a = Math.random();
+				if() {
+					
 				}
 			}
 		}

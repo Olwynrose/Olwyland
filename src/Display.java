@@ -47,8 +47,8 @@ public class Display {
 		lab = new JLabel();
 		idim = 720;
 		jdim = 1080;
-		margini = 0.3*(double)idim;
-		marginj = 0.3*(double)jdim;
+		margini = 0.43*(double)idim;
+		marginj = 0.43*(double)jdim;
 		transi = 0;
 		transj = 0;
 		translationType = 1;
