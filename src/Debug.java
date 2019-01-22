@@ -1161,7 +1161,6 @@ public class Debug {
 				Main.hitboxFileImage = "files/HB_Egouts_dessin1.png";
 				Main.backgroundFileImage = "files/HB_Egouts_dessin1.png";
 				Main.rappImage = 2;
-				Main.interpol = 2;
 				new ImageToHitbox();
 				Main.mainChar.checkPoint[0] = 620;
 				Main.mainChar.checkPoint[1] = 7770;

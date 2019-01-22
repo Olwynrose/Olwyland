@@ -53,7 +53,6 @@ public class Main {
 	static String backgroundFileImage;
 	static String foregroundFileImage;
 	static double rappImage;
-	static int interpol;
 
 	public static void main(String[] args) throws InterruptedException, IOException {
 		long tic, toc;
@@ -99,8 +98,8 @@ public class Main {
 			ennemyShots[i] = new Shot();
 		}
 
-		Debug.testMap(6);
-		//Map.load(2);
+		//Debug.testMap(6);
+		Map.load(3);
 		
 		screen = new Display();
 		screen.window.addKeyListener(new KeyListener() {

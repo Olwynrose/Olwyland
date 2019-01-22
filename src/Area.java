@@ -95,6 +95,10 @@ public class Area {
 	public double getSpeedMultJump() {
 		return this.speedMultJump;
 	}
+	
+	public void setSpeedMultJump(double mult) {
+		this.speedMultJump = mult;
+	}
 
 	public int getIndHB() {
 		return this.indHB;

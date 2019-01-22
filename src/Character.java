@@ -337,7 +337,7 @@ public class Character extends Hitbox {
 
 		this.speed[1] = bufspeed;
 
-		if(isIn() != 1) {
+		if(isIn() != 1 && this.speed[0]<0) {
 			this.speed[0] = - jumpSpeed;
 			nbJump = 1;
 			keyJump = false;
@@ -406,6 +406,7 @@ public class Character extends Hitbox {
 		}
 		else {
 			this.speed[0] = -Math.abs(this.speed[0])*Main.areas[indArea].getSpeedMultJump()-jumpSpeed;
+			System.out.println(Main.areas[indArea].getSpeedMultJump());
 			nbJump = maxNbJump;
 
 		}

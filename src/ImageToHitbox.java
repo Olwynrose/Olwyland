@@ -27,6 +27,7 @@ public class ImageToHitbox {
 
 	
 	public ImageToHitbox() {
+		err_max_hb = 2;
 		nbColor = 16;
 		redChan = new int[nbColor];
 		greenChan = new int[nbColor];
@@ -155,11 +156,11 @@ public class ImageToHitbox {
 						
 						if (errEll > errRect) {
 							// creation of a new rectangle
-							Main.areas[Main.nbAreas] = new Area(colorToAreaType(color), i0, j0, (j1-j0), (i1-i0));
+							Main.areas[Main.nbAreas] = new Area(colorToAreaType(color), i0*Main.rappImage, j0*Main.rappImage, (j1-j0)*Main.rappImage, (i1-i0)*Main.rappImage);
 							
 							// trampoline
 							if(colorToAreaType(color) == 7) {
-								Main.areas[Main.nbAreas].setSpeedMultTp(colorToAreaJumpSpeed(colorG));
+								Main.areas[Main.nbAreas].setSpeedMultJump(colorToAreaJumpSpeed(colorG));
 							}
 							Main.nbAreas = Main.nbAreas + 1;
 							
@@ -175,7 +176,7 @@ public class ImageToHitbox {
 							
 							// trampoline
 							if(colorToAreaType(color) == 7) {
-								Main.areas[Main.nbAreas].setSpeedMultTp(colorToAreaJumpSpeed(colorG));
+								Main.areas[Main.nbAreas].setSpeedMultJump(colorToAreaJumpSpeed(colorG));
 							}
 							
 							Main.nbAreas = Main.nbAreas + 1;
@@ -240,19 +241,20 @@ public class ImageToHitbox {
 						ind = getContour();
 						if (ind > 20) {
 							ind = simplifyContour(ind);
-							
-							Main.sceneries[Main.nbSceneries] = new Scenery(ind);
-							Main.sceneries[Main.nbSceneries].type = 1;
-							ind = ind - 1;
-							for (int n = 0; n < ind; n++) {
-								Main.sceneries[Main.nbSceneries].setOnePoint(n, Main.rappImage*(double) coord[n][0], Main.rappImage*(double) coord[n][1]);
-							}
-							Main.sceneries[Main.nbSceneries].setOnePoint(ind, Main.rappImage*(double) coord[0][0], Main.rappImage*(double) coord[0][1]);
-	
-							Main.nbSceneries = Main.nbSceneries + 1;
-							
-							if (Main.debug[12]) {
-								System.out.println("Hitbox n°" + Main.nbSceneries + " : " + ind + " edges");
+							if(ind > 2) {
+								Main.sceneries[Main.nbSceneries] = new Scenery(ind);
+								Main.sceneries[Main.nbSceneries].type = 1;
+								ind = ind - 1;
+								for (int n = 0; n < ind; n++) {
+									Main.sceneries[Main.nbSceneries].setOnePoint(n, Main.rappImage*(double) coord[n][0], Main.rappImage*(double) coord[n][1]);
+								}
+								Main.sceneries[Main.nbSceneries].setOnePoint(ind, Main.rappImage*(double) coord[0][0], Main.rappImage*(double) coord[0][1]);
+		
+								Main.nbSceneries = Main.nbSceneries + 1;
+								
+								if (Main.debug[12]) {
+									System.out.println("Hitbox n°" + Main.nbSceneries + " : " + ind + " edges");
+								}
 							}
 						}
 					}
@@ -289,16 +291,20 @@ public class ImageToHitbox {
 				if (color != nbColor - 1) {
 					
 					ind = connectedComponent(i, j, color);
-					if (ind > 100) {
+					if (ind > 50) {
 						ind = getTrajectory();
-						if (ind > 20) {
+						if (ind > 5) {
 							ind = simplifyContour(ind);
 
 							Main.sceneries[Main.nbSceneries] = new Scenery(2);
 							Main.sceneries[Main.nbSceneries].type = 2;
-								Main.sceneries[Main.nbSceneries].setOnePoint(0, Main.rappImage*(double) coord[0][0], Main.rappImage*(double) coord[0][1]);
-								Main.sceneries[Main.nbSceneries].setOnePoint(1, Main.rappImage*(double) coord[ind-1][0], Main.rappImage*(double) coord[ind-1][1]);
+							Main.sceneries[Main.nbSceneries].setOnePoint(0, Main.rappImage*(double) coord[0][0], Main.rappImage*(double) coord[0][1]);
+							Main.sceneries[Main.nbSceneries].setOnePoint(1, Main.rappImage*(double) coord[ind-1][0], Main.rappImage*(double) coord[ind-1][1]);
 							Main.nbSceneries = Main.nbSceneries + 1;
+							
+							if (Main.debug[12]) {
+								System.out.println("Hitbox n°" + Main.nbSceneries + " (line) : " + ind + " edges");
+							}
 						}
 					}
 				}
@@ -759,12 +765,17 @@ public class ImageToHitbox {
 			// trampoline
 			return 7;
 		}
+		case 6: {
+			// checkpoint
+			return 9;
+		}
 		}
 		return 0;
 	}
 	
 	private double colorToAreaJumpSpeed(int color) {
 		/* green chanel */
+		System.out.println(color);
 		switch (color) {
 		case 0: {
 			return 1.5;
@@ -1303,19 +1314,21 @@ public class ImageToHitbox {
 		indRev1 = 0;
 		indRev2 = ind;
 		n = getNextTrajPoint(coord[0][0], coord[0][1], deltaP, init_n-10);
-		ind = ind + 1;
-		coord[ind][0] = coord[0][0] + deltaP[n][0];
-		coord[ind][1] = coord[0][1] + deltaP[n][1];
-		buf_n = n;
-		while(n > -1) {
-			n = getNextTrajPoint(coord[ind][0], coord[ind][1], deltaP, buf_n);
-			if(n > -1) {
-				ind = ind + 1;
-				coord[ind][0] = coord[ind-1][0] + deltaP[n][0];
-				coord[ind][1] = coord[ind-1][1] + deltaP[n][1];
-			}
+		if(n>-1) {
+			ind = ind + 1;
+			coord[ind][0] = coord[0][0] + deltaP[n][0];
+			coord[ind][1] = coord[0][1] + deltaP[n][1];
 			buf_n = n;
-			
+			while(n > -1) {
+				n = getNextTrajPoint(coord[ind][0], coord[ind][1], deltaP, buf_n);
+				if(n > -1) {
+					ind = ind + 1;
+					coord[ind][0] = coord[ind-1][0] + deltaP[n][0];
+					coord[ind][1] = coord[ind-1][1] + deltaP[n][1];
+				}
+				buf_n = n;
+				
+			}
 		}
 		
 		while(indRev1<indRev2) {

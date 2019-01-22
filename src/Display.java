@@ -122,12 +122,12 @@ public class Display {
 
 		idim_map = imgBackground.length;
 		jdim_map = imgBackground[0].length;
-		if(Main.interpol == 3)
+		if(Main.rappImage == 3)
 		{
 			idim_map = 3*idim_map-3;
 			jdim_map = 3*jdim_map-3;
 		}
-		if(Main.interpol == 2)
+		if(Main.rappImage == 2)
 		{
 			idim_map = 2*idim_map-2;
 			jdim_map = 2*jdim_map-2;
@@ -148,12 +148,12 @@ public class Display {
 	
 			idim_fore = imgForeground.length;
 			jdim_fore = imgForeground[0].length;
-			if(Main.interpol == 3)
+			if(Main.rappImage == 3)
 			{
 				idim_fore = 3*idim_fore-3;
 				jdim_fore = 3*jdim_fore-3;
 			}
-			if(Main.interpol == 2)
+			if(Main.rappImage == 2)
 			{
 				idim_fore = 2*idim_fore-2;
 				jdim_fore = 2*jdim_fore-2;
@@ -211,29 +211,38 @@ public class Display {
 		{
 			for (j=0; j<jdim; j++)
 			{
-				if(Main.interpol == 3)
+				if(Main.rappImage == 3)
 				{
-					ii = (i-(int)transi)/3;
-					jj = (j-(int)transj)/3;
-					di = (i-(int)transi) % 3;
-					dj = (j-(int)transj) % 3;
-					img[i][j][0] = (int) ( ((double)imgBackground[ii][jj][0])*inter3[di][dj]+
-							((double)imgBackground[ii+1][jj][0])*inter3[3-di][dj]+
-							((double)imgBackground[ii][jj+1][0])*inter3[di][3-dj]+
-							((double)imgBackground[ii+1][jj+1][0])*inter3[3-di][3-dj]);
-					img[i][j][1] = (int) ( ((double)imgBackground[ii][jj][1])*inter3[di][dj]+
-							((double)imgBackground[ii+1][jj][1])*inter3[3-di][dj]+
-							((double)imgBackground[ii][jj+1][1])*inter3[di][3-dj]+
-							((double)imgBackground[ii+1][jj+1][1])*inter3[3-di][3-dj]);
-					img[i][j][2] = (int) ( ((double)imgBackground[ii][jj][2])*inter3[di][dj]+
-							((double)imgBackground[ii+1][jj][2])*inter3[3-di][dj]+
-							((double)imgBackground[ii][jj+1][2])*inter3[di][3-dj]+
-							((double)imgBackground[ii+1][jj+1][2])*inter3[3-di][3-dj]);
+					ii = (i+(int)transi)/3;
+					jj = (j+(int)transj)/3;
+					di = (i+(int)transi) % 3;
+					dj = (j+(int)transj) % 3;
+					
+					if(ii>0 && ii<idim_map/3-3 && jj>0 && jj<jdim_map/3-3)
+					{
+						img[i][j][0] = (int) ( ((double)imgBackground[ii][jj][0])*inter3[di][dj]+
+								((double)imgBackground[ii+1][jj][0])*inter3[3-di][dj]+
+								((double)imgBackground[ii][jj+1][0])*inter3[di][3-dj]+
+								((double)imgBackground[ii+1][jj+1][0])*inter3[3-di][3-dj]);
+						img[i][j][1] = (int) ( ((double)imgBackground[ii][jj][1])*inter3[di][dj]+
+								((double)imgBackground[ii+1][jj][1])*inter3[3-di][dj]+
+								((double)imgBackground[ii][jj+1][1])*inter3[di][3-dj]+
+								((double)imgBackground[ii+1][jj+1][1])*inter3[3-di][3-dj]);
+						img[i][j][2] = (int) ( ((double)imgBackground[ii][jj][2])*inter3[di][dj]+
+								((double)imgBackground[ii+1][jj][2])*inter3[3-di][dj]+
+								((double)imgBackground[ii][jj+1][2])*inter3[di][3-dj]+
+								((double)imgBackground[ii+1][jj+1][2])*inter3[3-di][3-dj]);
+					}
+					else {
+						img[i][j][0] = 0;
+						img[i][j][1] = 0;
+						img[i][j][2] = 0;
+					}
 
 				}
 				else
 				{
-					if (Main.interpol == 2)
+					if (Main.rappImage == 2)
 					{
 						ii = (i+(int)transi)/2;
 						jj = (j+(int)transj)/2;
@@ -311,7 +320,7 @@ public class Display {
 		{
 			for (j=0; j<jdim; j++)
 			{
-				if(Main.interpol == 3)
+				if(Main.rappImage == 3)
 				{
 					ii = (i-(int)transi)/3;
 					jj = (j-(int)transj)/3;
@@ -339,7 +348,7 @@ public class Display {
 				}
 				else
 				{
-					if (Main.interpol == 2)
+					if (Main.rappImage == 2)
 					{
 						ii = (i+(int)transi)/2;
 						jj = (j+(int)transj)/2;
