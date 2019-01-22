@@ -117,6 +117,45 @@ public class Scenery extends Hitbox {
 				Main.mainChar.forcedMove(speed[0]*(1-tMin), speed[1]*(1-tMin));
 			}
 		}
+		
+		for(int n = 0; n<Main.maxNbMobs; n++) {
+			move_charac = false;
+			// verify if a mob is on the hitbox
+			for(int i=0; i<this.nbPoints-1; i++) {
+				t = lineIntersection(1, 0, 
+						Main.mobs[n].getOnePoint(0, 0) - 0.5, Main.mobs[n].getOnePoint(0, 1),
+						position[0] + points[i][0], position[1] + points[i][1],
+						position[0] + points[i+1][0], position[1] + points[i+1][1]);
+	
+				if (t >= 0 && t < 1) {
+					move_charac = true;
+				}
+			}
+			if(move_charac){
+				Main.mobs[n].forcedMove(this.speed[0], this.speed[1]);
+			}
+			else {
+				
+				// verify if the hitbox intersect a mob
+				tMin = 1;
+				intersect(Main.mobs[n]);
+				
+				for(int i=0; i<this.nbPoints-1; i++) {
+					for(int j=0; j<Main.mobs[n].getNbPoints(); j++) {
+						t = lineIntersection(-this.speed[0], -this.speed[1], 
+								Main.mobs[n].getOnePoint(0, 0), Main.mobs[n].getOnePoint(0, 1),
+								position[0] + points[i][0], position[1] + points[i][1],
+								position[0] + points[i+1][0], position[1] + points[i+1][1]);
+					}		
+					if (t >= 0 && t < tMin) {
+						tMin = t;
+					}
+				}
+				if(tMin>0 && tMin<1) {
+					Main.mobs[n].forcedMove(speed[0]*(1-tMin), speed[1]*(1-tMin));
+				}
+			}
+		} // end mob intersection
 	}
 	
 	

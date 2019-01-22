@@ -1147,7 +1147,7 @@ public class Debug {
 				
 				double ci = -100;
 				double cj = 3550;
-				int indmob;
+				int indmob, buf_ind;
 				for(indmob = 0; indmob < 20 ; indmob++) {
 					Main.mobs[indmob] = new Mob(1);
 					Main.mobs[indmob].checkPoint[0] = ci;
@@ -1171,13 +1171,74 @@ public class Debug {
 				Main.sceneries[Main.nbSceneries].setOnePoint(3, -200, 2600);
 				Main.sceneries[Main.nbSceneries].setOnePoint(4, -600, 2600);
 				Main.nbSceneries = Main.nbSceneries + 1;
+
+				Main.sceneries[Main.nbSceneries] = new Scenery(4);
+				Main.sceneries[Main.nbSceneries].setOnePoint(0, 100, 0);
+				Main.sceneries[Main.nbSceneries].setOnePoint(1, 0, 0);
+				Main.sceneries[Main.nbSceneries].setOnePoint(2, 0, 100);
+				Main.sceneries[Main.nbSceneries].setOnePoint(3, 100, 100);
+
+				Main.sceneries[Main.nbSceneries].type = 1;
+				Main.sceneries[Main.nbSceneries].typeMove = 1;
+				Main.sceneries[Main.nbSceneries].period = 100;
+				Main.sceneries[Main.nbSceneries].time = 0;
+
+				Main.sceneries[Main.nbSceneries].newTrajectory(2);
+				Main.sceneries[Main.nbSceneries].setOneTrajectory(0, -300, 800);
+				Main.sceneries[Main.nbSceneries].setOneTrajectory(1, -200, 800);
+				Main.nbSceneries = Main.nbSceneries + 1;
 				
-				
+				Main.sceneries[Main.nbSceneries] = new Scenery(4);
+				Main.sceneries[Main.nbSceneries].setOnePoint(0, 100, 0);
+				Main.sceneries[Main.nbSceneries].setOnePoint(1, 0, 0);
+				Main.sceneries[Main.nbSceneries].setOnePoint(2, 0, 100);
+				Main.sceneries[Main.nbSceneries].setOnePoint(3, 100, 100);
+
+				Main.sceneries[Main.nbSceneries].type = 1;
+				Main.sceneries[Main.nbSceneries].typeMove = 1;
+				Main.sceneries[Main.nbSceneries].period = 100;
+				Main.sceneries[Main.nbSceneries].time = 0;
+
+				Main.sceneries[Main.nbSceneries].newTrajectory(2);
+				Main.sceneries[Main.nbSceneries].setOneTrajectory(0, -200, 1200);
+				Main.sceneries[Main.nbSceneries].setOneTrajectory(1, -300, 1200);
+				Main.nbSceneries = Main.nbSceneries + 1;
+
+				ci = -202;
+				cj = 1600;
 				Main.mobs[indmob] = new Mob(2);
-				Main.mobs[indmob].checkPoint[0] = -202;
-				Main.mobs[indmob].checkPoint[1] = 1600;
+				Main.mobs[indmob].checkPoint[0] = ci;
+				Main.mobs[indmob].checkPoint[1] = cj;
 				Main.mobs[indmob].position[0] = Main.mobs[indmob].checkPoint[0];
 				Main.mobs[indmob].position[1] = Main.mobs[indmob].checkPoint[1];
+				buf_ind = indmob + 1;
+				for(indmob=buf_ind; indmob < buf_ind+5 ; indmob++) {
+					Main.mobs[indmob] = new Mob(1);
+					Main.mobs[indmob].checkPoint[0] = ci;
+					Main.mobs[indmob].checkPoint[1] = cj;
+					Main.mobs[indmob].position[0] = ci;
+					Main.mobs[indmob].position[1] = cj;
+				}
+				ci = -202;
+				cj = 1000;
+				buf_ind = indmob;
+				for(indmob=buf_ind; indmob < buf_ind+5 ; indmob++) {
+					Main.mobs[indmob] = new Mob(1);
+					Main.mobs[indmob].checkPoint[0] = ci;
+					Main.mobs[indmob].checkPoint[1] = cj;
+					Main.mobs[indmob].position[0] = ci;
+					Main.mobs[indmob].position[1] = cj;
+				}
+				ci = -202;
+				cj = 2200;
+				buf_ind = indmob;
+				for(indmob=buf_ind; indmob < buf_ind+5 ; indmob++) {
+					Main.mobs[indmob] = new Mob(1);
+					Main.mobs[indmob].checkPoint[0] = ci;
+					Main.mobs[indmob].checkPoint[1] = cj;
+					Main.mobs[indmob].position[0] = ci;
+					Main.mobs[indmob].position[1] = cj;
+				}
 			}
 			break;
 			case 7:

@@ -8,7 +8,7 @@ public class Mob extends Hitbox{
 	private double width;
 	private double height;
 	private double tanAlpha;
-	// this.type = type of the mob
+	public int typeMob; 							// type of the mob
 	/* 0:nothing, 1: slug, 2: gunMob */
 	private double detectRange;		// range in witch the mob start to attack the player
 	private double visionRange;		// range in witch the mob stop to attack the player
@@ -63,7 +63,13 @@ public class Mob extends Hitbox{
 		width = 45;
 		height = 35;
 		tanAlpha = 0.75;
-		type = typeIn;
+		typeMob = typeIn;
+		if(typeMob>0) {
+			type = 1;
+		}
+		else {
+			type = 0;
+		}
 
 		state = 0;
 		attack = false;
@@ -75,12 +81,12 @@ public class Mob extends Hitbox{
 		slideCoef = 0.8;
 		detectRange = 250;
 		visionRange = 1750;
-		cpRange = 500;
+		cpRange = 850;
 
 		weapon = new Weapon();
 		charac = new Characteristics();
 		charac.hitTime = 0;
-		switch(type) {
+		switch(typeMob) {
 		case 1:
 		{
 			charac.defence = 10;
@@ -186,7 +192,7 @@ public class Mob extends Hitbox{
 			attack = true;
 		}
 		
-		if(this.type > 0) {
+		if(typeMob > 0) {
 			
 			if (animation == 0) {
 				if(charac.hp<=0) {
@@ -387,7 +393,7 @@ public class Mob extends Hitbox{
 		}
 
 		double a = 0;
-		switch(this.type) {
+		switch(typeMob) {
 		case 1:
 		{
 			
@@ -502,7 +508,6 @@ public class Mob extends Hitbox{
 					else {
 						a = Math.random();
 						if(position[1]-Main.mainChar.position[1]>0) {
-							System.out.println(Math.pow(Main.mainChar.position[1]-this.position[1]+distLim,2)/Math.pow(distLim,2));
 							if (a<Math.pow(Main.mainChar.position[1]-this.position[1]+distLim,2)/Math.pow(distLim,2)) {
 								if (this.position[1]-Main.mainChar.position[1]-distLim>0) {
 									keyLeft = true;
@@ -1096,6 +1101,28 @@ public class Mob extends Hitbox{
 		}
 	}
 	
+	public void forcedMove(double speedi, double speedj){
+		this.speed[0] = speedi;
+		this.speed[1] = speedj;
+		this.position[0] = this.position[0];
+		this.position[1] = this.position[1];
+
+		tMin = 1;
+		for (int i = 0 ; i < Main.nbSceneries ; i++) {
+			if(i < Main.indScene || i > Main.indScene) {
+				intersect(Main.sceneries[i]);
+			}
+		}
+
+		this.speed[0] = tMin * this.speed[0];
+		this.speed[1] = tMin * this.speed[1];
+
+		this.position[0] = this.position[0] + this.speed[0] - 0.001;
+		this.position[1] = this.position[1] + this.speed[1];
+
+		this.speed[0] = 0;
+		this.speed[1] = 0;
+	}
 	public void respawn() {
 		
 		charac.hp = charac.maxHp;
