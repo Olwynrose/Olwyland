@@ -1200,8 +1200,8 @@ public class Debug {
 				Main.sceneries[Main.nbSceneries].time = 0;
 
 				Main.sceneries[Main.nbSceneries].newTrajectory(2);
-				Main.sceneries[Main.nbSceneries].setOneTrajectory(0, -200, 1200);
-				Main.sceneries[Main.nbSceneries].setOneTrajectory(1, -300, 1200);
+				Main.sceneries[Main.nbSceneries].setOneTrajectory(0, -200, 1100);
+				Main.sceneries[Main.nbSceneries].setOneTrajectory(1, -300, 1100);
 				Main.nbSceneries = Main.nbSceneries + 1;
 
 				ci = -202;
@@ -1211,6 +1211,8 @@ public class Debug {
 				Main.mobs[indmob].checkPoint[1] = cj;
 				Main.mobs[indmob].position[0] = Main.mobs[indmob].checkPoint[0];
 				Main.mobs[indmob].position[1] = Main.mobs[indmob].checkPoint[1];
+				Main.mobs[indmob].weapon.hitMob = true;
+				
 				buf_ind = indmob + 1;
 				for(indmob=buf_ind; indmob < buf_ind+5 ; indmob++) {
 					Main.mobs[indmob] = new Mob(1);
@@ -1239,6 +1241,15 @@ public class Debug {
 					Main.mobs[indmob].position[0] = ci;
 					Main.mobs[indmob].position[1] = cj;
 				}
+				
+
+				Main.areas[Main.nbAreas] = new Area(6, -450, 1050, 200, 100);
+				Main.areas[Main.nbAreas].setIndTp(Main.nbAreas+1);
+				Main.areas[Main.nbAreas].setSpeedMultTp(1);
+				Main.nbAreas = Main.nbAreas + 1;
+				Main.areas[Main.nbAreas] = new Area(4,-350, 850, 10, 10);
+				Main.nbAreas = Main.nbAreas + 1;
+				
 			}
 			break;
 			case 7:

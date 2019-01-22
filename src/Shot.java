@@ -11,6 +11,7 @@ public class Shot extends Hitbox{
 	public double damages;
 	private double rayAOE;
 	private double acceleration;
+	private int indArea;		// indice of the current area
 	
 	
 	public Shot() {
@@ -24,7 +25,11 @@ public class Shot extends Hitbox{
 	}
 	
 	public void update() {
-		
+		if(this.type > 0) {
+			if(isIn() == 6) {
+				teleport();
+			}
+		}
 		double buf_tMin;
 		if(init) {
 			init = false;
@@ -313,6 +318,30 @@ public class Shot extends Hitbox{
 		}
 		break;
 		}
+	}
+	
+	private int isIn() {
+
+		for (int i = 0 ; i < Main.nbAreas ; i++) {
+			if (Main.areas[i].isIn(this.position[0], this.position[1]))
+			{
+				indArea = i;
+				return Main.areas[i].getType();
+			}
+		}
+		indArea = -1;
+		return 0;
+	}
+	
+	private void teleport() {
+		int indTp = Main.areas[indArea].getIndTp();
+		double mult = Main.areas[indArea].getSpeedMultTp();
+
+		this.speed[0] = mult * this.speed[0];
+		this.speed[1] = mult * this.speed[1];
+
+		this.position[0] = Main.areas[indTp].getPositionI() + Main.areas[indTp].getHeight() / 2;
+		this.position[1] = Main.areas[indTp].getPositionJ() + Main.areas[indTp].getWidth() / 2;
 	}
 	
 }

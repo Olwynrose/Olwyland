@@ -203,6 +203,7 @@ public class Character extends Hitbox {
 					break;
 				case 6:
 				{
+					// auto TP
 					animation = 4;
 					time = 0;
 					animate();

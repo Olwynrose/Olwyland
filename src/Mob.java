@@ -250,7 +250,8 @@ public class Mob extends Hitbox{
 						break;
 					case 6:
 					{
-						updateAir();
+						// auto TP
+						teleport();
 					}
 					break;
 					case 7:
@@ -487,7 +488,8 @@ public class Mob extends Hitbox{
 						timeRelowed = maxTimeRelowed;
 						timeShot = maxTimeShot;
 					}
-					weapon.updateMob(true, position[0] - 30, position[1], Main.mainChar.position[0]-10 - position[0] , Main.mainChar.position[1] - position[1]);
+					weapon.updateMob(true, position[0] - 30, position[1]+45*Math.signum(Main.mainChar.position[1] - position[1])
+							, Main.mainChar.position[0]-10 - position[0] , Main.mainChar.position[1] - position[1]);
 				}
 				
 				// move
@@ -1132,6 +1134,17 @@ public class Mob extends Hitbox{
 
 		this.position[0] = checkPoint[0];
 		this.position[1] = checkPoint[1];
+	}
+	
+	private void teleport() {
+		int indTp = Main.areas[indArea].getIndTp();
+		double mult = Main.areas[indArea].getSpeedMultTp();
+
+		this.speed[0] = mult * this.speed[0];
+		this.speed[1] = mult * this.speed[1];
+
+		this.position[0] = Main.areas[indTp].getPositionI() + Main.areas[indTp].getHeight() / 2;
+		this.position[1] = Main.areas[indTp].getPositionJ() + Main.areas[indTp].getWidth() / 2;
 	}
 	
 	private int isIn() {

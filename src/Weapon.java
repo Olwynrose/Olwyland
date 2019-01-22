@@ -1,6 +1,7 @@
 
 public class Weapon {
 	int type;
+	boolean hitMob;
 	public boolean keyShot;	// to verify if the shot has been released
 	int nbWeapons;
 	double dispersion;
@@ -12,6 +13,7 @@ public class Weapon {
 		nbWeapons = 50;
 		type = 1;
 		keyShot = true;
+		hitMob = false;
 		times = new int[nbWeapons];
 		maxTimes = new int[nbWeapons];
 		maxTimes[0] = 3; 	// simple shot
@@ -149,8 +151,8 @@ public class Weapon {
 				for(int i = 0 ; i < Main.maxNbShots ; i++) {
 					if(Main.ennemyShots[i].type == 0) {
 						Main.ennemyShots[i].fire(type, posi, posj, diri, dirj);
-						Main.ennemyShots[i].hitMob = false;
-						Main.ennemyShots[i].stopMob = false;
+						Main.ennemyShots[i].hitMob = this.hitMob;
+						Main.ennemyShots[i].stopMob = this.hitMob;
 						Main.ennemyShots[i].hitCharac = true;
 						break;
 					}
@@ -162,8 +164,8 @@ public class Weapon {
 				for(int i = 0 ; i < Main.maxNbShots ; i++) {
 					if(Main.ennemyShots[i].type == 0) {
 						Main.ennemyShots[i].fire(type, posi, posj, diri, dirj);
-						Main.ennemyShots[i].hitMob = false;
-						Main.ennemyShots[i].stopMob = false;
+						Main.ennemyShots[i].hitMob = this.hitMob;
+						Main.ennemyShots[i].stopMob = this.hitMob;
 						Main.ennemyShots[i].hitCharac = true;
 						break;
 					}
@@ -175,8 +177,8 @@ public class Weapon {
 				for(int i = 0 ; i < Main.maxNbShots ; i++) {
 					if(Main.ennemyShots[i].type == 0) {
 						Main.ennemyShots[i].fire(type, posi, posj, diri, dirj);
-						Main.ennemyShots[i].hitMob = false;
-						Main.ennemyShots[i].stopMob = false;
+						Main.ennemyShots[i].hitMob = this.hitMob;
+						Main.ennemyShots[i].stopMob = this.hitMob;
 						Main.ennemyShots[i].hitCharac = true;
 						break;
 					}
@@ -188,8 +190,8 @@ public class Weapon {
 				for(int i = 0 ; i < Main.maxNbShots ; i++) {
 					if(Main.ennemyShots[i].type == 0) {
 						Main.ennemyShots[i].fire(type, posi, posj, diri, dirj);
-						Main.ennemyShots[i].hitMob = false;
-						Main.ennemyShots[i].stopMob = false;
+						Main.ennemyShots[i].hitMob = this.hitMob;
+						Main.ennemyShots[i].stopMob = this.hitMob;
 						Main.ennemyShots[i].hitCharac = true;
 						break;
 					}
@@ -201,8 +203,8 @@ public class Weapon {
 				for(int i = 0 ; i < Main.maxNbShots ; i++) {
 					if(Main.ennemyShots[i].type == 0) {
 						Main.ennemyShots[i].fire(type, posi, posj, diri, dirj);
-						Main.ennemyShots[i].hitMob = false;
-						Main.ennemyShots[i].stopMob = false;
+						Main.ennemyShots[i].hitMob = this.hitMob;
+						Main.ennemyShots[i].stopMob = this.hitMob;
 						Main.ennemyShots[i].hitCharac = true;
 						break;
 					}
@@ -218,8 +220,8 @@ public class Weapon {
 				for(int i = 0 ; i < Main.maxNbShots ; i++) {
 					if(Main.ennemyShots[i].type == 0) {
 						Main.ennemyShots[i].fire(1, posi, posj, diri, dirj);
-						Main.ennemyShots[i].hitMob = false;
-						Main.ennemyShots[i].stopMob = false;
+						Main.ennemyShots[i].hitMob = this.hitMob;
+						Main.ennemyShots[i].stopMob = this.hitMob;
 						Main.ennemyShots[i].hitCharac = true;
 						Main.ennemyShots[i].damages = 150;
 						break;
@@ -238,8 +240,8 @@ public class Weapon {
 					for(int i = 0 ; i < Main.maxNbShots ; i++) {
 						if(Main.ennemyShots[i].type == 0) {
 							Main.ennemyShots[i].fire(1, posi, posj, diri, dirj);
-							Main.ennemyShots[i].hitMob = false;
-							Main.ennemyShots[i].stopMob = false;
+							Main.ennemyShots[i].hitMob = this.hitMob;
+							Main.ennemyShots[i].stopMob = this.hitMob;
 							Main.ennemyShots[i].hitCharac = true;
 							Main.ennemyShots[i].time = 10;
 							Main.ennemyShots[i].damages = 150;
