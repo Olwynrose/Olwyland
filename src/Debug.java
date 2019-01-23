@@ -1249,6 +1249,9 @@ public class Debug {
 				Main.nbAreas = Main.nbAreas + 1;
 				Main.areas[Main.nbAreas] = new Area(4,-350, 850, 10, 10);
 				Main.nbAreas = Main.nbAreas + 1;
+
+				Main.areas[Main.nbAreas] = new Area(7,-220, 1700, 150, 20);
+				Main.nbAreas = Main.nbAreas + 1;
 				
 			}
 			break;

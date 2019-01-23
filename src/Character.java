@@ -79,6 +79,7 @@ public class Character extends Hitbox {
 		else {
 			charac.defence = 10;
 		}
+		charac.indSound = 1;
 		charac.maxHp = 50;
 		charac.hp = charac.maxHp;
 
@@ -192,6 +193,7 @@ public class Character extends Hitbox {
 				{
 					// teleporter
 					if (Main.keyDown) {
+						Main.sounds.play(2);
 						animation = 4;
 						time = 0;
 						animate();
@@ -204,6 +206,7 @@ public class Character extends Hitbox {
 				case 6:
 				{
 					// auto TP
+					Main.sounds.play(2);
 					animation = 4;
 					time = 0;
 					animate();
@@ -403,13 +406,13 @@ public class Character extends Hitbox {
 			if(Main.keyUp && this.keyJump) {
 				this.speed[0] = - jumpSpeed;
 				nbJump = maxNbJump;
+				Main.sounds.play(4);
 			}
 		}
 		else {
 			this.speed[0] = -Math.abs(this.speed[0])*Main.areas[indArea].getSpeedMultJump()-jumpSpeed;
-			System.out.println(Main.areas[indArea].getSpeedMultJump());
 			nbJump = maxNbJump;
-
+			Main.sounds.play(4);
 		}
 
 		this.position[1] = this.position[1] + this.speed[1];
@@ -422,6 +425,9 @@ public class Character extends Hitbox {
 			intersect(Main.sceneries[i]);
 		}
 
+		if(this.speed[0]>5 && tMin<1 && state!=7 && state!=8) {
+			Main.sounds.play(1);
+		}
 		this.speed[0] = tMin * this.speed[0];
 		this.speed[1] = tMin * this.speed[1];
 		this.position[0] = this.position[0] + this.speed[0] - 0.001;
@@ -775,6 +781,7 @@ public class Character extends Hitbox {
 			nbJump = nbJump + 1;
 			keyJump = false;
 			this.speed[0] = - jumpSpeed;
+			Main.sounds.play(0);
 		}
 	}
 
@@ -808,6 +815,7 @@ public class Character extends Hitbox {
 			this.speed[0] = - jumpSpeed;
 			nbJump = 1;
 			keyJump = false;
+			Main.sounds.play(0);
 		}
 		
 	}
@@ -878,6 +886,7 @@ public class Character extends Hitbox {
 			this.speed[1] = 0.2 * jumpSpeed;
 			nbJump = 1;
 			keyJump = false;
+			Main.sounds.play(0);
 		}
 	}
 
@@ -896,6 +905,7 @@ public class Character extends Hitbox {
 			this.speed[1] = - 0.2 * jumpSpeed;
 			nbJump = 1;
 			keyJump = false;
+			Main.sounds.play(0);
 		}
 	}
 
@@ -1031,7 +1041,12 @@ public class Character extends Hitbox {
 			nbTimes = 4;
 
 			Main.screen.translationType = 0;
-
+			
+			if(time == 15)
+			{
+				Main.sounds.play(3);
+			}
+			
 			if (time < times[0]) {
 				this.speed[0] = maxSpeed - time * (1-coef0) * maxSpeed / times[0];
 				this.speed[1] = 0;
@@ -1112,7 +1127,7 @@ public class Character extends Hitbox {
 			times[1] = 2;
 			times[2] = 5;
 			nbTimes = 3;
-
+			
 			if (time == times[0]+1)
 			{
 				teleport();

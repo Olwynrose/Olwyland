@@ -67,6 +67,7 @@ public class Shot extends Hitbox{
 							Main.friendlyShots[i].time = 10;
 							Main.friendlyShots[i].damages = 200;
 							Main.friendlyShots[i].stopMob = false;
+							Main.sounds.play(5);
 							break;
 						}
 					}
@@ -132,6 +133,7 @@ public class Shot extends Hitbox{
 								Main.friendlyShots[i].damages = 400;
 								Main.friendlyShots[i].stopMob = false;
 								Main.friendlyShots[i].hitCharac = false;
+								Main.sounds.play(7);
 								break;
 							}
 						}
@@ -279,7 +281,7 @@ public class Shot extends Hitbox{
 			stopMob = false;
 			double norm = Math.sqrt(Math.pow(speedi,2)+Math.pow(speedj,2));
 			rayAOE = 0;
-			damages = 50;
+			damages = 150;
 			time = 20;
 			acceleration = -0.05 + 0.2*Math.random();
 			this.position[0] = i0+10*(Math.random()-0.5);

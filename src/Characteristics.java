@@ -6,8 +6,11 @@ public class Characteristics {
 	public double damages;
 	public int time;
 	public int hitTime;
+	public int indSound; 
+	/* 1:carac, 2: ennemy1, 3: ennemy2 */
 	
 	public Characteristics() {
+		indSound = 0;
 		defence = 10;
 		maxHp = 25;
 		hp = maxHp;
@@ -26,9 +29,36 @@ public class Characteristics {
 	}
 	
 	public void hit(double damageHit) {
-		if(time == 0) {
+		if(time == 0 && hp > 0) {
 			hp = hp - damageHit / defence;
 			time = hitTime;
+			switch(indSound) {
+			case 1:
+			{
+				
+			}
+			break;
+			case 2:
+			{
+				if(hp>0) {
+					Main.sounds.play(14);
+				}
+				else {
+					Main.sounds.play(15);
+				}
+			}
+			break;
+			case 3:
+			{
+				if(hp>0) {
+					Main.sounds.play(11);
+				}
+				else {
+					Main.sounds.play(12);
+				}
+			}
+			break;
+			}
 		}
 		
 	}

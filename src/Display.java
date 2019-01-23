@@ -667,19 +667,20 @@ public class Display {
 	}
 
 	public void updatePressedKeys(int key) {
-		if(key == 37)
+		System.out.println(key);
+		if(key == 37 || key == 81)
 		{
 			Main.keyLeft = true;
   	  	}
-  	  	if(key == 39)
+  	  	if(key == 39 || key == 68)
   	  	{
   	  		Main.keyRight = true;
   	  	}
-  	  	if(key == 38)
+  	  	if(key == 38 || key == 90)
   	  	{
   	  		Main.keyUp = true;
   	  	}
-  	  	if(key == 40)
+  	  	if(key == 40 || key == 83)
   	  	{
   	  		Main.keyDown = true;
   	  	}
@@ -722,20 +723,20 @@ public class Display {
 	}
 
 	public void updateReleasedKeys(int key) {
-		if(key == 37)
+		if(key == 37 || key == 81)
 		{
 			Main.keyLeft = false;
   	  	}
-  	  	if(key == 39)
+  	  	if(key == 39 || key == 68)
   	  	{
   	  		Main.keyRight = false;
   	  	}
-  	  	if(key == 38)
+  	  	if(key == 38 || key == 90)
   	  	{
   	  		Main.keyUp = false;
   	  		Main.mainChar.keyJump = true;
   	  	}
-  	  	if(key == 40)
+  	  	if(key == 40 || key == 83)
   	  	{
   	  		Main.keyDown = false;
   	  	}

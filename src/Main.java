@@ -15,6 +15,8 @@ public class Main {
 	static int maxNbSceneries;
 	static int indScene;
 
+	static Sound sounds;
+	
 	static Area[] areas;
 	static int nbAreas;
 	
@@ -78,7 +80,8 @@ public class Main {
 		debug[17] = true;		//display the shots hitbox
 		debug[18] = true;		// infinite defence
 
-
+		sounds = new Sound();
+		
 		mainChar = new Character();
 		maxNbSceneries = 1000;
 		maxNbMobs = 100;

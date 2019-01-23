@@ -114,6 +114,9 @@ public class Scenery extends Hitbox {
 				}
 			}
 			if(tMin>0 && tMin<1) {
+				if(Main.mainChar.speed[0]>5 && tMin<1) {
+					Main.sounds.play(1);
+				}
 				Main.mainChar.forcedMove(speed[0]*(1-tMin), speed[1]*(1-tMin));
 			}
 		}
@@ -150,6 +153,10 @@ public class Scenery extends Hitbox {
 					if (t >= 0 && t < tMin) {
 						tMin = t;
 					}
+				}
+				if(Main.mobs[n].speed[0]>5 && tMin<1 && 
+						Math.pow(Main.mainChar.position[0]-Main.mobs[n].position[0], 2)+Math.pow(Main.mainChar.position[1]-Main.mobs[n].position[1], 2)<1000*1000) {
+					Main.sounds.play(1);
 				}
 				if(tMin>0 && tMin<1) {
 					Main.mobs[n].forcedMove(speed[0]*(1-tMin), speed[1]*(1-tMin));

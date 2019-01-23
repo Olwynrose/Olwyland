@@ -19,7 +19,7 @@ public class Weapon {
 		maxTimes[0] = 3; 	// simple shot
 		maxTimes[1] = 15; 	// bomb
 		maxTimes[2] = 10;	// sniper
-		maxTimes[3] = 0;	// fire
+		maxTimes[3] = 4;	// fire
 		maxTimes[4] = 115;	// jack3 yeallow 3
 		maxTimes[5] = 3;	// simple machingun
 		maxTimes[6] = 8;	// shotgun
@@ -39,6 +39,7 @@ public class Weapon {
 					if(Main.friendlyShots[i].type == 0) {
 						Main.friendlyShots[i].fire(type, posi, posj, diri, dirj);
 						Main.friendlyShots[i].hitMob = true;
+						Main.sounds.play(5);
 						break;
 					}
 				}
@@ -50,6 +51,7 @@ public class Weapon {
 					if(Main.friendlyShots[i].type == 0) {
 						Main.friendlyShots[i].fire(type, posi, posj, diri, dirj);
 						Main.friendlyShots[i].hitMob = true;
+						Main.sounds.play(6);
 						break;
 					}
 				}
@@ -61,6 +63,7 @@ public class Weapon {
 					if(Main.friendlyShots[i].type == 0) {
 						Main.friendlyShots[i].fire(type, posi, posj, diri, dirj);
 						Main.friendlyShots[i].hitMob = true;
+						Main.sounds.play(8);
 						break;
 					}
 				}
@@ -72,6 +75,7 @@ public class Weapon {
 					if(Main.friendlyShots[i].type == 0) {
 						Main.friendlyShots[i].fire(type, posi, posj, diri, dirj);
 						Main.friendlyShots[i].hitMob = true;
+						Main.sounds.play(9);
 						break;
 					}
 				}
@@ -99,6 +103,7 @@ public class Weapon {
 						Main.friendlyShots[i].fire(1, posi, posj, diri, dirj);
 						Main.friendlyShots[i].hitMob = true;
 						Main.friendlyShots[i].damages = 150;
+						Main.sounds.play(5);
 						break;
 					}
 				}
@@ -119,6 +124,7 @@ public class Weapon {
 							Main.friendlyShots[i].stopMob = false;
 							Main.friendlyShots[i].time = 10;
 							Main.friendlyShots[i].damages = 150;
+							Main.sounds.play(10);
 							break;
 						}
 					}
@@ -154,6 +160,7 @@ public class Weapon {
 						Main.ennemyShots[i].hitMob = this.hitMob;
 						Main.ennemyShots[i].stopMob = this.hitMob;
 						Main.ennemyShots[i].hitCharac = true;
+						Main.sounds.play(5);
 						break;
 					}
 				}
@@ -224,6 +231,7 @@ public class Weapon {
 						Main.ennemyShots[i].stopMob = this.hitMob;
 						Main.ennemyShots[i].hitCharac = true;
 						Main.ennemyShots[i].damages = 150;
+						Main.sounds.play(5);
 						break;
 					}
 				}
@@ -245,6 +253,7 @@ public class Weapon {
 							Main.ennemyShots[i].hitCharac = true;
 							Main.ennemyShots[i].time = 10;
 							Main.ennemyShots[i].damages = 150;
+							Main.sounds.play(8);
 							break;
 						}
 					}

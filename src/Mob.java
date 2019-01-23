@@ -85,6 +85,7 @@ public class Mob extends Hitbox{
 
 		weapon = new Weapon();
 		charac = new Characteristics();
+		charac.indSound = typeMob + 1;
 		charac.hitTime = 0;
 		switch(typeMob) {
 		case 1:
@@ -426,6 +427,9 @@ public class Mob extends Hitbox{
 				a = Math.random();
 				if (a<0.1) {
 					keyUp = true;
+					if(nbJump==0 && Math.pow(Main.mainChar.position[0]-this.position[0], 2)+Math.pow(Main.mainChar.position[1]-this.position[1], 2)<200*200) {
+						Main.sounds.play(13);
+					}
 				}
 				else {
 					keyUp = false;
@@ -459,9 +463,13 @@ public class Mob extends Hitbox{
 				a = Math.random();
 				if (a<0.01) {
 					keyUp = true;
+					if(nbJump==0 && Math.pow(Main.mainChar.position[0]-this.position[0], 2)+Math.pow(Main.mainChar.position[1]-this.position[1], 2)<400*400) {
+						Main.sounds.play(13);
+					}
 				}
 				else {
 					keyUp = false;
+					
 				}
 			}
 		}
@@ -612,11 +620,15 @@ public class Mob extends Hitbox{
 			if(keyUp) {
 				this.speed[0] = - jumpSpeed;
 				nbJump = maxNbJump;
+				Main.sounds.play(4);
 			}
 		}
 		else {
 			this.speed[0] = -Math.abs(this.speed[0])*Main.areas[indArea].getSpeedMultJump()-jumpSpeed;
 			nbJump = maxNbJump;
+			if(Math.pow(Main.mainChar.position[0]-this.position[0], 2)+Math.pow(Main.mainChar.position[1]-this.position[1], 2)<600*600) {
+				Main.sounds.play(4);
+			}
 
 		}
 
@@ -1165,7 +1177,10 @@ public class Mob extends Hitbox{
 		for (int i = 0 ; i < Main.nbSceneries ; i++) {
 			intersect(Main.sceneries[i]);
 		}
-
+		if(this.speed[0]>5 && tMin<1 && state!=7 && state!=8 && 
+				Math.pow(Main.mainChar.position[0]-this.position[0], 2)+Math.pow(Main.mainChar.position[1]-this.position[1], 2)<1000*1000) {
+			Main.sounds.play(1);
+		}
 		this.speed[0] = tMin * this.speed[0];
 		this.speed[1] = tMin * this.speed[1];
 		this.position[0] = this.position[0] + this.speed[0] - 0.001;
