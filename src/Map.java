@@ -109,6 +109,78 @@ public class Map {
 			
 		}
 		break;
+		case 4:
+		{
+
+			Main.mainChar.checkPoint[0] = 200;;//6000;//
+			Main.mainChar.checkPoint[1] = 150;//5000;//
+			Main.mainChar.position[0] = Main.mainChar.checkPoint[0];
+			Main.mainChar.position[1] = Main.mainChar.checkPoint[1];
+			
+			Main.rappImage = 3;
+			
+			// load map image
+			Main.backgroundFileImage = "files/Egouts/Egouts_bg.png";
+			//Main.foregroundFileImage = "files/map_test2/Olwyland_maptest2_foreground.png";
+			
+
+			ImageToHitbox Im2Hb = new ImageToHitbox();
+
+			Im2Hb.getMovingHitbox("files/Egouts/Egouts_traj1.png",
+					"files/Egouts/Egouts_mhb1.png",
+					"files/Egouts/Egouts_mtx1.png");
+			System.out.println("traj 1 ok");
+			Im2Hb.getMovingHitbox("files/Egouts/Egouts_traj2.png",
+					"files/Egouts/Egouts_mhb2.png",
+					"files/Egouts/Egouts_mtx2.png");
+			System.out.println("traj 2 ok");
+			Im2Hb.getMovingHitbox("files/Egouts/Egouts_traj3.png",
+					"files/Egouts/Egouts_mhb3.png",
+					"files/Egouts/Egouts_mtx3.png");
+			System.out.println("traj 3 ok");
+			Im2Hb.getMovingHitbox("files/Egouts/Egouts_traj4.png",
+					"files/Egouts/Egouts_mhb4.png",
+					"files/Egouts/Egouts_mtx4.png");
+			System.out.println("traj 4 ok");
+
+			
+			// generate map areas from images
+			Im2Hb.getArea("files/Egouts/Egouts_area2.png");
+			Im2Hb.getArea("files/Egouts/Egouts_area1.png");
+			Main.areas[Main.nbAreas] = new Area(9, 4850, 7520, 100, 100);
+			Main.nbAreas = Main.nbAreas + 1;
+			System.out.println("areas ok");
+			
+			// generate map hitboxes from images
+			Im2Hb.getHitboxLine("files/Egouts/Egouts_line.png");
+			System.out.println("lines ok");
+			Im2Hb.getHitbox("files/Egouts/Egouts_hb.png");
+			System.out.println("hitbox ok");
+
+
+			double ci = 4000;
+			double cj = 150;
+			int indmob, buf_ind;
+			for(indmob = 0; indmob < 8 ; indmob++) {
+				Main.mobs[indmob] = new Mob(1);
+				Main.mobs[indmob].checkPoint[0] = ci;
+				Main.mobs[indmob].checkPoint[1] = cj;
+				Main.mobs[indmob].position[0] = ci;
+				Main.mobs[indmob].position[1] = cj;
+			}
+
+			ci = 4000;
+			cj = 150;
+			Main.mobs[indmob] = new Mob(2);
+			Main.mobs[indmob].checkPoint[0] = ci;
+			Main.mobs[indmob].checkPoint[1] = cj;
+			Main.mobs[indmob].position[0] = Main.mobs[indmob].checkPoint[0];
+			Main.mobs[indmob].position[1] = Main.mobs[indmob].checkPoint[1];
+			Main.mobs[indmob].weapon.hitMob = true;
+	
+			
+		}
+		break;
 		}
 	}
 }

@@ -78,7 +78,7 @@ public class Main {
 		debug[15] = true;		//display the character hitbox
 		debug[16] = true;		//display the mobs hitbox
 		debug[17] = true;		//display the shots hitbox
-		debug[18] = true;		// infinite defence
+		//debug[18] = true;		// infinite defence
 
 		sounds = new Sound();
 		
@@ -101,8 +101,8 @@ public class Main {
 			ennemyShots[i] = new Shot();
 		}
 
-		Debug.testMap(6);
-		//Map.load(3);
+		//Debug.testMap(6);
+		Map.load(4);
 		
 		screen = new Display();
 		screen.window.addKeyListener(new KeyListener() {

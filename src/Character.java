@@ -138,7 +138,7 @@ public class Character extends Hitbox {
 			System.out.println(this.position[0] + " - " + this.position[1]);
 		}
 
-		if(charac.hp < 0 && animation == 0) {
+		if(charac.hp <= 0 && animation == 0) {
 			animation = 1;
 			time = 0;
 		}

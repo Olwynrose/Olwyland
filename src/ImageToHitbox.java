@@ -13,6 +13,7 @@ public class ImageToHitbox {
 	int idim, jdim;
 	
 	int nb_couleur;
+	int buf_ind;
 	int nbColor;
 	int seuil_couleur;
 	int[] redChan, greenChan, blueChan;
@@ -172,8 +173,8 @@ public class ImageToHitbox {
 						}
 						else {
 							// creation of a new ellipse
-							Main.areas[Main.nbAreas] = area;
-							
+							Main.areas[Main.nbAreas] = new Area(colorToAreaType(color), ci*Main.rappImage, cj*Main.rappImage, 0, 0);
+							Main.areas[Main.nbAreas].setEllipse(r1*Main.rappImage, r2*Main.rappImage, thetaEllipse);
 							// trampoline
 							if(colorToAreaType(color) == 7) {
 								Main.areas[Main.nbAreas].setSpeedMultJump(colorToAreaJumpSpeed(colorG));
@@ -237,9 +238,10 @@ public class ImageToHitbox {
 				if (color != nbColor - 1) {
 					
 					ind = connectedComponent(i, j, color);
-					if (ind > 100) {
+					if (ind > 30) {
+						this.buf_ind = ind;
 						ind = getContour();
-						if (ind > 20) {
+						if (ind > 10) {
 							ind = simplifyContour(ind);
 							if(ind > 2) {
 								Main.sceneries[Main.nbSceneries] = new Scenery(ind);
@@ -360,14 +362,14 @@ public class ImageToHitbox {
 			}
 		}
 		
-		idimTexture = i1 - i0;
-		jdimTexture = j1 - j0;
+		idimTexture = (int)Main.rappImage*(i1 - i0);
+		jdimTexture = (int)Main.rappImage*(j1 - j0);
 		imgTexture = new int[idimTexture][jdimTexture][3];
 		for(i=0 ; i<idimTexture ; i++) {
 			for(j=0 ; j<jdimTexture ; j++) {
-				imgTexture[i][j][0] = img[i+i0][j+j0][0];
-				imgTexture[i][j][1] = img[i+i0][j+j0][1];
-				imgTexture[i][j][2] = img[i+i0][j+j0][2];
+				imgTexture[i][j][0] = img[i/((int)Main.rappImage)+i0][j/((int)Main.rappImage)+j0][0];
+				imgTexture[i][j][1] = img[i/((int)Main.rappImage)+i0][j/((int)Main.rappImage)+j0][1];
+				imgTexture[i][j][2] = img[i/((int)Main.rappImage)+i0][j/((int)Main.rappImage)+j0][2];
 			}
 		}
 		
@@ -397,7 +399,7 @@ public class ImageToHitbox {
 				if (color != nbColor - 1) {
 					
 					ind = connectedComponent(i, j, color);
-					if (ind > 40) {
+					if (ind > 30) {
 						ind = getContour();
 						if (ind > 10) {
 							ind = simplifyContour(ind);
@@ -441,9 +443,9 @@ public class ImageToHitbox {
 					colorB = colorMatch(i, j, 2);
 					
 					ind = connectedComponent(i, j, colorR);
-					if (ind > 100) {
+					if (ind > 20) {
 						ind = getTrajectory();
-						if (ind > 20) {
+						if (ind > 5) {
 							ind = simplifyContour(ind);
 							
 							for(int nb=0; nb<colorToMovingHBPlatformNumber(colorB);nb++) {
@@ -488,8 +490,8 @@ public class ImageToHitbox {
 									Main.sceneries[Main.nbSceneries].setOnePoint(iHB, coordHB[iHB][0] - Main.sceneries[Main.nbSceneries].getOneTrajectory(0,0)
 											, coordHB[iHB][1] - Main.sceneries[Main.nbSceneries].getOneTrajectory(0,1));
 								}
-								Main.sceneries[Main.nbSceneries].transi = - i0 + (int)Main.sceneries[Main.nbSceneries].getOneTrajectory(0,0);
-								Main.sceneries[Main.nbSceneries].transj = - j0 + (int)Main.sceneries[Main.nbSceneries].getOneTrajectory(0,1);
+								Main.sceneries[Main.nbSceneries].transi = - (int)Main.rappImage*i0 + (int)Main.sceneries[Main.nbSceneries].getOneTrajectory(0,0);
+								Main.sceneries[Main.nbSceneries].transj = - (int)Main.rappImage*j0 + (int)Main.sceneries[Main.nbSceneries].getOneTrajectory(0,1);
 								Main.sceneries[Main.nbSceneries].img = new int[idimTexture][jdimTexture][3];
 								Main.sceneries[Main.nbSceneries].idim = idimTexture;
 								Main.sceneries[Main.nbSceneries].jdim = jdimTexture;
@@ -507,6 +509,7 @@ public class ImageToHitbox {
 									System.out.println("TypeMove: " + Main.sceneries[Main.nbSceneries].typeMove);
 									System.out.println("Period: " + Main.sceneries[Main.nbSceneries].period + " - colorG: " + colorG);
 									System.out.println("Time: " + Main.sceneries[Main.nbSceneries].time + " - colorB: " + colorB);
+									System.out.println("Texture size: " + idimTexture + " * " + jdimTexture);
 								
 								}
 
@@ -636,7 +639,7 @@ public class ImageToHitbox {
 
 		//System.out.println(ind + " _ " + imax);
 		// nombre de pixels par composantes
-
+		this.buf_ind = ind;
 		return ind;
 
 	}
@@ -885,7 +888,7 @@ public class ImageToHitbox {
 		boolean cond;
 		boolean in;
 		boolean out;
-		int maxIter = idim*jdim-1;
+		int maxIter = Math.max(5000, this.buf_ind/4);
 
 		ind = 0;
 		buf_i = 0;
