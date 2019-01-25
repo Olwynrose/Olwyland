@@ -27,6 +27,8 @@ public class Display {
 
 	public int idim;
 	public int jdim;
+	public int idimWin;
+	public int jdimWin;
 	public int idim_map;
 	public int jdim_map;
 	public int idim_fore;
@@ -45,8 +47,10 @@ public class Display {
 		window = new JFrame();
 		pan = new JPanel();
 		lab = new JLabel();
-		idim = 720;
-		jdim = 1080;
+		idim = 600;
+		jdim = 900;
+		idimWin = 720;
+		jdimWin = 1080;
 		margini = 0.43*(double)idim;
 		marginj = 0.43*(double)jdim;
 		transi = 0;
@@ -58,7 +62,7 @@ public class Display {
 		coefTransparency = 80;
 
 		window.setTitle("Olwyland");
-		window.setSize(jdim, idim);
+		window.setSize(jdimWin, idimWin);
 		window.setResizable(false);
 		window.setLocationRelativeTo(null);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -196,10 +200,10 @@ public class Display {
 			}
 		}
 
-		ii = new ImageIcon(getImageFromArray(arrayimage, jdim, idim));
+		ii = new ImageIcon(getImageFromArray(arrayimage, jdim, idim).getScaledInstance(jdimWin, idimWin, Image.SCALE_AREA_AVERAGING));
 		pan.remove(lab);
 		lab.setIcon(ii);
-		lab.setBounds(0, 0, jdim, idim);
+		lab.setBounds(0, 0, jdimWin, idimWin);
 		pan.add(lab);
 		pan.repaint();
 		pan.revalidate();
@@ -780,7 +784,7 @@ public class Display {
 	}
 	public void updatePressedMouse(java.awt.event.MouseEvent arg0) {
 		Main.mouseI = (double) arg0.getY() + Main.screen.transi;
-		Main.mouseJ = (double) arg0.getX() + Main.screen.transj;
+		Main.mouseJ = (double) arg0.getX()*jdim/jdimWin + Main.screen.transj;
 		Main.mouseLeft = true;
 	}
 

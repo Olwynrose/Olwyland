@@ -114,7 +114,7 @@ public class Weapon {
 				double theta = Math.atan2(diri, dirj);
 				double rand_thata;
 				for(int j=0; j<7; j++) {
-					rand_thata = theta-0.3 + 0.6*Math.random();
+					rand_thata = theta - 0.3 + 0.6*Math.random();
 					diri = Math.sin(rand_thata);
 					dirj = Math.cos(rand_thata);
 					for(int i = 0 ; i < Main.maxNbShots ; i++) {

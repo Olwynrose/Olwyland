@@ -104,6 +104,7 @@ public class Shot extends Hitbox{
 						}
 					}
 				}
+				buf_tMin = tMin;
 				if(hitCharac) {
 					intersect(Main.mainChar);
 					if(tMin < buf_tMin) {
@@ -254,6 +255,7 @@ public class Shot extends Hitbox{
 					intersect(Main.mobs[i]);
 					if(tMin < buf_tMin) {
 						Main.mobs[i].charac.hit(damages);
+						System.out.println("tape mob");
 						tMin = 1;
 					}
 				}
@@ -262,6 +264,7 @@ public class Shot extends Hitbox{
 				intersect(Main.mainChar);
 				if(tMin < buf_tMin) {
 					Main.mainChar.charac.hit(damages);
+					System.out.println("tape perso");
 					tMin = 1;
 				}
 			}

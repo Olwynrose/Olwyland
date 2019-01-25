@@ -57,6 +57,9 @@ public class Mob extends Hitbox{
 	private int timeRelowed;
 	private int maxTimeShot;
 	private int timeShot;
+	private int maxTimeAttack;
+	private int timeAttack;
+	private double buf_hp;
 
 	
 	public Mob(int typeIn) {
@@ -79,7 +82,7 @@ public class Mob extends Hitbox{
 		jumpSpeed = Math.sqrt(2 * Main.gravity * maxJump);
 		frictionCoef = Main.gravity / maxSpeed;
 		slideCoef = 0.8;
-		detectRange = 250;
+		detectRange = 450;
 		visionRange = 1750;
 		cpRange = 850;
 
@@ -90,6 +93,7 @@ public class Mob extends Hitbox{
 		switch(typeMob) {
 		case 1:
 		{
+			maxJump = 120;
 			charac.defence = 10;
 			charac.maxHp = 25;
 			charac.hp = charac.maxHp;
@@ -110,12 +114,14 @@ public class Mob extends Hitbox{
 			maxTimeRelowed = 50;
 			timeShot = 0;
 			timeMove = maxTimeMove;
-			detectRange = 350;
-			visionRange = 850;
+			detectRange = 450;
+			visionRange = 1000;
 		}
 		break;
 		}
-
+		
+		buf_hp = charac.hp;
+		maxTimeAttack = 60;
 		waterAcceleration = 1;
 		waterSpeed = 7;
 		waterFricCoef = waterAcceleration / waterSpeed;
@@ -189,10 +195,11 @@ public class Mob extends Hitbox{
 		int areaType;
 		
 		charac.update();
-		if( charac.hp<charac.maxHp) {
+		if( charac.hp<buf_hp) {
 			attack = true;
+			timeAttack = maxTimeAttack;
 		}
-		
+		buf_hp = charac.hp;
 		if(typeMob > 0) {
 			
 			if (animation == 0) {
@@ -387,13 +394,18 @@ public class Mob extends Hitbox{
 		if(Math.pow(Main.mainChar.position[0]-this.position[0],2)+Math.pow(Main.mainChar.position[1]-this.position[1],2)<Math.pow(detectRange,2)) {
 			attack = true;
 		}
-		if(Math.pow(Main.mainChar.position[0]-this.position[0],2)+Math.pow(Main.mainChar.position[1]-this.position[1],2)>Math.pow(visionRange,2)) {
+		if(Math.pow(Main.mainChar.position[0]-this.position[0],2)+Math.pow(Main.mainChar.position[1]-this.position[1],2)>Math.pow(visionRange,2)) {		
+			timeAttack = timeAttack - 1;
+		}
+		else {
+			timeAttack = maxTimeAttack;
+		}
+		if(timeAttack<=0) {
 			attack = false;
 			timeShot = maxTimeShot;
 			timeRelowed = 0;
 			charac.hp = charac.maxHp;
 		}
-
 		double a = 0;
 		switch(typeMob) {
 		case 1:

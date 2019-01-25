@@ -150,6 +150,7 @@ public class Character extends Hitbox {
 		
 		if (animation == 0) {
 			if (Main.debug[7] && Main.keySpace == true) {
+				charac.addOxygen();
 				debugFly();
 			}
 			else {
@@ -279,7 +280,7 @@ public class Character extends Hitbox {
 		updateState();
 		move();
 
-		buf_dir = weapon.updateCharac(position[0]-40, position[1], Main.mouseI-Main.mainChar.position[0] , Main.mouseJ-Main.mainChar.position[1]);
+		buf_dir = weapon.updateCharac(position[0]-40, position[1], Main.mouseI-Main.mainChar.position[0]+40 , Main.mouseJ-Main.mainChar.position[1]);
 		if(buf_dir != 0) {
 			direction = buf_dir;
 		}
@@ -945,20 +946,21 @@ public class Character extends Hitbox {
 	}
 
 	private void debugFly() {
+		charac.hp = charac.maxHp;
 		this.speed[0] = 0;
 		this.speed[1] = 0;
 
 		if(Main.keyUp) {
-			this.position[0] -= moveSpeed;
+			this.position[0] -= 4*moveSpeed;
 		}
 		if(Main.keyDown) {
-			this.position[0] += moveSpeed;
+			this.position[0] += 4*moveSpeed;
 		}
 		if(Main.keyLeft) {
-			this.position[1] -= moveSpeed;
+			this.position[1] -= 4*moveSpeed;
 		}
 		if(Main.keyRight) {
-			this.position[1] += moveSpeed;
+			this.position[1] += 4*moveSpeed;
 		}
 	}
 
