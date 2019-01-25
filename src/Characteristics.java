@@ -8,6 +8,8 @@ public class Characteristics {
 	public int hitTime;
 	public int indSound; 
 	/* 1:carac, 2: ennemy1, 3: ennemy2 */
+	public int oxygen;
+	public int maxOxygen;
 	
 	public Characteristics() {
 		indSound = 0;
@@ -17,6 +19,7 @@ public class Characteristics {
 		damages = 100;
 		time = 0;
 		hitTime = 6;
+		maxOxygen = 0;
 	}
 	
 	public void update() {
@@ -25,6 +28,16 @@ public class Characteristics {
 		}
 		else {
 			time = 0;
+		}
+	}
+	
+	public void addOxygen() {
+		oxygen = Math.min(oxygen+maxOxygen/10, maxOxygen);
+	}
+	public void consumeOxygen() {
+		oxygen = oxygen - 1;
+		if(oxygen <= 0 ) { 
+			hp = 0;
 		}
 	}
 	

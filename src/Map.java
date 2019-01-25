@@ -112,8 +112,8 @@ public class Map {
 		case 4:
 		{
 
-			Main.mainChar.checkPoint[0] = 200;;//6000;//
-			Main.mainChar.checkPoint[1] = 150;//5000;//
+			Main.mainChar.checkPoint[0] = 5790;//200;//
+			Main.mainChar.checkPoint[1] = 9000;//150;//
 			Main.mainChar.position[0] = Main.mainChar.checkPoint[0];
 			Main.mainChar.position[1] = Main.mainChar.checkPoint[1];
 			
@@ -147,6 +147,7 @@ public class Map {
 			// generate map areas from images
 			Im2Hb.getArea("files/Egouts/Egouts_area2.png");
 			Im2Hb.getArea("files/Egouts/Egouts_area1.png");
+			// checkpoints
 			Main.areas[Main.nbAreas] = new Area(9, 4850, 7520, 100, 100);
 			Main.nbAreas = Main.nbAreas + 1;
 			System.out.println("areas ok");
@@ -157,7 +158,12 @@ public class Map {
 			Im2Hb.getHitbox("files/Egouts/Egouts_hb.png");
 			System.out.println("hitbox ok");
 
+			// big void under the map
+			Main.areas[Main.nbAreas] = new Area(3, 8000, -5000, 20000, 500);
+			Main.nbAreas = Main.nbAreas + 1;
+			
 
+			// mobs after the first fall
 			double ci = 4000;
 			double cj = 150;
 			int indmob, buf_ind;
@@ -178,6 +184,27 @@ public class Map {
 			Main.mobs[indmob].position[1] = Main.mobs[indmob].checkPoint[1];
 			Main.mobs[indmob].weapon.hitMob = true;
 	
+
+			// mobs after the water bonus
+			ci = 5790;
+			cj = 9000;
+			buf_ind = indmob+1;
+			for(indmob = buf_ind; indmob < buf_ind + 10 ; indmob++) {
+				Main.mobs[indmob] = new Mob(1);
+				Main.mobs[indmob].checkPoint[0] = ci;
+				Main.mobs[indmob].checkPoint[1] = cj;
+				Main.mobs[indmob].position[0] = ci;
+				Main.mobs[indmob].position[1] = cj;
+			}
+			buf_ind = indmob;
+			for(indmob = buf_ind; indmob < buf_ind + 2 ; indmob++) {
+				Main.mobs[indmob] = new Mob(2);
+				Main.mobs[indmob].checkPoint[0] = ci;
+				Main.mobs[indmob].checkPoint[1] = cj;
+				Main.mobs[indmob].position[0] = ci;
+				Main.mobs[indmob].position[1] = cj;
+			}
+			
 			
 		}
 		break;

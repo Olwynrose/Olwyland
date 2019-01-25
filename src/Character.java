@@ -12,6 +12,7 @@ public class Character extends Hitbox {
 
 	public int state; 				// state of the character
 	/* 0:fly , 1:floor, 2:top, 3:left, 4:right, 5: botleft, 6:botright, 7:slideleft, 8:slideright, 9: slidefloor*/
+	public int areaType;
 	private double maxSpeed;		// max speed for the free fall
 	private double moveSpeed;		// walk speed
 	private double jumpSpeed;		// speed with which the character jumps
@@ -75,10 +76,13 @@ public class Character extends Hitbox {
 		charac = new Characteristics();
 		if(Main.debug[18]) {
 			charac.defence = 10000000000.0;
+			charac.maxOxygen = 100000;
 		}
 		else {
 			charac.defence = 10;
+			charac.maxOxygen = 600;
 		}
+		
 		charac.indSound = 1;
 		charac.maxHp = 50;
 		charac.hp = charac.maxHp;
@@ -109,7 +113,6 @@ public class Character extends Hitbox {
 	}
 
 	public void update() {
-		int areaType;
 		if(Main.key1) {
 			weapon.type = 1;
 		}
@@ -156,12 +159,14 @@ public class Character extends Hitbox {
 				case 0:
 				{
 					// air
+					charac.addOxygen();
 					updateAir();
 				}
 					break;
 				case 1:
 				{
 					// water
+					charac.consumeOxygen();
 					updateWater();
 				}
 					break;
@@ -186,12 +191,14 @@ public class Character extends Hitbox {
 				case 4:
 				{
 					// scale
+					charac.addOxygen();
 					updateScale();
 				}
 					break;
 				case 5:
 				{
 					// teleporter
+					charac.addOxygen();
 					if (Main.keyDown) {
 						Main.sounds.play(2);
 						animation = 4;
@@ -206,6 +213,7 @@ public class Character extends Hitbox {
 				case 6:
 				{
 					// auto TP
+					charac.addOxygen();
 					Main.sounds.play(2);
 					animation = 4;
 					time = 0;
@@ -766,6 +774,7 @@ public class Character extends Hitbox {
 	// ACTIONS
 
 	private void fly() {
+		nbJump = Math.max(1, nbJump);
 		this.speed[0] = this.speed[0] + Main.gravity - frictionCoef * this.speed[0];
 		this.speed[1] = this.speed[1] - frictionCoef * this.speed[1];
 

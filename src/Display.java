@@ -181,6 +181,7 @@ public class Display {
 		}
 		foreground();
 		hp();
+		oxygen();
 		animations();
 		int i, j, k;
 		for(i = 0; i < idim ; i++)
@@ -885,11 +886,20 @@ public class Display {
 	}
 	
 	public void hp() {
-		for(int j = 5 ; j < 5 + (int) Main.mainChar.charac.hp ; j++) {
+		for(int j = 5 ; j < 5 + (int) (100*Main.mainChar.charac.hp/Main.mainChar.charac.maxHp) ; j++) {
 			for(int i = 5 ; i < 15 ; i++) {
 				img[i][j][0] = 0;
 				img[i][j][1] = 200;
 				img[i][j][2] = 0;
+			}
+		}
+	}
+	public void oxygen() {
+		for(int j = 5 ; j < 5 + (100*Main.mainChar.charac.oxygen)/Main.mainChar.charac.maxOxygen ; j++) {
+			for(int i = 20 ; i < 25 ; i++) {
+				img[i][j][0] = 0;
+				img[i][j][1] = 150;
+				img[i][j][2] = 255;
 			}
 		}
 	}
