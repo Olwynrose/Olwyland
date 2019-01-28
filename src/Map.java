@@ -205,6 +205,14 @@ public class Map {
 				Main.mobs[indmob].position[1] = cj;
 			}
 			
+			// switch in the water
+			Main.areas[Main.nbAreas] = new Area(8, 6465, 6990, 70, 100);
+			Main.areas[Main.nbAreas].setIndArea(Main.nbAreas + 1);
+			Main.nbAreas = Main.nbAreas + 1;
+			Main.areas[Main.nbAreas] = new Area(1, 5130, 8310, 300, 900);
+			Main.nbAreas = Main.nbAreas + 1;
+			
+			
 			
 		}
 		break;

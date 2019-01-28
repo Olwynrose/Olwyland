@@ -2,7 +2,8 @@
 public class Area {
 
 	private int type;
-	/* 1: water, 2: lava, 3: void, 4: scale, 5: teleporter, 6: auto-teleporter, 7: trampoline, 8: switch HB, 9: Check point */
+	/* 1: water, 2: lava, 3: void, 4: scale, 5: teleporter, 6: auto-teleporter, 7: trampoline, 8: switch, 9: Check point */
+	public boolean active;
 	private double[] position;
 	private double width;
 	private double height;
@@ -10,12 +11,14 @@ public class Area {
 	private double speedMultTp;
 	private double speedMultJump;
 	private int indHB;
+	private int indArea;
 	private int form;				// form of the area
 	/* 0: rectangle, 1: ellipse */
 	private double a, b, c; 		// ellipse coefficients
 
 	public Area(int t, double posi, double posj, double w, double h) {
 		this.type = t;
+		this.active = true;
 		this.position = new double[2];
 		this.position[0] = posi;
 		this.position[1] = posj;
@@ -24,32 +27,39 @@ public class Area {
 		this.indTp = 0;
 		this.speedMultTp = 0;
 		this.speedMultJump = 3;
-		this.indHB = 0;
+		this.indHB = -1;
+		this.indArea = -1;
 		this.form = 0;
 	}
 
 	public boolean isIn(double i, double j) {
-		if (this.form == 0) {
-			if (i > this.position[0]
-					&& i < this.position[0] + this.height
-					&& j > this.position[1]
-					&& j < this.position[1] + this.width) {
-				return true;
+		if(active) {
+			if (this.form == 0) {
+				if (i > this.position[0]
+						&& i < this.position[0] + this.height
+						&& j > this.position[1]
+						&& j < this.position[1] + this.width) {
+					return true;
+				}
+				else {
+					return false;
+				}
 			}
 			else {
-				return false;
+				if (a*Math.pow(i - this.position[0], 2)
+						+ 2*b*(i - this.position[0])*(j - this.position[1])
+						+ c*Math.pow(j - this.position[1], 2) < 1) {
+					return true;
+				}
+				else {
+					return false;
+				}
 			}
 		}
 		else {
-			if (a*Math.pow(i - this.position[0], 2)
-					+ 2*b*(i - this.position[0])*(j - this.position[1])
-					+ c*Math.pow(j - this.position[1], 2) < 1) {
-				return true;
-			}
-			else {
-				return false;
-			}
+			return false;
 		}
+	
 	}
 
 	public int getType() {
@@ -106,6 +116,14 @@ public class Area {
 
 	public void setIndHB(int ind) {
 		this.indHB = ind;
+	}
+	
+	public int getIndArea() {
+		return this.indArea;
+	}
+
+	public void setIndArea(int ind) {
+		this.indArea = ind;
 	}
 
 	public int getForm() {

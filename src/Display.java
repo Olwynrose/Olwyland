@@ -544,19 +544,21 @@ public class Display {
 
 	public void areas() {
 		for (int n = 0 ; n < Main.nbAreas ; n++) {
-			if (Main.areas[n].getForm() == 0) {
-				for(int i = (int)Math.max(0, Main.areas[n].getPositionI() - transi) ; i < (int)Math.min(idim, Main.areas[n].getPositionI() + Main.areas[n].getHeight() - transi); i++) {
-					for(int j = (int)Math.max(0, Main.areas[n].getPositionJ() - transj) ; j < (int)Math.min(jdim, Main.areas[n].getPositionJ() + Main.areas[n].getWidth() - transj); j++) {
-						colorPixel(i, j, Main.areas[n].getType());
+			if(Main.areas[n].active) {
+				if (Main.areas[n].getForm() == 0) {
+					for(int i = (int)Math.max(0, Main.areas[n].getPositionI() - transi) ; i < (int)Math.min(idim, Main.areas[n].getPositionI() + Main.areas[n].getHeight() - transi); i++) {
+						for(int j = (int)Math.max(0, Main.areas[n].getPositionJ() - transj) ; j < (int)Math.min(jdim, Main.areas[n].getPositionJ() + Main.areas[n].getWidth() - transj); j++) {
+							colorPixel(i, j, Main.areas[n].getType());
+						}
 					}
 				}
-			}
-			else {
-				//ellipse
-				for (int i = 0 ; i < idim ; i++) {
-					for (int j = 0 ; j < jdim ; j++) {
-						if (Main.areas[n].isIn((double)i + transi, (double)j + transj)) {
-							colorPixel(i, j, Main.areas[n].getType());
+				else {
+					//ellipse
+					for (int i = 0 ; i < idim ; i++) {
+						for (int j = 0 ; j < jdim ; j++) {
+							if (Main.areas[n].isIn((double)i + transi, (double)j + transj)) {
+								colorPixel(i, j, Main.areas[n].getType());
+							}
 						}
 					}
 				}
@@ -783,7 +785,7 @@ public class Display {
 	  	}
 	}
 	public void updatePressedMouse(java.awt.event.MouseEvent arg0) {
-		Main.mouseI = (double) arg0.getY() + Main.screen.transi;
+		Main.mouseI = (double) arg0.getY()*idim/idimWin + Main.screen.transi;
 		Main.mouseJ = (double) arg0.getX()*jdim/jdimWin + Main.screen.transj;
 		Main.mouseLeft = true;
 	}
