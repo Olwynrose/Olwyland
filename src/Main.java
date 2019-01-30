@@ -19,14 +19,18 @@ public class Main {
 	
 	static Area[] areas;
 	static int nbAreas;
+
+	static Spawn[] spawns;
+	static int maxNbSpawns;
+	static int nbSpawns;
 	
 	static Mob[] mobs;
 	static int maxNbMobs;
 	
 	static Shot[] friendlyShots;
+	static Shot[] ennemyShots;
 	static int maxNbShots;
 
-	static Shot[] ennemyShots;
 	
 	static double gravity = 3.5;
 
@@ -89,6 +93,10 @@ public class Main {
 		nbSceneries = 0;
 		areas = new Area[maxNbSceneries];
 		nbAreas = 0;
+		maxNbSpawns = 100;
+		spawns = new Spawn[maxNbSpawns];
+		nbSpawns = 0;
+		
 		mobs = new Mob[maxNbMobs];
 		for(int i = 0; i<maxNbMobs ; i++) {
 			mobs[i] = new Mob(0);
@@ -100,6 +108,7 @@ public class Main {
 			friendlyShots[i] = new Shot();
 			ennemyShots[i] = new Shot();
 		}
+		
 
 		//Debug.testMap(6);
 		Map.load(4);
@@ -154,6 +163,9 @@ public class Main {
 			}
 			for(int n=0 ; n<maxNbMobs ; n++){
 				mobs[n].update();
+			}
+			for(int n=0 ; n<nbSpawns ; n++){
+				spawns[n].update();
 			}
 			for(indScene=0 ; indScene<nbSceneries ; indScene++){
 				sceneries[indScene].update();

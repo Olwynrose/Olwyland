@@ -410,7 +410,7 @@ public class Display {
 		
 		if (Main.debug[16]) {
 			for(int n = 0 ; n< Main.maxNbMobs ; n++) {
-				if(Main.mobs[n].type>0) {
+				if(Main.mobs[n].typeMob>0) {
 					for (int i = 0 ; i < Main.mobs[n].getNbPoints() - 1 ; i++) {
 						if(Main.mobs[n].charac.hp<=0) {
 							segment(Main.mobs[n].getOnePoint(i, 0)-transi, Main.mobs[n].getOnePoint(i, 1)-transj,

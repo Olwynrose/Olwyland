@@ -112,10 +112,12 @@ public class Map {
 		case 4:
 		{
 
-			Main.mainChar.checkPoint[0] = 5790;//200;//
-			Main.mainChar.checkPoint[1] = 9000;//150;//
+			Main.mainChar.checkPoint[0] = 4000;//5790;//200;//
+			Main.mainChar.checkPoint[1] = 6000;//9000;//150;//
 			Main.mainChar.position[0] = Main.mainChar.checkPoint[0];
 			Main.mainChar.position[1] = Main.mainChar.checkPoint[1];
+			Main.mainChar.charac.maxHp = 250;
+			Main.mainChar.charac.hp = 250;
 			
 			Main.rappImage = 3;
 			
@@ -166,44 +168,79 @@ public class Map {
 			// mobs after the first fall
 			double ci = 4000;
 			double cj = 150;
-			int indmob, buf_ind;
-			for(indmob = 0; indmob < 8 ; indmob++) {
-				Main.mobs[indmob] = new Mob(1);
-				Main.mobs[indmob].checkPoint[0] = ci;
-				Main.mobs[indmob].checkPoint[1] = cj;
-				Main.mobs[indmob].position[0] = ci;
-				Main.mobs[indmob].position[1] = cj;
-			}
-
-			ci = 4000;
-			cj = 150;
-			Main.mobs[indmob] = new Mob(2);
-			Main.mobs[indmob].checkPoint[0] = ci;
-			Main.mobs[indmob].checkPoint[1] = cj;
-			Main.mobs[indmob].position[0] = Main.mobs[indmob].checkPoint[0];
-			Main.mobs[indmob].position[1] = Main.mobs[indmob].checkPoint[1];
-			Main.mobs[indmob].weapon.hitMob = true;
-	
-
+			Main.spawns[Main.nbSpawns] = new Spawn(1, 5, 1);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].type = 2;
+			Main.spawns[Main.nbSpawns].hitMob = true;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
+			
+			Main.spawns[Main.nbSpawns] = new Spawn(1, 30, 6);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
+			
 			// mobs after the water bonus
 			ci = 5790;
 			cj = 9000;
-			buf_ind = indmob+1;
-			for(indmob = buf_ind; indmob < buf_ind + 10 ; indmob++) {
-				Main.mobs[indmob] = new Mob(1);
-				Main.mobs[indmob].checkPoint[0] = ci;
-				Main.mobs[indmob].checkPoint[1] = cj;
-				Main.mobs[indmob].position[0] = ci;
-				Main.mobs[indmob].position[1] = cj;
-			}
-			buf_ind = indmob;
-			for(indmob = buf_ind; indmob < buf_ind + 2 ; indmob++) {
-				Main.mobs[indmob] = new Mob(2);
-				Main.mobs[indmob].checkPoint[0] = ci;
-				Main.mobs[indmob].checkPoint[1] = cj;
-				Main.mobs[indmob].position[0] = ci;
-				Main.mobs[indmob].position[1] = cj;
-			}
+			Main.spawns[Main.nbSpawns] = new Spawn(1, 6, 2);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].type = 2;
+			Main.spawns[Main.nbSpawns].hitMob = true;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
+			
+			Main.spawns[Main.nbSpawns] = new Spawn(1, 30, 6);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
+
+			ci = 7020;
+			cj = 4000;
+			Main.spawns[Main.nbSpawns] = new Spawn(7, 50, 8);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].setOnePoint(1, ci, cj+500);
+			Main.spawns[Main.nbSpawns].setOnePoint(2, ci, cj+1000);
+			Main.spawns[Main.nbSpawns].setOnePoint(3, ci, cj+1500);
+			Main.spawns[Main.nbSpawns].setOnePoint(4, ci, cj+2000);
+			Main.spawns[Main.nbSpawns].setOnePoint(5, ci, cj+2500);
+			Main.spawns[Main.nbSpawns].setOnePoint(6, ci, cj+3000);
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
+			
+			// mobs in level 2
+			ci = 4000;
+			cj = 5500;
+			Main.spawns[Main.nbSpawns] = new Spawn(4, 10, 4);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].setOnePoint(1, ci, cj+600);
+			Main.spawns[Main.nbSpawns].setOnePoint(2, ci, cj+1200);
+			Main.spawns[Main.nbSpawns].setOnePoint(3, ci, cj+1800);
+			Main.spawns[Main.nbSpawns].type = 2;
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].limJ0 = 5175;
+			Main.spawns[Main.nbSpawns].limJ1 = 7440;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
+			
+			ci = 4000;
+			cj = 5500;
+			Main.spawns[Main.nbSpawns] = new Spawn(4, 30, 9);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].setOnePoint(1, ci, cj+600);
+			Main.spawns[Main.nbSpawns].setOnePoint(2, ci, cj+1200);
+			Main.spawns[Main.nbSpawns].setOnePoint(3, ci, cj+1800);
+			Main.spawns[Main.nbSpawns].type = 1;
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].limJ0 = 5175;
+			Main.spawns[Main.nbSpawns].limJ1 = 7440;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
 			
 			// switch in the water
 			Main.areas[Main.nbAreas] = new Area(8, 6465, 6990, 70, 100);

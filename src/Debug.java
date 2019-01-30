@@ -1147,14 +1147,14 @@ public class Debug {
 				
 				double ci = -100;
 				double cj = 3550;
-				int indmob, buf_ind;
-				for(indmob = 0; indmob < 20 ; indmob++) {
-					Main.mobs[indmob] = new Mob(1);
-					Main.mobs[indmob].checkPoint[0] = ci;
-					Main.mobs[indmob].checkPoint[1] = cj;
-					Main.mobs[indmob].position[0] = ci;
-					Main.mobs[indmob].position[1] = cj;
-				}
+				
+				Main.spawns[Main.nbSpawns] = new Spawn(1, 10, 2);
+				Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+				Main.spawns[Main.nbSpawns].active = true;
+				Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+				Main.spawns[Main.nbSpawns].limJ0 = 3200;
+				Main.spawns[Main.nbSpawns].limJ1 = 3700;
+				Main.nbSpawns = Main.nbSpawns + 1;
 
 				
 				
@@ -1204,43 +1204,33 @@ public class Debug {
 				Main.sceneries[Main.nbSceneries].setOneTrajectory(1, -300, 1100);
 				Main.nbSceneries = Main.nbSceneries + 1;
 
+				
+
 				ci = -202;
 				cj = 1600;
-				Main.mobs[indmob] = new Mob(2);
-				Main.mobs[indmob].checkPoint[0] = ci;
-				Main.mobs[indmob].checkPoint[1] = cj;
-				Main.mobs[indmob].position[0] = Main.mobs[indmob].checkPoint[0];
-				Main.mobs[indmob].position[1] = Main.mobs[indmob].checkPoint[1];
-				Main.mobs[indmob].weapon.hitMob = true;
+
+				Main.spawns[Main.nbSpawns] = new Spawn(1, 5, 1);
+				Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+				Main.spawns[Main.nbSpawns].active = true;
+				Main.spawns[Main.nbSpawns].type = 2;
+				Main.spawns[Main.nbSpawns].hitMob = true;
+				Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+				Main.nbSpawns = Main.nbSpawns + 1;
 				
-				buf_ind = indmob + 1;
-				for(indmob=buf_ind; indmob < buf_ind+5 ; indmob++) {
-					Main.mobs[indmob] = new Mob(1);
-					Main.mobs[indmob].checkPoint[0] = ci;
-					Main.mobs[indmob].checkPoint[1] = cj;
-					Main.mobs[indmob].position[0] = ci;
-					Main.mobs[indmob].position[1] = cj;
-				}
+				Main.spawns[Main.nbSpawns] = new Spawn(3, 40, 10);
+				ci = -202;
+				cj = 1600;
+				Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
 				ci = -202;
 				cj = 1000;
-				buf_ind = indmob;
-				for(indmob=buf_ind; indmob < buf_ind+5 ; indmob++) {
-					Main.mobs[indmob] = new Mob(1);
-					Main.mobs[indmob].checkPoint[0] = ci;
-					Main.mobs[indmob].checkPoint[1] = cj;
-					Main.mobs[indmob].position[0] = ci;
-					Main.mobs[indmob].position[1] = cj;
-				}
+				Main.spawns[Main.nbSpawns].setOnePoint(1, ci, cj);
 				ci = -202;
 				cj = 2200;
-				buf_ind = indmob;
-				for(indmob=buf_ind; indmob < buf_ind+5 ; indmob++) {
-					Main.mobs[indmob] = new Mob(1);
-					Main.mobs[indmob].checkPoint[0] = ci;
-					Main.mobs[indmob].checkPoint[1] = cj;
-					Main.mobs[indmob].position[0] = ci;
-					Main.mobs[indmob].position[1] = cj;
-				}
+				Main.spawns[Main.nbSpawns].setOnePoint(2, ci, cj);
+				Main.spawns[Main.nbSpawns].active = true;
+				Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+				Main.nbSpawns = Main.nbSpawns + 1;
+				
 				
 
 				Main.areas[Main.nbAreas] = new Area(6, -450, 1050, 200, 100);

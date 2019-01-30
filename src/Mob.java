@@ -3,6 +3,7 @@ public class Mob extends Hitbox{
 	/* characteristics */
 	public Characteristics charac;
 	public Weapon weapon;
+	public int idSpawn;
 	
 	/* Parameters */
 	private double width;
@@ -13,6 +14,7 @@ public class Mob extends Hitbox{
 	private double detectRange;		// range in witch the mob start to attack the player
 	private double visionRange;		// range in witch the mob stop to attack the player
 	private double cpRange;			// maximum distance to the checkpoint
+	public double limI0, limI1, limJ0, limJ1;	// localization constrains
 
 	public int state; 				// state of the character
 	/* 0:fly, 1:floor, 2:top, 3:left, 4:right, 5: botleft, 6:botright, 7:slideleft, 8:slideright, 9: slidefloor*/
@@ -63,10 +65,16 @@ public class Mob extends Hitbox{
 
 	
 	public Mob(int typeIn) {
+		
+		idSpawn = -1;
 		width = 45;
 		height = 35;
 		tanAlpha = 0.75;
 		typeMob = typeIn;
+		limI0 = -100000000.0;
+		limI1 = 100000000.0;
+		limJ0 = -100000000.0;
+		limJ1 = 100000000.0;
 		if(typeMob>0) {
 			type = 1;
 		}
@@ -481,11 +489,23 @@ public class Mob extends Hitbox{
 				}
 				else {
 					keyUp = false;
-					
 				}
+			}
+			
+			// constrains on the position
+			if(this.position[1] < limJ0) {
+				keyLeft = false;
+				keyRight = true;
+				timeMove = maxTimeMove;
+			}
+			if(this.position[1] > limJ1) {
+				keyLeft = true;
+				keyRight = false;
+				timeMove = maxTimeMove;
 			}
 		}
 		break;
+		
 		case 2:
 		{
 			double distLim = 300;
@@ -610,6 +630,18 @@ public class Mob extends Hitbox{
 				else {
 					keyUp = false;
 				}
+			}
+			
+			// constrains on the position
+			if(this.position[1] < limJ0) {
+				keyLeft = false;
+				keyRight = true;
+				timeMove = maxTimeMove;
+			}
+			if(this.position[1] > limJ1) {
+				keyLeft = true;
+				keyRight = false;
+				timeMove = maxTimeMove;
 			}
 		}
 		} // end switch
@@ -1018,19 +1050,15 @@ public class Mob extends Hitbox{
 		case 1:
 		{
 			//respawn
-			times[0] = 10;
+			times[0] = 20;
 			times[1] = 2;
 			times[2] = 10;
-			nbTimes = 3;
+			nbTimes = 2;
 
 			if (time == times[0]+1)
 			{
-				respawn();
-			}
-			if(time == times[0]+times[1]+times[2])
-			{
-				nbTimes = 0;
-				animation = 0;
+				idSpawn = -1;
+				typeMob = 0;
 			}
 			time++;
 		}

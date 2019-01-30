@@ -293,9 +293,9 @@ public class ImageToHitbox {
 				if (color != nbColor - 1) {
 					
 					ind = connectedComponent(i, j, color);
-					if (ind > 50) {
+					if (ind > 20) {
 						ind = getTrajectory();
-						if (ind > 5) {
+						if (ind > 2) {
 							ind = simplifyContour(ind);
 
 							Main.sceneries[Main.nbSceneries] = new Scenery(2);
