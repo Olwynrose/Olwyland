@@ -91,6 +91,10 @@ public class Spawn {
 		spawnPoints[ind][1] = j;
 	}
 	
+	public void reset() {
+		nbMobs = 0;
+		active = true;
+	}
 	
 	
 }

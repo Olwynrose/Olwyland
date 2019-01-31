@@ -10,8 +10,12 @@ public class Area {
 	private int indTp;
 	private double speedMultTp;
 	private double speedMultJump;
-	private int indHB;
-	private int indArea;
+	private int[] indHB;
+	private int[] indArea;
+	private int[] indSpawn;
+	private int nbHB;
+	private int nbAreas;
+	private int nbSpawns;
 	private int form;				// form of the area
 	/* 0: rectangle, 1: ellipse */
 	private double a, b, c; 		// ellipse coefficients
@@ -27,8 +31,12 @@ public class Area {
 		this.indTp = 0;
 		this.speedMultTp = 0;
 		this.speedMultJump = 3;
-		this.indHB = -1;
-		this.indArea = -1;
+		this.indHB = new int[10];
+		this.indArea = new int[10];
+		this.indSpawn = new int[10];
+		nbHB = 0;
+		nbAreas = 0;
+		nbSpawns = 0;
 		this.form = 0;
 	}
 
@@ -110,20 +118,31 @@ public class Area {
 		this.speedMultJump = mult;
 	}
 
-	public int getIndHB() {
+	public int[] getIndHB() {
 		return this.indHB;
 	}
 
 	public void setIndHB(int ind) {
-		this.indHB = ind;
+		this.indHB[nbHB] = ind;
+		nbHB = nbHB + 1;
 	}
 	
-	public int getIndArea() {
+	public int[] getIndArea() {
 		return this.indArea;
 	}
 
 	public void setIndArea(int ind) {
-		this.indArea = ind;
+		this.indArea[nbAreas] = ind;
+		nbAreas = nbAreas + 1;
+	}
+
+	public int[] getIndSpawn() {
+		return this.indSpawn;
+	}
+
+	public void setIndSpawn(int ind) {
+		this.indSpawn[nbSpawns] = ind;
+		nbSpawns = nbSpawns + 1;
 	}
 
 	public int getForm() {
@@ -132,6 +151,20 @@ public class Area {
 
 	public void setForm(int f) {
 		this.form = f;
+	}
+	
+	public void actSwitch() {
+
+		for(int i = 0; i < nbHB; i++ ) {
+			Main.sceneries[indHB[i]].type = (Main.sceneries[indHB[i]].type + 1) %2;
+		}
+		for(int i = 0; i < nbAreas; i++ ) {
+			Main.areas[indArea[i]].active = !Main.areas[indArea[i]].active;
+		}
+		for(int i = 0; i < nbSpawns; i++ ) {
+			Main.spawns[indSpawn[i]].reset();
+		}
+			
 	}
 
 	public void setEllipse(double r1, double r2, double theta) {

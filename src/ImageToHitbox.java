@@ -196,7 +196,7 @@ public class ImageToHitbox {
 	
 	public void getHitbox(String fileName) {
 		int i, j;
-		int color;
+		int color = 0;
 		int ind;
 		
 		
@@ -233,10 +233,10 @@ public class ImageToHitbox {
 
 		for (i = 0; i < idim; i++) {
 			for (j = 0; j < jdim; j++) {
-				color = colorMatch(i, j, 0);
 
-				if (color != nbColor - 1) {
-					
+				if (img[i][j][0]<8) {
+
+					color = colorMatch(i, j, 0);
 					ind = connectedComponent(i, j, color);
 					if (ind > 30) {
 						this.buf_ind = ind;
@@ -263,6 +263,7 @@ public class ImageToHitbox {
 					supprConnectedComponent();
 				}
 			}
+			
 		}
 	}
 	

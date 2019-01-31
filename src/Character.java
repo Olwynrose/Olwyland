@@ -232,14 +232,8 @@ public class Character extends Hitbox {
 					// switch HB
 					if (Main.keyDown ) {
 						if(time <= 0) {
-							if(Main.areas[indArea].getIndHB()>=0) {
-								Main.sceneries[Main.areas[indArea].getIndHB()].type = (Main.sceneries[Main.areas[indArea].getIndHB()].type + 1) %2;
-								time = 20;
-							}
-							if(Main.areas[indArea].getIndArea()>=0) {
-								Main.areas[Main.areas[indArea].getIndArea()].active = ! Main.areas[Main.areas[indArea].getIndArea()].active;
-								time = 20;
-							}
+							Main.areas[indArea].actSwitch();
+							time = 20;
 						}
 						else {
 							time = time - 1;
@@ -1000,6 +994,9 @@ public class Character extends Hitbox {
 		this.position[0] = checkPoint[0];
 		this.position[1] = checkPoint[1];
 		Main.screen.centerChar();
+		for(int i=0; i<Main.nbSceneries; i++) {
+			Main.spawns[i].reset();
+		}
 	}
 
 	private int isIn() {

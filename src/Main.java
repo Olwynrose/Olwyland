@@ -75,7 +75,7 @@ public class Main {
 		//debug[8] = true;		//print the area the character enters in
 		debug[9] = true;		//display the areas
 		debug[10] = true;		//display the hitboxes
-		//debug[11] = true;		//display character position
+		debug[11] = true;		//display character position
 		debug[12] = true;		//print the parameters of the detected areas
 		//debug[13] = true;		//print 
 		debug[14] = true;		//print the parameters of the detected moving hitboxes

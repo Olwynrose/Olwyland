@@ -127,7 +127,7 @@ public class Map {
 			
 
 			ImageToHitbox Im2Hb = new ImageToHitbox();
-
+/*
 			Im2Hb.getMovingHitbox("files/Egouts/Egouts_traj1.png",
 					"files/Egouts/Egouts_mhb1.png",
 					"files/Egouts/Egouts_mtx1.png");
@@ -144,7 +144,7 @@ public class Map {
 					"files/Egouts/Egouts_mhb4.png",
 					"files/Egouts/Egouts_mtx4.png");
 			System.out.println("traj 4 ok");
-
+*/
 			
 			// generate map areas from images
 			Im2Hb.getArea("files/Egouts/Egouts_area2.png");
@@ -182,6 +182,19 @@ public class Map {
 			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
 			Main.nbSpawns = Main.nbSpawns + 1;
 			
+			// switch in the water room
+			Main.areas[Main.nbAreas] = new Area(8, 6465, 6990, 70, 100);
+			Main.areas[Main.nbAreas].setIndArea(Main.nbAreas + 1);
+			Main.areas[Main.nbAreas].setIndHB(Main.nbSceneries);
+			Main.nbAreas = Main.nbAreas + 1;
+			Main.areas[Main.nbAreas] = new Area(1, 5130, 8310, 300, 1100);
+			Main.areas[Main.nbAreas].active = false;
+			Main.nbAreas = Main.nbAreas + 1;
+			Main.sceneries[Main.nbSceneries] = new Scenery(2);
+			Main.sceneries[Main.nbSceneries].setOnePoint(0, 5914, 5176);
+			Main.sceneries[Main.nbSceneries].setOnePoint(1, 5608, 5176);
+			Main.nbSceneries = Main.nbSceneries + 1;
+			
 			// mobs after the water bonus
 			ci = 5790;
 			cj = 9000;
@@ -213,7 +226,7 @@ public class Map {
 			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
 			Main.nbSpawns = Main.nbSpawns + 1;
 			
-			// mobs in level 2
+			// mobs in level 2 room 1
 			ci = 4000;
 			cj = 5500;
 			Main.spawns[Main.nbSpawns] = new Spawn(4, 10, 4);
@@ -242,12 +255,82 @@ public class Map {
 			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
 			Main.nbSpawns = Main.nbSpawns + 1;
 			
-			// switch in the water
-			Main.areas[Main.nbAreas] = new Area(8, 6465, 6990, 70, 100);
-			Main.areas[Main.nbAreas].setIndArea(Main.nbAreas + 1);
+			// mobs in level 2 lava
+			ci = 3910;
+			cj = 8744;
+			Main.spawns[Main.nbSpawns] = new Spawn(1, 1, 1);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].type = 2;
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].limJ0 = 8705;
+			Main.spawns[Main.nbSpawns].limJ1 = 8800;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
+			
+			// mobs in level 2 jump
+			ci = 4015;
+			cj = 9758;
+			Main.spawns[Main.nbSpawns] = new Spawn(1, 2, 2);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].type = 1;
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].limJ0 = 9680;
+			Main.spawns[Main.nbSpawns].limJ1 = 9860;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
+			ci = 2747;
+			cj = 9700;
+			Main.spawns[Main.nbSpawns] = new Spawn(1, 1, 1);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].type = 2;
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].limJ0 = 9690;
+			Main.spawns[Main.nbSpawns].limJ1 = 9909;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
+			
+			// mobs in level 2 slide
+			ci = 3170;
+			cj = 8676;
+			Main.spawns[Main.nbSpawns] = new Spawn(1, 8, 4);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].type = 1;
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
+			Main.spawns[Main.nbSpawns] = new Spawn(1, 2, 2);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].type = 2;
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
+			
+			ci = 3170;
+			cj = 7690;
+			Main.spawns[Main.nbSpawns] = new Spawn(1, 6, 6);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].type = 1;
+			Main.spawns[Main.nbSpawns].active = true;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
+			
+			// switch in the level 2
+			Main.areas[Main.nbAreas] = new Area(8, 3212, 6054, 70, 100);
+			Main.areas[Main.nbAreas].setIndHB(Main.nbSceneries);
+			Main.areas[Main.nbAreas].setIndSpawn(Main.nbSpawns);
 			Main.nbAreas = Main.nbAreas + 1;
-			Main.areas[Main.nbAreas] = new Area(1, 5130, 8310, 300, 900);
-			Main.nbAreas = Main.nbAreas + 1;
+			Main.sceneries[Main.nbSceneries] = new Scenery(2);
+			Main.sceneries[Main.nbSceneries].setOnePoint(0, 2900, 5963);
+			Main.sceneries[Main.nbSceneries].setOnePoint(1, 2640, 5963);
+			Main.nbSceneries = Main.nbSceneries + 1;
+			ci = 3170;
+			cj = 6787;
+			Main.spawns[Main.nbSpawns] = new Spawn(1, 6, 3);
+			Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
+			Main.spawns[Main.nbSpawns].type = 1;
+			Main.spawns[Main.nbSpawns].active = false;
+			Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
+			Main.nbSpawns = Main.nbSpawns + 1;
 			
 			
 			

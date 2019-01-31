@@ -496,12 +496,12 @@ public class Mob extends Hitbox{
 			if(this.position[1] < limJ0) {
 				keyLeft = false;
 				keyRight = true;
-				timeMove = maxTimeMove;
+				timeMove = (int) (20*Math.random());
 			}
 			if(this.position[1] > limJ1) {
 				keyLeft = true;
 				keyRight = false;
-				timeMove = maxTimeMove;
+				timeMove = (int) (20*Math.random());
 			}
 		}
 		break;
@@ -636,12 +636,12 @@ public class Mob extends Hitbox{
 			if(this.position[1] < limJ0) {
 				keyLeft = false;
 				keyRight = true;
-				timeMove = maxTimeMove;
+				timeMove = (int) (20*Math.random());
 			}
 			if(this.position[1] > limJ1) {
 				keyLeft = true;
 				keyRight = false;
-				timeMove = maxTimeMove;
+				timeMove = (int) (20*Math.random());
 			}
 		}
 		} // end switch
