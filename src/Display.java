@@ -785,7 +785,7 @@ public class Display {
 	  	}
 	}
 	public void updatePressedMouse(java.awt.event.MouseEvent arg0) {
-		Main.mouseI = (double) arg0.getY()*idim/idimWin + Main.screen.transi;
+		Main.mouseI = (double) (arg0.getY()-25)*idim/idimWin + Main.screen.transi;
 		Main.mouseJ = (double) arg0.getX()*jdim/jdimWin + Main.screen.transj;
 		Main.mouseLeft = true;
 	}

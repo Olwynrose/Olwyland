@@ -126,6 +126,13 @@ public class Mob extends Hitbox{
 			visionRange = 1000;
 		}
 		break;
+		case 3:
+		{
+			charac.defence = 5;
+			charac.maxHp = 25;
+			charac.hp = charac.maxHp;
+			maxTimeMove = 40;
+		}
 		}
 		
 		buf_hp = charac.hp;
@@ -644,6 +651,80 @@ public class Mob extends Hitbox{
 				timeMove = (int) (20*Math.random());
 			}
 		}
+		
+		case 3:
+		{
+			
+			if (attack) {
+				if (timeMove>0) {
+					timeMove = timeMove - 1;
+					if(timeMove<maxTimeMove/5) {
+						keyLeft = false;
+						keyRight = false;
+					}
+				}
+				else {
+					a = Math.random();
+					if (a<0.2+0.005*Math.abs(Main.mainChar.position[1]-this.position[1])) {
+						a = Math.random();
+						if (a>0.5+0.01*(Main.mainChar.position[1]-this.position[1])) {
+							keyLeft = true;
+							keyRight = false;
+							timeMove = maxTimeMove/2;
+						}
+						else {
+							keyLeft = false;
+							keyRight = true;
+							timeMove = maxTimeMove/2;
+						}
+					}
+					else {
+						keyLeft = false;
+						keyRight = false;
+					}
+				}
+					
+			} 
+			else { // if(attack)
+				if (timeMove>0) {
+					timeMove = timeMove - 1;
+				}
+				else {
+					a = Math.random();
+					if (a<0.05) {
+						a = Math.random();
+						if (a<0.5) {
+							keyLeft = true;
+							keyRight = false;
+							timeMove = maxTimeMove;
+						}
+						else {
+							keyLeft = false;
+							keyRight = true;
+							timeMove = maxTimeMove;
+						}
+					}
+					else {
+						keyLeft = false;
+						keyRight = false;
+					}
+				}
+			}
+			
+			// constrains on the position
+			if(this.position[1] < limJ0) {
+				keyLeft = false;
+				keyRight = true;
+				timeMove = (int) (20*Math.random());
+			}
+			if(this.position[1] > limJ1) {
+				keyLeft = true;
+				keyRight = false;
+				timeMove = (int) (20*Math.random());
+			}
+		}
+		break;
+		
 		} // end switch
 		
 		

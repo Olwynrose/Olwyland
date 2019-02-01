@@ -82,7 +82,7 @@ public class Main {
 		debug[15] = true;		//display the character hitbox
 		debug[16] = true;		//display the mobs hitbox
 		debug[17] = true;		//display the shots hitbox
-		//debug[18] = true;		// infinite defense
+		//debug[18] = true;		//infinite defense
 		debug[19] = true;		//load debug map instead of image map
 
 		sounds = new Sound();

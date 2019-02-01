@@ -994,7 +994,7 @@ public class Character extends Hitbox {
 		this.position[0] = checkPoint[0];
 		this.position[1] = checkPoint[1];
 		Main.screen.centerChar();
-		for(int i=0; i<Main.nbSceneries; i++) {
+		for(int i=0; i<Main.nbSpawns; i++) {
 			Main.spawns[i].reset();
 		}
 	}

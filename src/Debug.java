@@ -1148,12 +1148,13 @@ public class Debug {
 				double ci = -100;
 				double cj = 3550;
 				
-				Main.spawns[Main.nbSpawns] = new Spawn(1, 10, 2);
+				Main.spawns[Main.nbSpawns] = new Spawn(1, 100, 2);
 				Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
 				Main.spawns[Main.nbSpawns].active = true;
 				Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
 				Main.spawns[Main.nbSpawns].limJ0 = 3200;
 				Main.spawns[Main.nbSpawns].limJ1 = 3700;
+				Main.spawns[Main.nbSpawns].type = 3;
 				Main.nbSpawns = Main.nbSpawns + 1;
 
 				

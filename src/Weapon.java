@@ -16,12 +16,12 @@ public class Weapon {
 		hitMob = false;
 		times = new double[nbWeapons];
 		maxTimes = new double[nbWeapons];
-		maxTimes[0] = 3; 	// simple shot
+		maxTimes[0] = 8; 	// simple shot
 		maxTimes[1] = 15; 	// bomb
 		maxTimes[2] = 10;	// sniper
 		maxTimes[3] = 4;	// fire
 		maxTimes[4] = 115;	// jack3 yeallow 3
-		maxTimes[5] = 2.9;	// simple machingun
+		maxTimes[5] = 3;	// simple machingun
 		maxTimes[6] = 8;	// shotgun
 		dispersion = 0.05;
 	}
@@ -39,6 +39,8 @@ public class Weapon {
 					if(Main.friendlyShots[i].type == 0) {
 						Main.friendlyShots[i].fire(type, posi, posj, diri, dirj);
 						Main.friendlyShots[i].hitMob = true;
+						Main.friendlyShots[i].time = 8;
+						Main.friendlyShots[i].damages = 50;
 						Main.sounds.play(5);
 						break;
 					}
@@ -76,6 +78,7 @@ public class Weapon {
 						Main.friendlyShots[i].fire(type, posi, posj, diri, dirj);
 						Main.friendlyShots[i].hitMob = true;
 						Main.sounds.play(9);
+						Main.friendlyShots[i].damages = 40;
 						break;
 					}
 				}
@@ -102,7 +105,7 @@ public class Weapon {
 					if(Main.friendlyShots[i].type == 0) {
 						Main.friendlyShots[i].fire(1, posi, posj, diri, dirj);
 						Main.friendlyShots[i].hitMob = true;
-						Main.friendlyShots[i].damages = 150;
+						Main.friendlyShots[i].damages = 80;
 						Main.sounds.play(5);
 						break;
 					}
@@ -113,17 +116,19 @@ public class Weapon {
 			{
 				double theta = Math.atan2(diri, dirj);
 				double rand_thata;
-				for(int j=0; j<7; j++) {
-					rand_thata = theta - 0.3 + 0.6*Math.random();
+				double disp = 0.2;
+				int nbProj = 10;
+				for(int j=0; j<nbProj; j++) {
+					rand_thata = theta - disp + 2*disp*Math.random();
 					diri = Math.sin(rand_thata);
 					dirj = Math.cos(rand_thata);
 					for(int i = 0 ; i < Main.maxNbShots ; i++) {
 						if(Main.friendlyShots[i].type == 0) {
 							Main.friendlyShots[i].fire(1, posi, posj, diri, dirj);
 							Main.friendlyShots[i].hitMob = true;
-							Main.friendlyShots[i].stopMob = false;
-							Main.friendlyShots[i].time = 10;
-							Main.friendlyShots[i].damages = 150;
+							Main.friendlyShots[i].stopMob = true;
+							Main.friendlyShots[i].time = 5;
+							Main.friendlyShots[i].damages = 20;
 							Main.sounds.play(10);
 							break;
 						}

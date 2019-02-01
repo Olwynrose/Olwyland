@@ -283,12 +283,12 @@ public class Shot extends Hitbox{
 			double norm = Math.sqrt(Math.pow(speedi,2)+Math.pow(speedj,2));
 			rayAOE = 0;
 			damages = 150;
-			time = 20;
+			time = 20 - (int)Math.abs(0.5*Main.mainChar.speed[1]);
 			acceleration = -0.05 + 0.2*Math.random();
 			this.position[0] = i0+10*(Math.random()-0.5);
 			this.position[1] = j0+5*(Math.random()-0.5);
 			this.speed[0] = 9*speedi/norm;
-			this.speed[1] = 9*speedj/norm;
+			this.speed[1] = 9*speedj/norm + 0.5*Main.mainChar.speed[1];
 			this.nbPoints = 2;
 			this.points = new double[nbPoints][2];
 			this.points[0][0] = 10;
