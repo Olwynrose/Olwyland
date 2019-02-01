@@ -5,8 +5,8 @@ public class Weapon {
 	public boolean keyShot;	// to verify if the shot has been released
 	int nbWeapons;
 	double dispersion;
-	int[] times;
-	int[] maxTimes;
+	double[] times;
+	double[] maxTimes;
 	
 	
 	public Weapon() {
@@ -14,21 +14,21 @@ public class Weapon {
 		type = 1;
 		keyShot = true;
 		hitMob = false;
-		times = new int[nbWeapons];
-		maxTimes = new int[nbWeapons];
+		times = new double[nbWeapons];
+		maxTimes = new double[nbWeapons];
 		maxTimes[0] = 3; 	// simple shot
 		maxTimes[1] = 15; 	// bomb
 		maxTimes[2] = 10;	// sniper
 		maxTimes[3] = 4;	// fire
 		maxTimes[4] = 115;	// jack3 yeallow 3
-		maxTimes[5] = 3;	// simple machingun
+		maxTimes[5] = 2.9;	// simple machingun
 		maxTimes[6] = 8;	// shotgun
 		dispersion = 0.05;
 	}
 
 	public int updateCharac(double posi, double posj, double diri, double dirj) {
 		int direction = 0;
-		if (Main.mouseLeft && (keyShot || type == 4 || type == 6) && times[type-1] == 0) {
+		if (Main.mouseLeft && (keyShot || type == 4 || type == 6) && times[type-1] <0.01) {
 			keyShot = false;
 			direction = (int) Math.signum(Main.mouseJ-Main.mainChar.position[1]);
 			
@@ -133,14 +133,14 @@ public class Weapon {
 			break;
 			}
 			
-			times[type - 1] = maxTimes[type - 1];
+			times[type - 1] = times[type - 1] + maxTimes[type - 1];
 		}
 		for(int i = 0; i<nbWeapons; i++) {
-			if(times[i]>0) {
+			if(times[i]>-1) {
 				times[i] = times[i] - 1;
 			}
 			else {
-				times[i] = 0;
+				times[i] = -1;
 			}
 		}
 		return direction;

@@ -75,14 +75,15 @@ public class Main {
 		//debug[8] = true;		//print the area the character enters in
 		debug[9] = true;		//display the areas
 		debug[10] = true;		//display the hitboxes
-		debug[11] = true;		//display character position
+		//debug[11] = true;		//display character position
 		debug[12] = true;		//print the parameters of the detected areas
 		//debug[13] = true;		//print 
 		debug[14] = true;		//print the parameters of the detected moving hitboxes
 		debug[15] = true;		//display the character hitbox
 		debug[16] = true;		//display the mobs hitbox
 		debug[17] = true;		//display the shots hitbox
-		//debug[18] = true;		// infinite defence
+		//debug[18] = true;		// infinite defense
+		debug[19] = true;		//load debug map instead of image map
 
 		sounds = new Sound();
 		
@@ -109,9 +110,12 @@ public class Main {
 			ennemyShots[i] = new Shot();
 		}
 		
-
-		//Debug.testMap(6);
-		Map.load(4);
+		if (debug[19]) {
+			Debug.testMap(6);
+		}else {
+			Map.load(4);
+		}
+		
 		
 		screen = new Display();
 		screen.window.addKeyListener(new KeyListener() {
