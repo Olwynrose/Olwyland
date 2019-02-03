@@ -2,7 +2,7 @@
 public class Mob extends Hitbox{
 	/* characteristics */
 	public Characteristics charac;
-	public Weapon weapon;
+	public WeaponMob weapon;
 	public int idSpawn;
 	
 	/* Parameters */
@@ -94,7 +94,7 @@ public class Mob extends Hitbox{
 		visionRange = 1750;
 		cpRange = 850;
 
-		weapon = new Weapon();
+		weapon = new WeaponMob();
 		charac = new Characteristics();
 		charac.indSound = typeMob + 1;
 		charac.hitTime = 0;
@@ -102,7 +102,7 @@ public class Mob extends Hitbox{
 		case 1:
 		{
 			maxJump = 120;
-			charac.defence = 10;
+			charac.defense = 10;
 			charac.maxHp = 25;
 			charac.hp = charac.maxHp;
 			maxTimeMove = 30;
@@ -110,13 +110,13 @@ public class Mob extends Hitbox{
 		break;
 		case 2:
 		{
-			charac.defence = 10;
+			charac.defense = 10;
 			charac.maxHp = 50;
 			charac.hp = charac.maxHp;
 			width = 35;
 			height = 55;
 
-			weapon.type = 6;
+			weapon.type = 5;
 			maxTimeMove = 20;
 			maxTimeShot = 10;
 			maxTimeRelowed = 50;
@@ -128,7 +128,7 @@ public class Mob extends Hitbox{
 		break;
 		case 3:
 		{
-			charac.defence = 5;
+			charac.defense = 5;
 			charac.maxHp = 25;
 			charac.hp = charac.maxHp;
 			maxTimeMove = 40;
@@ -520,7 +520,7 @@ public class Mob extends Hitbox{
 				// move
 				if (timeRelowed>0) {
 					timeRelowed = timeRelowed - 1;
-					weapon.updateMob(false, position[0] - 30, position[1], Main.mainChar.position[0]-10 - position[0] , Main.mainChar.position[1] - position[1]);
+					weapon.update(false, position[0] - 30, position[1], Main.mainChar.position[0]-10 - position[0] , Main.mainChar.position[1] - position[1]);
 					
 					
 					
@@ -535,7 +535,7 @@ public class Mob extends Hitbox{
 						timeRelowed = maxTimeRelowed;
 						timeShot = maxTimeShot;
 					}
-					weapon.updateMob(true, position[0] - 30, position[1]+45*Math.signum(Main.mainChar.position[1] - position[1])
+					weapon.update(true, position[0] - 30, position[1]+45*Math.signum(Main.mainChar.position[1] - position[1])
 							, Main.mainChar.position[0]-10 - position[0] , Main.mainChar.position[1] - position[1]);
 				}
 				

@@ -749,39 +749,47 @@ public class Display {
   	  	if(key == 32)
   	  	{
   	  		Main.keySpace = false;
-  	  		Main.mainChar.weapon.keyShot = true;
+  	  		Main.mainChar.weapon.setKeyShot(true);
   	  	}
   	  	if(key == 49)
 	  	{
 	  		Main.key1 = false;
+	  		Main.changeWeapon = true;
 	  	}
   	  	if(key == 50)
 	  	{
 	  		Main.key2 = false;
+	  		Main.changeWeapon = true;
 	  	}
   	  	if(key == 51)
 	  	{
 	  		Main.key3 = false;
+	  		Main.changeWeapon = true;
 	  	}
   	  	if(key == 52)
 	  	{
 	  		Main.key4 = false;
+	  		Main.changeWeapon = true;
 	  	}
   	  	if(key == 53)
 	  	{
 	  		Main.key5 = false;
+	  		Main.changeWeapon = true;
 	  	}
   	  	if(key == 54)
 	  	{
 	  		Main.key6 = false;
+	  		Main.changeWeapon = true;
 	  	}
   	  	if(key == 55)
 	  	{
 	  		Main.key7 = false;
+	  		Main.changeWeapon = true;
 	  	}
   	  	if(key == 56)
 	  	{
 	  		Main.key8 = false;
+	  		Main.changeWeapon = true;
 	  	}
 	}
 	public void updatePressedMouse(java.awt.event.MouseEvent arg0) {

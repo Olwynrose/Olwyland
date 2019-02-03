@@ -1,9 +1,10 @@
+import java.io.IOException;
 
 public class Character extends Hitbox {
 
 	/* Characteristics */
 	public Characteristics charac;
-	public Weapon weapon;
+	public WeaponCharac weapon;
 	
 	/* Parameters */
 	private double width;
@@ -45,13 +46,14 @@ public class Character extends Hitbox {
 	private int indArea;		// indice of the current area
 	
 
-	public Character() {
+	public Character() throws NumberFormatException, IOException {
 		width = 38;
 		height = 65;
 		tanAlpha = 0.75;
 
 		type = 1;
-		weapon = new Weapon();
+		weapon = new WeaponCharac();
+		weapon.setType(0);
 		state = 0;
 		direction = 1;
 		maxSpeed = 25;
@@ -75,11 +77,11 @@ public class Character extends Hitbox {
 		
 		charac = new Characteristics();
 		if(Main.debug[18]) {
-			charac.defence = 10000000000.0;
+			charac.defense = 10000000000.0;
 			charac.maxOxygen = 100000;
 		}
 		else {
-			charac.defence = 10;
+			charac.defense = 10;
 			charac.maxOxygen = 600;
 		}
 		
@@ -113,29 +115,37 @@ public class Character extends Hitbox {
 	}
 
 	public void update() {
-		if(Main.key1) {
-			weapon.type = 1;
+		if(Main.key1 && Main.changeWeapon) {
+	  		Main.changeWeapon = false;
+			weapon.setType(0);
 		}
-		if(Main.key2) {
-			weapon.type = 2;
+		if(Main.key2 && Main.changeWeapon) {
+	  		Main.changeWeapon = false;
+			weapon.setType(1);
 		}
-		if(Main.key3) {
-			weapon.type = 3;
+		if(Main.key3 && Main.changeWeapon) {
+	  		Main.changeWeapon = false;
+			weapon.setType(2);
 		}
-		if(Main.key4) {
-			weapon.type = 4;
+		if(Main.key4 && Main.changeWeapon) {
+	  		Main.changeWeapon = false;
+			weapon.setType(3);
 		}
-		if(Main.key5) {
-			weapon.type = 5;
+		if(Main.key5 && Main.changeWeapon) {
+	  		Main.changeWeapon = false;
+			weapon.setType(4);
 		}
-		if(Main.key6) {
-			weapon.type = 6;
+		if(Main.key6 && Main.changeWeapon) {
+	  		Main.changeWeapon = false;
+			weapon.setType(5);
 		}
-		if(Main.key7) {
-			weapon.type = 7;
+		if(Main.key7 && Main.changeWeapon) {
+	  		Main.changeWeapon = false;
+			weapon.setType(6);
 		}
-		if(Main.key8) {
-			weapon.type = 8;
+		if(Main.key8 && Main.changeWeapon) {
+	  		Main.changeWeapon = false;
+			weapon.setType(7);
 		}
 		if(Main.debug[11]) {
 			System.out.println(this.position[0] + " - " + this.position[1]);
@@ -1169,4 +1179,6 @@ public class Character extends Hitbox {
 		this.position[1] = Main.areas[indTp].getPositionJ() + Main.areas[indTp].getWidth() / 2;
 		Main.screen.centerChar();
 	}
+	
+	
 }

@@ -15,12 +15,12 @@ public class Sound {
 	 * 2:TP carac, 
 	 * 3: void carac, 
 	 * 4: trampo, 
-	 * 5: tir1, 
-	 * 6: tir2, 
-	 * 7: tir22,
-	 * 8: tir3, 
-	 * 9: tir4,
-	 * 10: tir7,
+	 * 5: tir1, simple shot, machine gun, jack yellow 3
+	 * 6: tir2, bomb
+	 * 7: tir22, bomb explosion
+	 * 8: tir3, sniper
+	 * 9: tir4, fire
+	 * 10: tir7, shotgun
 	 * 11: EnnemyHit,
 	 * 12: EnnemyDie,
 	 * 13: SlugJump, 

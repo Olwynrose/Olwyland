@@ -1,6 +1,6 @@
 
 public class Characteristics {
-	public double defence;
+	public double defense;
 	public double maxHp;
 	public double hp;
 	public double damages;
@@ -11,9 +11,10 @@ public class Characteristics {
 	public int oxygen;
 	public int maxOxygen;
 	
+	
 	public Characteristics() {
 		indSound = 0;
-		defence = 10;
+		defense = 10;
 		maxHp = 25;
 		hp = maxHp;
 		damages = 100;
@@ -41,9 +42,11 @@ public class Characteristics {
 		}
 	}
 	
-	public void hit(double damageHit) {
+	public double hit(double damageHit) {
+		double effectiveDmg = 0;
 		if(time == 0 && hp > 0) {
-			hp = hp - damageHit / defence;
+			effectiveDmg = Math.min(damageHit, hp * defense);
+			hp = hp - effectiveDmg / defense - 0.001;
 			time = hitTime;
 			switch(indSound) {
 			case 1:
@@ -73,6 +76,10 @@ public class Characteristics {
 			break;
 			}
 		}
-		
+		return weaponExp(effectiveDmg);
+	}
+	
+	public double weaponExp(double effecDmg) {
+		return (effecDmg * defense)/1000;
 	}
 }

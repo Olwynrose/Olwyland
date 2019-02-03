@@ -2,16 +2,17 @@
 public class Shot extends Hitbox{
 
 	// type
-	/* 1:simple shot, 2: bomb */
+	/* 0: inactive, 1:simple shot, 2: bomb, 3: sniper */
 	public boolean init;
 	public int time;
 	public boolean hitMob;
 	public boolean hitCharac;
 	public boolean stopMob;
 	public double damages;
+	public int indWeapon;		//index of the weapon that shot the shot
 	private double rayAOE;
 	private double acceleration;
-	private int indArea;		// indice of the current area
+	private int indArea;		// index of the current area
 	
 	
 	public Shot() {
@@ -19,6 +20,7 @@ public class Shot extends Hitbox{
 		this.type = 0;
 		this.position = new double[2];
 		this.speed = new double[2];
+		indWeapon = -1;
 		time = 0;
 		rayAOE = 0;
 		stopMob = false;
@@ -30,88 +32,96 @@ public class Shot extends Hitbox{
 				teleport();
 			}
 		}
-		double buf_tMin;
+		double buf_Sceneries;
+		double buf_Mobs;
+		double weaponExp;
 		if(init) {
 			init = false;
 		}
 		else {
-			// control the fly
-			switch(this.type) {
-			case 1:
-			{
-			}
-			break;
-			case 2:
-			{
-				speed[0] = speed[0] + Main.gravity;
-			}
-			break;
-			case 3:
-			{
-			}
-			break;
-			case 4:
-			{
-				speed[0] = speed[0] - acceleration;
-			}
-			break;
-			case 5:
-			{
-				speed[0] = Math.min(speed[0] - acceleration, 0);
-				for(int j=0 ; j < 2 ; j++) {
-					for(int i = 0 ; i < Main.maxNbShots ; i++) {
-						if(Main.friendlyShots[i].type == 0) {
-							double a = Math.random();
-							Main.friendlyShots[i].fire(1, position[0], position[1], Math.sin(Math.PI*a) , Math.cos(Math.PI*a));
-							Main.friendlyShots[i].hitMob = true;
-							Main.friendlyShots[i].time = 10;
-							Main.friendlyShots[i].damages = 200;
-							Main.friendlyShots[i].stopMob = false;
-							Main.sounds.play(5);
-							break;
+			if(time > 0) {
+
+				time = time - 1;
+				
+				// control the fly
+				switch(this.type) {
+				case 1:
+				{
+				}
+				break;
+				case 2:
+				{
+					speed[0] = speed[0] + Main.gravity;
+				}
+				break;
+				case 3:
+				{
+				}
+				break;
+				case 4:
+				{
+					speed[0] = speed[0] - acceleration;
+				}
+				break;
+				case 5:
+				{
+					speed[0] = Math.min(speed[0] - acceleration, 0);
+					for(int j=0 ; j < 2 ; j++) {
+						for(int i = 0 ; i < Main.maxNbShots ; i++) {
+							if(Main.friendlyShots[i].type == 0) {
+								double a = Math.random();
+								Main.friendlyShots[i].fire(1, position[0], position[1], Math.sin(Math.PI*a) , Math.cos(Math.PI*a));
+								Main.friendlyShots[i].hitMob = true;
+								Main.friendlyShots[i].time = 10;
+								Main.friendlyShots[i].damages = this.damages;
+								Main.friendlyShots[i].stopMob = false;
+								Main.sounds.play(5);
+								break;
+							}
 						}
 					}
 				}
-			}
-			break;
-			}
-			
-			if(time > 0) {
-				time = time - 1;
-			}
-	
-			
-			// control the intersections
-			if(time > 0) {
+				break;
+				}
+				
+				// control the intersections
 				tMin = 1;
 
 				for (int i = 0 ; i < Main.nbSceneries ; i++) {
 					intersect(Main.sceneries[i]);
 				}
-				buf_tMin = tMin;
+				buf_Sceneries = tMin;
 				if(hitMob) {
 					for (int i = 0 ; i < Main.maxNbMobs ; i++) {
 						intersect(Main.mobs[i]);
-						if(tMin < buf_tMin) {
+						if(tMin < buf_Sceneries) {
 							if(stopMob && Main.mobs[i].charac.hp>0) {
-								Main.mobs[i].charac.hit(damages);
+								weaponExp = Main.mobs[i].charac.hit(damages);
+								if (indWeapon >= 0) {
+									Main.mainChar.weapon.expCurrent[indWeapon] += weaponExp;
+									System.out.println(Main.mainChar.weapon.expCurrent[indWeapon]);
+								}
 								break;
 							}
 							else {
-								Main.mobs[i].charac.hit(damages);
+								weaponExp = Main.mobs[i].charac.hit(damages);
+								if (indWeapon >= 0) {
+									Main.mainChar.weapon.expCurrent[indWeapon] += weaponExp;
+									System.out.println(Main.mainChar.weapon.expCurrent[indWeapon]);
+								}
 								tMin = 1;
 							}
 						}
 					}
 				}
-				buf_tMin = tMin;
+				buf_Mobs = Math.min(tMin, buf_Sceneries);
 				if(hitCharac) {
 					intersect(Main.mainChar);
-					if(tMin < buf_tMin) {
+					if(tMin < buf_Mobs) {
 						Main.mainChar.charac.hit(damages);
 					}
 				}
-				tMin = Math.min(tMin, buf_tMin);
+				tMin = Math.min(Math.min(tMin, buf_Mobs), buf_Sceneries);
 				this.position[0] = this.position[0] + 0.99*tMin*speed[0];
 				this.position[1] = this.position[1] + 0.99*tMin*speed[1];
 			}
@@ -131,7 +141,7 @@ public class Shot extends Hitbox{
 								Main.friendlyShots[i].fire(1, position[0], position[1], Math.cos(2*Math.PI*j/maxProjectiles) , Math.sin(2*Math.PI*j/maxProjectiles));
 								Main.friendlyShots[i].hitMob = true;
 								Main.friendlyShots[i].time = 4;
-								Main.friendlyShots[i].damages = 400;
+								Main.friendlyShots[i].damages = this.damages;
 								Main.friendlyShots[i].stopMob = false;
 								Main.friendlyShots[i].hitCharac = false;
 								Main.sounds.play(7);
@@ -283,12 +293,12 @@ public class Shot extends Hitbox{
 			double norm = Math.sqrt(Math.pow(speedi,2)+Math.pow(speedj,2));
 			rayAOE = 0;
 			damages = 150;
-			time = 20 - (int)Math.abs(0.5*Main.mainChar.speed[1]);
+			time = 20;
 			acceleration = -0.05 + 0.2*Math.random();
 			this.position[0] = i0+10*(Math.random()-0.5);
 			this.position[1] = j0+5*(Math.random()-0.5);
 			this.speed[0] = 9*speedi/norm;
-			this.speed[1] = 9*speedj/norm + 0.5*Main.mainChar.speed[1];
+			this.speed[1] = 9*speedj/norm;
 			this.nbPoints = 2;
 			this.points = new double[nbPoints][2];
 			this.points[0][0] = 10;
@@ -304,7 +314,7 @@ public class Shot extends Hitbox{
 			stopMob = false;
 			double norm = Math.sqrt(Math.pow(speedi,2)+Math.pow(speedj,2));
 			rayAOE = 0;
-			damages = 0;
+			damages = 200;
 			time = 100;
 			acceleration = -0.2;
 			this.position[0] = i0+10*(Math.random()-0.5);

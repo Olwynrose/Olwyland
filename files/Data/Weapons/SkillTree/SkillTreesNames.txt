@@ -1,0 +1,6 @@
+Bomb
+Sniper
+Fire
+Jack3
+MachineGun
+ShotGun

@@ -48,6 +48,7 @@ public class Main {
 	static boolean key6;
 	static boolean key7;
 	static boolean key8;
+	static boolean changeWeapon;
 	
 	static boolean mouseLeft;
 	static double mouseI;
@@ -64,6 +65,9 @@ public class Main {
 		long tic, toc;
 		Main.backgroundFileImage = "files/blk.png";
 		Main.foregroundFileImage = "";
+		
+		changeWeapon = true;
+		
 		debug = new boolean[50];
 		//debug[1] = true; 		//print the compute time
 		//debug[2] = true;		//print the state of the character
@@ -82,7 +86,7 @@ public class Main {
 		debug[15] = true;		//display the character hitbox
 		debug[16] = true;		//display the mobs hitbox
 		debug[17] = true;		//display the shots hitbox
-		//debug[18] = true;		//infinite defense
+		debug[18] = true;		//infinite defense
 		debug[19] = true;		//load debug map instead of image map
 
 		sounds = new Sound();
@@ -109,6 +113,7 @@ public class Main {
 			friendlyShots[i] = new Shot();
 			ennemyShots[i] = new Shot();
 		}
+		
 		
 		if (debug[19]) {
 			Debug.testMap(6);
@@ -146,7 +151,7 @@ public class Main {
 			@Override
 			public void mouseReleased(java.awt.event.MouseEvent arg0) {
 				mouseLeft = false;
-	  	  		Main.mainChar.weapon.keyShot = true;
+	  	  		Main.mainChar.weapon.setKeyShot(true);
 			}
 		} );
 		screen.window.addMouseMotionListener( new MouseMotionAdapter() 
