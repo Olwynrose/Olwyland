@@ -31,7 +31,8 @@ public class Main {
 	static Shot[] ennemyShots;
 	static int maxNbShots;
 
-	
+	static Item[] items;
+	static int maxNbItems;
 	static double gravity = 3.5;
 
 	// KEYS
@@ -91,7 +92,8 @@ public class Main {
 		//debug[20] = true;		//print the total exp and its progression and the total skill points of the current weapon
 		//debug[21] = true;		//print the values and types of the skill trees when loaded
 		//debug[22] = true;		//print the values of the weapons' characteristics multipliers of the skill trees
-		debug[23] = true;		//print the munitions of the current weapon
+		//debug[23] = true;		//print the munitions of the current weapon
+		debug[24] = true;		//print the number of coins
 		
 		sounds = new Sound();
 		
@@ -118,6 +120,11 @@ public class Main {
 			ennemyShots[i] = new Shot();
 		}
 		
+		maxNbItems = 300;
+		items = new Item[maxNbItems];
+		for(int i = 0; i<maxNbItems ; i++) {
+			items[i] = new Item();
+		}
 		
 		if (debug[19]) {
 			Debug.testMap(6);
@@ -125,6 +132,12 @@ public class Main {
 			Map.load(4);
 		}
 		
+		items[0].activeItem(-400, 800, 3);
+		items[1].activeItem(-420, 840, 3);
+		items[2].activeItem(220, 800, 3);
+		items[3].activeItem(-100, 3700, 3);
+		items[4].activeItem(-120, 3750, 3);
+		items[5].activeItem(-160, 3300, 3);
 		
 		screen = new Display();
 		screen.window.addKeyListener(new KeyListener() {
@@ -180,9 +193,13 @@ public class Main {
 			for(int n=0 ; n<nbSpawns ; n++){
 				spawns[n].update();
 			}
+			for(int n=0 ; n<maxNbItems ; n++){
+				items[n].update();
+			}
 			for(indScene=0 ; indScene<nbSceneries ; indScene++){
 				sceneries[indScene].update();
 			}
+			
 			screen.global();
 
 			toc = System.currentTimeMillis();

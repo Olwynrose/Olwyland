@@ -190,6 +190,7 @@ public class Display {
 		oxygen();
 		weaponExp();
 		munitions();
+		item();
 	
 		animations();
 		int i, j, k;
@@ -939,7 +940,7 @@ public class Display {
 		}
 	}
 	public void munitions() {
-		for(int j = 5 ; j < 5 + Main.mainChar.weapon.maxMunitions[Main.mainChar.weapon.getType()]+ Main.mainChar.weapon.addMun[Main.mainChar.weapon.getType()] ; j++) {
+		for(int j = 5 ; j < 5 + Main.mainChar.weapon.getMunitions() ; j++) {
 			for(int i = idim-50 ; i < idim-30 ; i++) {
 				img[i][2*j][0] = 127;
 				img[i][2*j][1] = 127;
@@ -951,6 +952,24 @@ public class Display {
 				img[i][2*j][0] = 255;
 				img[i][2*j][1] = 255;
 				img[i][2*j][2] = 127;
+			}
+		}
+	}
+	public void item() {
+		int ii, jj;
+		for(int i = 0; i<Main.maxNbItems ; i++) {
+			if (Main.items[i].type == 1) {
+				for (int n = -4 ; n <= 4 ; n++) {
+					for (int m = -4 ; m <= 4 ; m++) {
+						ii = ((int)(Main.items[i].position[0] - transi)) + n;
+						jj = ((int)(Main.items[i].position[1] - transj)) + m;
+						if(ii > 0 && ii < idim && jj > 0 && jj < jdim) {
+							img[ii][jj][0] = 255;
+							img[ii][jj][1] = 255;
+							img[ii][jj][2] = 255;
+						}
+					}
+				}
 			}
 		}
 	}

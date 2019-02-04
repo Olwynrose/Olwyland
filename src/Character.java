@@ -50,7 +50,7 @@ public class Character extends Hitbox {
 		width = 38;
 		height = 65;
 		tanAlpha = 0.75;
-
+		
 		type = 1;
 		weapon = new WeaponCharac();
 		weapon.setType(0);
@@ -550,22 +550,22 @@ public class Character extends Hitbox {
 		this.points = new double[6][2];
 		this.nbPoints = 6;
 
-		this.points[0][0] = 0;
+		this.points[0][0] = 0 + 0.6*height;
 		this.points[0][1] = 0;
 
-		this.points[1][0] = - tanAlpha * (width / 2);
+		this.points[1][0] = - tanAlpha * (width / 2) + 0.6*height;
 		this.points[1][1] = width / 2;
 
-		this.points[2][0] = - height;
+		this.points[2][0] = - height + 0.6*height;
 		this.points[2][1] = width / 2;
 
-		this.points[3][0] = - height;
+		this.points[3][0] = - height + 0.6*height;
 		this.points[3][1] = - width / 2;
 
-		this.points[4][0] = - tanAlpha * (width / 2);
+		this.points[4][0] = - tanAlpha * (width / 2) + 0.6*height;
 		this.points[4][1] = - width / 2;
 
-		this.points[5][0] = 0;
+		this.points[5][0] = 0 + 0.6*height;
 		this.points[5][1] = 0;
 	}
 

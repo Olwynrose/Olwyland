@@ -15,9 +15,10 @@ public class Mob extends Hitbox{
 	private double visionRange;		// range in witch the mob stop to attack the player
 	private double cpRange;			// maximum distance to the checkpoint
 	public double limI0, limI1, limJ0, limJ1;	// localization constrains
-
+	
 	public int state; 				// state of the character
 	/* 0:fly, 1:floor, 2:top, 3:left, 4:right, 5: botleft, 6:botright, 7:slideleft, 8:slideright, 9: slidefloor*/
+	private int coins;				// coins dropped at the death
 	private double maxSpeed;		// max speed for the free fall
 	private double moveSpeed;		// walk speed
 	private double jumpSpeed;		// speed with which the character jumps
@@ -106,6 +107,7 @@ public class Mob extends Hitbox{
 			charac.maxHp = 25;
 			charac.hp = charac.maxHp;
 			maxTimeMove = 30;
+			coins = 20;
 		}
 		break;
 		case 2:
@@ -124,6 +126,7 @@ public class Mob extends Hitbox{
 			timeMove = maxTimeMove;
 			detectRange = 450;
 			visionRange = 1000;
+			coins = 59;
 		}
 		break;
 		case 3:
@@ -132,6 +135,7 @@ public class Mob extends Hitbox{
 			charac.maxHp = 25;
 			charac.hp = charac.maxHp;
 			maxTimeMove = 40;
+			coins = 6;
 		}
 		}
 		
@@ -222,6 +226,7 @@ public class Mob extends Hitbox{
 					attack = false;
 					animation = 1;
 					time = 0;
+					drop();
 					animate();
 				}
 				else {
@@ -536,7 +541,7 @@ public class Mob extends Hitbox{
 						timeShot = maxTimeShot;
 					}
 					weapon.update(true, position[0] - 30, position[1]+45*Math.signum(Main.mainChar.position[1] - position[1])
-							, Main.mainChar.position[0]-10 - position[0] , Main.mainChar.position[1] - position[1]);
+							, Main.mainChar.position[0] - position[0] , Main.mainChar.position[1] - position[1]);
 				}
 				
 				// move
@@ -1313,6 +1318,82 @@ public class Mob extends Hitbox{
 		intersect(Main.mainChar);
 		if(tMin<1) {
 			Main.mainChar.charac.hit(charac.damages);
+		}
+	}
+	
+	private void drop() {
+		while(coins > 0) {
+			if(coins >= 1000) {
+				for(int i = 0 ; i < Main.maxNbItems ; i++) {
+					if(Main.items[i].type == 0) {
+						coins = coins - 1000;
+						Main.items[i].activeItem(position[0]-2, position[1], -9);
+						Main.items[i].dMax = 500;
+						break;
+					}
+				}
+			}
+			else if(coins >= 500){
+				for(int i = 0 ; i < Main.maxNbItems ; i++) {
+					if(Main.items[i].type == 0) {
+						coins = coins - 500;
+						Main.items[i].activeItem(position[0]-2, position[1], -8);
+						Main.items[i].dMax = 500;
+						break;
+					}
+				}
+			}
+			else if(coins >= 100){
+				for(int i = 0 ; i < Main.maxNbItems ; i++) {
+					if(Main.items[i].type == 0) {
+						coins = coins - 100;
+						Main.items[i].activeItem(position[0]-2, position[1], -7);
+						Main.items[i].dMax = 500;
+						break;
+					}
+				}
+			}
+			else if(coins >= 50){
+				for(int i = 0 ; i < Main.maxNbItems ; i++) {
+					if(Main.items[i].type == 0) {
+						coins = coins - 50;
+						Main.items[i].activeItem(position[0]-2, position[1], -6);
+						Main.items[i].dMax = 500;
+						break;
+					}
+				}
+			}
+			else if(coins >= 10){
+				for(int i = 0 ; i < Main.maxNbItems ; i++) {
+					if(Main.items[i].type == 0) {
+						coins = coins - 10;
+						Main.items[i].activeItem(position[0]-2, position[1], -5);
+						Main.items[i].dMax = 500;
+						break;
+					}
+				}
+			}
+			else if(coins >= 5){
+				for(int i = 0 ; i < Main.maxNbItems ; i++) {
+					if(Main.items[i].type == 0) {
+						coins = coins - 5;
+						Main.items[i].activeItem(position[0]-2, position[1], -4);
+						Main.items[i].dMax = 500;
+						break;
+					}
+				}
+			}
+			else if(coins >= 1){
+				for(int i = 0 ; i < Main.maxNbItems ; i++) {
+					if(Main.items[i].type == 0) {
+						coins = coins - 1;
+						Main.items[i].activeItem(position[0]-2, position[1], -3);
+						Main.items[i].dMax = 500;
+						break;
+					}
+				}
+			}
+			
 		}
 	}
 }

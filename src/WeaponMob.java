@@ -29,7 +29,7 @@ public class WeaponMob {
 	
 	public int update(boolean shot, double posi, double posj, double diri, double dirj) {
 		int direction = 0;
-		if (shot && times[type-1] == 0) {
+		if (shot && times[type] == 0) {
 			direction = (int) Math.signum(dirj);
 
 			switch(type) {
@@ -143,7 +143,7 @@ public class WeaponMob {
 			break;
 			}
 			
-			times[type - 1] = maxTimes[type - 1];
+			times[type] = maxTimes[type];
 		}
 		for(int i = 0; i<nbWeapons; i++) {
 			if(times[i]>0) {

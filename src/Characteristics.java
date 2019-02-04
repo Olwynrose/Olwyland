@@ -10,9 +10,11 @@ public class Characteristics {
 	/* 1:carac, 2: ennemy1, 3: ennemy2 */
 	public int oxygen;
 	public int maxOxygen;
+	public int coins;
 	
 	
 	public Characteristics() {
+		
 		indSound = 0;
 		defense = 10;
 		maxHp = 25;
@@ -21,6 +23,7 @@ public class Characteristics {
 		time = 0;
 		hitTime = 6;
 		maxOxygen = 0;
+		coins = 0;
 	}
 	
 	public void update() {

@@ -8,15 +8,16 @@ public class WeaponCharac {
 
 	private int type;
 
-	private boolean keyShot;	// to verify if the shot has been released
+	private boolean keyShot;			// to verify if the shot has been released
 	private int nbWeapons;
-	private double[] dispersion;//initial dispersion
-	private double[] times;		//time
-	private double[] coolDown;	//cooldown (frame)
-	private int[] scope; 		//initial scope
-	private double[] damages;	//initial damages
-	public int[] maxMunitions;	//initial max munitions
-	public int[] munitions;		//current munitions
+	private double[] dispersion;		//initial dispersion
+	private double[] times;				//time
+	private double[] coolDown;			//cooldown (frame)
+	private int[] scope; 				//initial scope
+	private double[] damages;			//initial damages
+	public int[] maxMunitions;			//initial max munitions
+	public int[] munitions;				//current munitions
+	public int[] collectableMunitions; 	//number of collectable munitions
 
 	private SkillTree[] skillTrees;
 	private double[] multDmg;
@@ -415,6 +416,14 @@ public class WeaponCharac {
 		maxMunitions[5] = 100;	// simple machingun 
 		maxMunitions[6] = 20;	// shotgun
 		
+		collectableMunitions = new int[nbWeapons];
+		collectableMunitions[1] = 2;	// bomb
+		collectableMunitions[2] = 2;	// sniper
+		collectableMunitions[3] = 10;	// fire
+		collectableMunitions[4] = 1;	// jack3 yeallow 3
+		collectableMunitions[5] = 20;	// simple machingun 
+		collectableMunitions[6] = 5;	// shotgun
+		
 		coolDown = new double[nbWeapons];
 		coolDown[0] = 8; 	// simple shot
 		coolDown[1] = 15; 	// bomb
@@ -545,11 +554,28 @@ public class WeaponCharac {
 		progressionExp[indWeapon] = (expCurrent[indWeapon]-expMinLevel[indWeapon])/(expMaxLevel[indWeapon]-expMinLevel[indWeapon]);
 	}
 	
+	public void collectMunitions(int t) {
+		munitions[t] = Math.min(maxMunitions[t]+addMun[t], munitions[t]+collectableMunitions[t]);
+	}
+	
+	public boolean fullMunitions(int t) {
+		if (munitions[t] == maxMunitions[t] + addMun[t]) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	public boolean getKeyShot() {
 		return this.keyShot;
 	}
 	
 	public void setKeyShot(boolean ks) {
 		this.keyShot = ks;
+	}
+	
+	public int getMunitions() {
+		return munitions[type] + addMun[type];
 	}
 }
