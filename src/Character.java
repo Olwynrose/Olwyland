@@ -162,6 +162,7 @@ public class Character extends Hitbox {
 			if (Main.debug[7] && Main.keySpace == true) {
 				charac.addOxygen();
 				debugFly();
+				weapon.munitions[weapon.getType()] = weapon.maxMunitions[weapon.getType()] + weapon.addMun[weapon.getType()];
 			}
 			else {
 				areaType = isIn();

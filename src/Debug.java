@@ -1210,7 +1210,7 @@ public class Debug {
 				ci = -202;
 				cj = 1600;
 
-				Main.spawns[Main.nbSpawns] = new Spawn(1, 5, 1);
+				Main.spawns[Main.nbSpawns] = new Spawn(1, 50, 1);
 				Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
 				Main.spawns[Main.nbSpawns].active = true;
 				Main.spawns[Main.nbSpawns].type = 2;
@@ -1218,7 +1218,7 @@ public class Debug {
 				Main.spawns[Main.nbSpawns].idSpawn = Main.nbSpawns;
 				Main.nbSpawns = Main.nbSpawns + 1;
 				
-				Main.spawns[Main.nbSpawns] = new Spawn(3, 40, 10);
+				Main.spawns[Main.nbSpawns] = new Spawn(3, 400, 20);
 				ci = -202;
 				cj = 1600;
 				Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);

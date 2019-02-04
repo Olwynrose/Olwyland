@@ -75,6 +75,7 @@ public class Shot extends Hitbox{
 								Main.friendlyShots[i].time = 10;
 								Main.friendlyShots[i].damages = this.damages;
 								Main.friendlyShots[i].stopMob = false;
+								Main.friendlyShots[i].indWeapon = this.indWeapon;
 								Main.sounds.play(5);
 								break;
 							}
@@ -97,17 +98,15 @@ public class Shot extends Hitbox{
 						if(tMin < buf_Sceneries) {
 							if(stopMob && Main.mobs[i].charac.hp>0) {
 								weaponExp = Main.mobs[i].charac.hit(damages);
-								if (indWeapon >= 0) {
-									Main.mainChar.weapon.expCurrent[indWeapon] += weaponExp;
-									System.out.println(Main.mainChar.weapon.expCurrent[indWeapon]);
+								if (indWeapon > 0) {
+									Main.mainChar.weapon.updateExp(indWeapon, weaponExp);
 								}
 								break;
 							}
 							else {
 								weaponExp = Main.mobs[i].charac.hit(damages);
-								if (indWeapon >= 0) {
-									Main.mainChar.weapon.expCurrent[indWeapon] += weaponExp;
-									System.out.println(Main.mainChar.weapon.expCurrent[indWeapon]);
+								if (indWeapon > 0) {
+									Main.mainChar.weapon.updateExp(indWeapon, weaponExp);
 								}
 								tMin = 1;
 							}
@@ -144,6 +143,7 @@ public class Shot extends Hitbox{
 								Main.friendlyShots[i].damages = this.damages;
 								Main.friendlyShots[i].stopMob = false;
 								Main.friendlyShots[i].hitCharac = false;
+								Main.friendlyShots[i].indWeapon = this.indWeapon;
 								Main.sounds.play(7);
 								break;
 							}
@@ -264,7 +264,11 @@ public class Shot extends Hitbox{
 				for (int i = 0 ; i < Main.maxNbMobs ; i++) {
 					intersect(Main.mobs[i]);
 					if(tMin < buf_tMin) {
-						Main.mobs[i].charac.hit(damages);
+						double weaponExp;
+						weaponExp = Main.mobs[i].charac.hit(damages);
+						if (indWeapon > 0) {
+							Main.mainChar.weapon.updateExp(indWeapon, weaponExp);
+						}
 						tMin = 1;
 					}
 				}

@@ -25,6 +25,7 @@ public class Display {
 	private int[][][] imgForeground;
 	private int[] arrayimage;
 
+	private int h;
 	public int idim;
 	public int jdim;
 	public int idimWin;
@@ -47,6 +48,7 @@ public class Display {
 		window = new JFrame();
 		pan = new JPanel();
 		lab = new JLabel();
+		h = 20;
 		idim = 600;
 		jdim = 900;
 		idimWin = 720;
@@ -62,7 +64,7 @@ public class Display {
 		coefTransparency = 80;
 
 		window.setTitle("Olwyland");
-		window.setSize(jdimWin, idimWin);
+		window.setSize(jdimWin, idimWin + h);
 		window.setResizable(false);
 		window.setLocationRelativeTo(null);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -186,6 +188,9 @@ public class Display {
 		foreground();
 		hp();
 		oxygen();
+		weaponExp();
+		munitions();
+	
 		animations();
 		int i, j, k;
 		for(i = 0; i < idim ; i++)
@@ -203,7 +208,7 @@ public class Display {
 		ii = new ImageIcon(getImageFromArray(arrayimage, jdim, idim).getScaledInstance(jdimWin, idimWin, Image.SCALE_AREA_AVERAGING));
 		pan.remove(lab);
 		lab.setIcon(ii);
-		lab.setBounds(0, 0, jdimWin, idimWin);
+		lab.setBounds(0, 0, jdimWin, idimWin + h);
 		pan.add(lab);
 		pan.repaint();
 		pan.revalidate();
@@ -914,6 +919,38 @@ public class Display {
 				img[i][j][0] = 0;
 				img[i][j][1] = 150;
 				img[i][j][2] = 255;
+			}
+		}
+	}
+	public void weaponExp() {
+		for(int j = 5 ; j < 5 + 100 ; j++) {
+			for(int i = 30 ; i < 35 ; i++) {
+				img[i][j][0] = 127;
+				img[i][j][1] = 65;
+				img[i][j][2] = 127;
+			}
+		}
+		for(int j = 5 ; j < 5 + 100*Main.mainChar.weapon.progressionExp[Main.mainChar.weapon.getType()] ; j++) {
+			for(int i = 30 ; i < 35 ; i++) {
+				img[i][j][0] = 255;
+				img[i][j][1] = 127;
+				img[i][j][2] = 255;
+			}
+		}
+	}
+	public void munitions() {
+		for(int j = 5 ; j < 5 + Main.mainChar.weapon.maxMunitions[Main.mainChar.weapon.getType()]+ Main.mainChar.weapon.addMun[Main.mainChar.weapon.getType()] ; j++) {
+			for(int i = idim-50 ; i < idim-30 ; i++) {
+				img[i][2*j][0] = 127;
+				img[i][2*j][1] = 127;
+				img[i][2*j][2] = 65;
+			}
+		}
+		for(int j = 5 ; j < 5 + Main.mainChar.weapon.munitions[Main.mainChar.weapon.getType()]; j++) {
+			for(int i = idim-50 ; i < idim-30 ; i++) {
+				img[i][2*j][0] = 255;
+				img[i][2*j][1] = 255;
+				img[i][2*j][2] = 127;
 			}
 		}
 	}

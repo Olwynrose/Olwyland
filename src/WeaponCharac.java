@@ -15,19 +15,27 @@ public class WeaponCharac {
 	private double[] coolDown;	//cooldown (frame)
 	private int[] scope; 		//initial scope
 	private double[] damages;	//initial damages
-	private int[] munitions;	//initial munitions
+	public int[] maxMunitions;	//initial max munitions
+	public int[] munitions;		//current munitions
 
 	private SkillTree[] skillTrees;
 	private double[] multDmg;
 	private double[] multDisp;
-	private int[] addMun;
+	public int[] addMun;
 	private double[] multCoolDown;
 	private int[] addScope;
 	private boolean[] stopMob;
 	
 	public double[] expCurrent;
 	private double[] expFirstLevel;
-	private int[] skillPoints;
+	private int[] skillPointsTotal;
+	
+	private double r;		//reason of the arithmetic suite that calculates the exp required for the next level of the weapon
+	private double q;		//reason of the geometric suite that calculates the exp required for the next level of the weapon
+	
+	private double[] expMaxLevel;
+	private double[] expMinLevel;
+	public double[] progressionExp;
 	
 	public WeaponCharac() throws NumberFormatException, IOException {
 		nbWeapons = 7;
@@ -41,13 +49,22 @@ public class WeaponCharac {
 		loadIndSkillTrees();
 		
 		getSkillTreeMultipliers();
+		
+		munitions = new int[nbWeapons];
+		for (int i = 1 ; i < nbWeapons ; i++) {
+			munitions[i] = maxMunitions[i] + addMun[i];
+		}
 	}
 	
 	public int updateCharac(double posi, double posj, double diri, double dirj) {
 		int direction = 0;
-		if (Main.mouseLeft && (keyShot || type == 3 || type == 5) && times[type] <0.01) {
+		if (Main.mouseLeft && (keyShot || type == 3 || type == 5) && times[type] <0.01 && (munitions[type] > 0 || type == 0)) {
 			keyShot = false;
 			direction = (int) Math.signum(Main.mouseJ-Main.mainChar.position[1]);
+			munitions[type] -= 1;
+			if (Main.debug[23]) {
+				System.out.println("munitions de l'arme " + type + " : " + munitions[type]);
+			}
 			
 			switch(type) {
 			case 0:
@@ -58,6 +75,7 @@ public class WeaponCharac {
 						Main.friendlyShots[i].hitMob = true;
 						Main.friendlyShots[i].time = scope[type] + addScope[type];
 						Main.friendlyShots[i].damages = damages[type] * multDmg[type];
+						
 						Main.friendlyShots[i].indWeapon = type;
 						Main.sounds.play(5);
 						break;
@@ -193,6 +211,11 @@ public class WeaponCharac {
 	}
 	
 	public void getSkillTreeMultipliers() {
+		multDmg[0] = 1;
+		multCoolDown[0] = 1;
+		multDisp[0] = 1;
+		stopMob[0] = true;
+		
 		for (int n = 1 ; n < nbWeapons ; n++) {
 			multDmg[n] = 1;
 			addMun[n] = 0;
@@ -203,9 +226,12 @@ public class WeaponCharac {
 			
 			if (skillTrees[n].indCC > 0) {
 				for (int i = 0 ; i < skillTrees[n].indCC ; i++) {
-					System.out.println("common");
-					System.out.println(skillTrees[n].getSkillType(0, i));
-					System.out.println(skillTrees[n].getSkillValue(0, i));
+					if (Main.debug[21]) {
+						System.out.println("common");
+						System.out.println(skillTrees[n].getSkillType(0, i));
+						System.out.println(skillTrees[n].getSkillValue(0, i));
+					}
+					
 					switch(skillTrees[n].getSkillType(0, i)) {
 					case 1:
 					{
@@ -244,9 +270,11 @@ public class WeaponCharac {
 				}
 				if (skillTrees[n].indFB > 0) {
 					for (int i = 0 ; i < skillTrees[n].indFB ; i++) {
-						System.out.println("First");
-						System.out.println(skillTrees[n].getSkillType(1, i));
-						System.out.println(skillTrees[n].getSkillValue(1, i));
+						if (Main.debug[21]) {
+							System.out.println("First branch");
+							System.out.println(skillTrees[n].getSkillType(1, i));
+							System.out.println(skillTrees[n].getSkillValue(1, i));
+						}
 						switch(skillTrees[n].getSkillType(1, i)) {
 						case 1: 
 						{
@@ -288,9 +316,11 @@ public class WeaponCharac {
 				}
 				if (skillTrees[n].indSB > 0) {
 					for (int i = 0 ; i < skillTrees[n].indSB ; i++) {
-						System.out.println("Second");
-						System.out.println(skillTrees[n].getSkillType(2, i));
-						System.out.println(skillTrees[n].getSkillValue(2, i));
+						if (Main.debug[21]) {
+							System.out.println("Second branch");
+							System.out.println(skillTrees[n].getSkillType(2, i));
+							System.out.println(skillTrees[n].getSkillValue(2, i));
+						}
 						switch(skillTrees[n].getSkillType(2, i)) {
 						case 1: 
 						{
@@ -330,9 +360,11 @@ public class WeaponCharac {
 				}
 				if (skillTrees[n].indTB > 0) {
 					for (int i = 0 ; i < skillTrees[n].indTB ; i++) {
-						System.out.println("Third");
-						System.out.println(skillTrees[n].getSkillType(3, i));
-						System.out.println(skillTrees[n].getSkillValue(3, i));
+						if (Main.debug[21]) {
+							System.out.println("Third branch");
+							System.out.println(skillTrees[n].getSkillType(3, i));
+							System.out.println(skillTrees[n].getSkillValue(3, i));
+						}
 						switch(skillTrees[n].getSkillType(3, i)) {
 						case 1: 
 						{
@@ -375,13 +407,13 @@ public class WeaponCharac {
 	}
 	
 	private void initialisation() throws NumberFormatException, IOException {
-		munitions = new int[nbWeapons];
-		munitions[1] = 0;	// bomb
-		munitions[2] = 0;	// sniper
-		munitions[3] = 0;	// fire
-		munitions[4] = 0;	// jack3 yeallow 3
-		munitions[5] = 100;	// simple machingun 
-		munitions[6] = 15;	// shotgun
+		maxMunitions = new int[nbWeapons];
+		maxMunitions[1] = 5;	// bomb
+		maxMunitions[2] = 5;	// sniper
+		maxMunitions[3] = 50;	// fire
+		maxMunitions[4] = 2;	// jack3 yeallow 3
+		maxMunitions[5] = 100;	// simple machingun 
+		maxMunitions[6] = 20;	// shotgun
 		
 		coolDown = new double[nbWeapons];
 		coolDown[0] = 8; 	// simple shot
@@ -413,6 +445,14 @@ public class WeaponCharac {
 		scope[4] = 100;
 		scope[5] = 12;
 		scope[6] = 5;
+		
+		expFirstLevel = new double[nbWeapons];
+		expFirstLevel[1] = 50;
+		expFirstLevel[2] = 50;
+		expFirstLevel[3] = 50;
+		expFirstLevel[4] = 50;
+		expFirstLevel[5] = 50;
+		expFirstLevel[6] = 50;
 
 		times = new double[nbWeapons];
 		
@@ -426,10 +466,25 @@ public class WeaponCharac {
 		stopMob = new boolean[nbWeapons];
 
 		expCurrent = new double[nbWeapons];
-		expFirstLevel = new double[nbWeapons];
-		skillPoints = new int[nbWeapons];
-		
+		skillPointsTotal = new int[nbWeapons];
+		expMinLevel = new double[nbWeapons];
+		expMaxLevel = new double[nbWeapons];
+
 		loadExp();
+		
+		q = 1.05;
+		r = 0.2;
+		progressionExp = new double[nbWeapons];
+		
+		for (int i = 1 ; i < nbWeapons ; i++) {
+			expMaxLevel[i] = expFirstLevel[i];
+			expMinLevel[i] = 0;
+			
+			updateExp(i, 0);
+		}
+		
+		
+		
 	}
 	
 	public void loadIndSkillTrees() throws NumberFormatException, IOException {
@@ -451,12 +506,14 @@ public class WeaponCharac {
 	
 	public void setType(int t) {
 		this.type = t;
-		System.out.println("multDmg : " + this.multDmg[type]);
-		System.out.println("multDisp : " + this.multDisp[type]);
-		System.out.println("addMun : " + this.addMun[type]);
-		System.out.println("multcd : " + this.multCoolDown[type]);
-		System.out.println("addscope : " + this.addScope[type]);
-		System.out.println("stopMob : " + this.stopMob[type]);
+		if (Main.debug[22]) {
+			System.out.println("multDmg : " + this.multDmg[type]);
+			System.out.println("multDisp : " + this.multDisp[type]);
+			System.out.println("addMun : " + this.addMun[type]);
+			System.out.println("multcd : " + this.multCoolDown[type]);
+			System.out.println("addscope : " + this.addScope[type]);
+			System.out.println("stopMob : " + this.stopMob[type]);
+		}
 	}
 	
 	public void loadExp() throws IOException {
@@ -466,13 +523,26 @@ public class WeaponCharac {
 			expCurrent[i] = Double.parseDouble(brCE.readLine());
 		}
 		brCE.close();
-		
-		File fileExpFirstLevel = new File("files/Data/Weapons/SkillTree/ExperienceFirstLevel.txt");
-		BufferedReader brEFL = new BufferedReader(new FileReader(fileExpFirstLevel));
-		for (int i = 1 ; i < nbWeapons ; i++) {
-			expFirstLevel[i] = Double.parseDouble(brEFL.readLine());
+	}
+	
+	public void updateExp(int indWeapon, double additionalExp) {
+		double diffExp;
+		expCurrent[indWeapon] += additionalExp;
+		while(expCurrent[indWeapon] > expMaxLevel[indWeapon]) {
+			diffExp = expMaxLevel[indWeapon] - expMinLevel[indWeapon];
+			expMinLevel[indWeapon] = expMaxLevel[indWeapon];
+			expMaxLevel[indWeapon] += diffExp*q+r*expFirstLevel[indWeapon];
+			
+			skillPointsTotal[indWeapon] += 1;
+			if (Main.debug[20]) {
+				System.out.println("Level up ! skill points total : " + skillPointsTotal[indWeapon]);
+			}
 		}
-		brEFL.close();
+		if (Main.debug[20]) {
+			System.out.println("exp : " + expCurrent[indWeapon]);
+			System.out.println("progression : " + (expCurrent[indWeapon]-expMinLevel[indWeapon])/(expMaxLevel[indWeapon]-expMinLevel[indWeapon]));
+		}
+		progressionExp[indWeapon] = (expCurrent[indWeapon]-expMinLevel[indWeapon])/(expMaxLevel[indWeapon]-expMinLevel[indWeapon]);
 	}
 	
 	public boolean getKeyShot() {

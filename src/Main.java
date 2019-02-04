@@ -88,7 +88,11 @@ public class Main {
 		debug[17] = true;		//display the shots hitbox
 		debug[18] = true;		//infinite defense
 		debug[19] = true;		//load debug map instead of image map
-
+		//debug[20] = true;		//print the total exp and its progression and the total skill points of the current weapon
+		//debug[21] = true;		//print the values and types of the skill trees when loaded
+		//debug[22] = true;		//print the values of the weapons' characteristics multipliers of the skill trees
+		debug[23] = true;		//print the munitions of the current weapon
+		
 		sounds = new Sound();
 		
 		mainChar = new Character();
