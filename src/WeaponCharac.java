@@ -164,7 +164,7 @@ public class WeaponCharac {
 				}
 			}
 			break;
-			case 6:
+			case 7:
 			{
 				double theta = Math.atan2(diri, dirj);
 				double rand_thata;
@@ -184,6 +184,21 @@ public class WeaponCharac {
 							Main.sounds.play(10);
 							break;
 						}
+					}
+				}
+			}
+			break;
+			case 6:
+			{
+				for(int i = 0 ; i < Main.maxNbShots ; i++) {
+					if(Main.friendlyShots[i].type == 0) {
+						Main.friendlyShots[i].fire(6, posi, posj, diri, dirj);
+						Main.friendlyShots[i].hitMob = true;
+						Main.friendlyShots[i].time = 40;
+						Main.friendlyShots[i].damages = damages[type] * multDmg[type];
+						Main.friendlyShots[i].indWeapon = type;
+						Main.sounds.play(6);
+						break;
 					}
 				}
 			}

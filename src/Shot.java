@@ -10,6 +10,7 @@ public class Shot extends Hitbox{
 	public boolean stopMob;
 	public double damages;
 	public int indWeapon;		//index of the weapon that shot the shot
+	public int numBombs;
 	private double rayAOE;
 	private double acceleration;
 	private int indArea;		// index of the current area
@@ -34,6 +35,7 @@ public class Shot extends Hitbox{
 		}
 		double buf_Sceneries;
 		double buf_Mobs;
+		boolean impactMob = false;
 		double weaponExp;
 		if(init) {
 			init = false;
@@ -83,6 +85,11 @@ public class Shot extends Hitbox{
 					}
 				}
 				break;
+				case 6:
+				{
+					speed[0] = speed[0] + Main.gravity;
+				}
+				break;
 				}
 				
 				// control the intersections
@@ -100,6 +107,7 @@ public class Shot extends Hitbox{
 								weaponExp = Main.mobs[i].charac.hit(damages);
 								if (indWeapon > 0) {
 									Main.mainChar.weapon.updateExp(indWeapon, weaponExp);
+									impactMob = true;
 								}
 								break;
 							}
@@ -121,8 +129,17 @@ public class Shot extends Hitbox{
 					}
 				}
 				tMin = Math.min(Math.min(tMin, buf_Mobs), buf_Sceneries);
-				this.position[0] = this.position[0] + 0.99*tMin*speed[0];
-				this.position[1] = this.position[1] + 0.99*tMin*speed[1];
+				this.position[0] = this.position[0] + 0.999*tMin*speed[0];
+				this.position[1] = this.position[1] + 0.999*tMin*speed[1];
+				
+				if(type == 6) {
+					for (int j = 0 ; j < Main.maxNbMobs ; j++) {
+						if((Math.pow(Main.mobs[j].position[0]-position[0], 2)+Math.pow(Main.mobs[j].position[1]-position[1], 2))<Math.pow(50,2)) {
+							Main.mobs[j].charac.hit(damages);
+							impactMob = true;
+						}
+					}
+				}
 			}
 			else {
 				// control the change of behavior (ex explosions)
@@ -146,6 +163,46 @@ public class Shot extends Hitbox{
 								Main.friendlyShots[i].indWeapon = this.indWeapon;
 								Main.sounds.play(7);
 								break;
+							}
+						}
+					}
+				}
+				break;
+				case 6:
+				{
+					if(numBombs>0) {
+						for(int j = 0 ; j < numBombs ; j++) {
+							for(int i = 0 ; i < Main.maxNbShots ; i++) {
+								if(Main.friendlyShots[i].type == 0) {
+									Main.friendlyShots[i].fire(6, position[0]-5, position[1], 150*Math.cos(2*Math.PI*j/((double)numBombs)) , 90*Math.sin(2*Math.PI*j/((double)numBombs)) );
+									Main.friendlyShots[i].hitMob = true;
+									Main.friendlyShots[i].time = 25 + ((int) (15.0*Math.random()));
+									Main.friendlyShots[i].damages = this.damages;
+									Main.friendlyShots[i].stopMob = false;
+									Main.friendlyShots[i].hitCharac = false;
+									Main.friendlyShots[i].indWeapon = this.indWeapon;
+									Main.friendlyShots[i].numBombs = -1;
+									Main.sounds.play(7);
+									break;
+								}
+							}
+						}
+					}
+					else {
+						double maxProjectiles = 10;
+						for(int j = 0 ; j < maxProjectiles ; j++) {
+							for(int i = 0 ; i < Main.maxNbShots ; i++) {
+								if(Main.friendlyShots[i].type == 0) {
+									Main.friendlyShots[i].fire(1, position[0]-2, position[1], Math.cos(2*Math.PI*j/maxProjectiles) , Math.sin(2*Math.PI*j/maxProjectiles));
+									Main.friendlyShots[i].hitMob = true;
+									Main.friendlyShots[i].time = 1;
+									Main.friendlyShots[i].damages = this.damages;
+									Main.friendlyShots[i].stopMob = false;
+									Main.friendlyShots[i].hitCharac = false;
+									Main.friendlyShots[i].indWeapon = this.indWeapon;
+									Main.sounds.play(7);
+									break;
+								}
 							}
 						}
 					}
@@ -179,7 +236,41 @@ public class Shot extends Hitbox{
 			}
 			
 			if(tMin < 1) {
-				time = 0;
+				if(type != 6 || impactMob) {
+					time = 0;
+				}
+				else {
+					tMin = 1;
+					boolean onFloor = false;
+					for (int i = 0 ; i < Main.nbSceneries ; i++) {
+						if(Main.sceneries[i].type == 1)
+						{
+							for (int j = 0 ; j < Main.sceneries[i].getNbPoints() - 1 ; j++) {
+								t = lineIntersection( 1, 0,
+										position[0] + points[0][0], position[1] + points[0][1],
+										Main.sceneries[i].position[0] + Main.sceneries[i].points[j][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j][1],
+										Main.sceneries[i].position[0] + Main.sceneries[i].points[j+1][0], Main.sceneries[i].position[1] + Main.sceneries[i].points[j+1][1]);
+								if (t >= 0 && t < 1) {
+									onFloor = true;
+								}
+							}
+						}
+					}
+					if(onFloor) {
+						    position[0] = position[0] - 0.01;
+							if(numBombs>0) {
+								speed[0] = -0.5*speed[0];
+							}
+							else {
+								speed[0] = -speed[0];
+							}
+					}
+					else {
+						position[1] = position[1] - 0.1*Math.signum(speed[1]);
+						speed[0] = -0.1;
+						speed[1] = -0.5*speed[1] - 7*Math.signum(speed[1]);
+					}
+				}
 			}
 		}
 	}
@@ -225,9 +316,9 @@ public class Shot extends Hitbox{
 			this.points = new double[nbPoints][2];
 			this.points[0][0] = 0;
 			this.points[0][1] = 0;
-			this.points[1][0] = -9;
+			this.points[1][0] = -8;
 			this.points[1][1] = -4;
-			this.points[2][0] = -9;
+			this.points[2][0] = -8;
 			this.points[2][1] = 4;
 			this.points[3][0] = 0;
 			this.points[3][1] = 0;
@@ -331,6 +422,32 @@ public class Shot extends Hitbox{
 			this.points[0][1] = -10;
 			this.points[1][0] = 0;
 			this.points[1][1] = 10;
+			
+		}
+		break;
+		// bouncer
+		case 6:
+		{
+			stopMob = true;
+			rayAOE = 0;
+			time = 100;
+			damages = 500;
+			numBombs = 15;
+			this.position[0] = i0;
+			this.position[1] = j0;
+			this.nbPoints = 4;
+			this.points = new double[nbPoints][2];
+			this.points[0][0] = 0;
+			this.points[0][1] = 0;
+			this.points[1][0] = -5;
+			this.points[1][1] = -4;
+			this.points[2][0] = -5;
+			this.points[2][1] = 4;
+			this.points[3][0] = 0;
+			this.points[3][1] = 0;
+
+			this.speed[0] = speedi*0.15;
+			this.speed[1] = speedj*0.15;
 			
 		}
 		break;
