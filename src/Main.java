@@ -4,12 +4,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
 
-import com.sun.glass.events.MouseEvent;
-
 public class Main {
 
 	static Character mainChar;
-	static Display screen;
+	static DisplayGame screen;
 	static Scenery[] sceneries;
 	static int nbSceneries;
 	static int maxNbSceneries;
@@ -41,6 +39,7 @@ public class Main {
 	static boolean keyRight;
 	static boolean keyLeft;
 	static boolean keySpace;
+	static boolean keyEscape;
 	static boolean key1;
 	static boolean key2;
 	static boolean key3;
@@ -55,6 +54,8 @@ public class Main {
 	static double mouseI;
 	static double mouseJ;
 
+	static int menu;
+	static DisplayMenu screenMenu;
 
 	static boolean[] debug;
 	static String hitboxFileImage;
@@ -93,7 +94,8 @@ public class Main {
 		//debug[21] = true;		//print the values and types of the skill trees when loaded
 		//debug[22] = true;		//print the values of the weapons' characteristics multipliers of the skill trees
 		//debug[23] = true;		//print the munitions of the current weapon
-		debug[24] = true;		//print the number of coins
+		//debug[24] = true;		//print the number of coins
+		//debug[25] = true;		//print informations about upgrading weapons
 		
 		sounds = new Sound();
 		
@@ -139,7 +141,7 @@ public class Main {
 		items[4].activeItem(-120, 3750, 3);
 		items[5].activeItem(-160, 3300, 3);
 		
-		screen = new Display();
+		screen = new DisplayGame();
 		screen.window.addKeyListener(new KeyListener() {
 			  public void keyTyped(KeyEvent e) {}
 		      public void keyPressed(KeyEvent e) {
@@ -151,6 +153,9 @@ public class Main {
 		    	  screen.updateReleasedKeys(key);
 		      }
 		});
+			
+		menu = 1; /* 0:homepage, 1:game, 2:pause */
+		screenMenu = new DisplayMenu();
 		
 		screen.window.addMouseListener( new MouseListener() 
 		{
@@ -180,35 +185,58 @@ public class Main {
 		} );
 
 		while(true) {
-			tic = System.currentTimeMillis();
-
-			mainChar.update();
-			for(int n=0 ; n<maxNbShots ; n++){
-				friendlyShots[n].update();
-				ennemyShots[n].update();
+			if (keyEscape && menu == 1) {
+				keyEscape = false;
+				screen.resetTrans();
+				menu = 2;
 			}
-			for(int n=0 ; n<maxNbMobs ; n++){
-				mobs[n].update();
+			else if (keyEscape && menu == 2) {
+				keyEscape = false;
+				menu = 1;
+				screen.centerChar();
 			}
-			for(int n=0 ; n<nbSpawns ; n++){
-				spawns[n].update();
-			}
-			for(int n=0 ; n<maxNbItems ; n++){
-				items[n].update();
-			}
-			for(indScene=0 ; indScene<nbSceneries ; indScene++){
-				sceneries[indScene].update();
-			}
-			
-			screen.global();
-
-			toc = System.currentTimeMillis();
-			if (toc - tic < 50)
+			switch(menu)
 			{
-				Thread.sleep(50 - (toc-tic));
-			}
-			if (debug[1]) {
-				System.out.println("Computing time : " + (toc-tic) + "   [Main]");
+				case 1:
+				{
+					tic = System.currentTimeMillis();
+					
+					mainChar.update();
+					for(int n=0 ; n<maxNbShots ; n++){
+						friendlyShots[n].update();
+						ennemyShots[n].update();
+					}
+					for(int n=0 ; n<maxNbMobs ; n++){
+						mobs[n].update();
+					}
+					for(int n=0 ; n<nbSpawns ; n++){
+						spawns[n].update();
+					}
+					for(int n=0 ; n<maxNbItems ; n++){
+						items[n].update();
+					}
+					for(indScene=0 ; indScene<nbSceneries ; indScene++){
+						sceneries[indScene].update();
+					}
+					
+					screen.global();
+		
+					toc = System.currentTimeMillis();
+					if (toc - tic < 50)
+					{
+						Thread.sleep(50 - (toc-tic));
+					}
+					if (debug[1]) {
+						System.out.println("Computing time : " + (toc-tic) + "   [Main]");
+					}
+				}
+				break;
+				case 2:
+				{
+					screenMenu.global();
+					
+				}
+				break;
 			}
 		}
 	}

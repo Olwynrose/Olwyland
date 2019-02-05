@@ -14,18 +14,18 @@ import java.io.IOException;
 import java.awt.Color;
 import java.awt.Component;
 
-public class Display {
+public class DisplayGame {
 
 	public JFrame window;
-	private JPanel pan;
-	private JLabel lab;
-	private ImageIcon ii;
+	public JPanel pan;
+	public JLabel lab;
+	public ImageIcon ii;
 	private int[][][] img;
 	private int[][][] imgBackground;
 	private int[][][] imgForeground;
-	private int[] arrayimage;
+	public int[] arrayimage;
 
-	private int h;
+	public int h;
 	public int idim;
 	public int jdim;
 	public int idimWin;
@@ -44,11 +44,11 @@ public class Display {
 
 	private int coefTransparency;
 
-	public Display() {
+	public DisplayGame() {
 		window = new JFrame();
 		pan = new JPanel();
 		lab = new JLabel();
-		h = 20;
+		h = 0;
 		idim = 600;
 		jdim = 900;
 		idimWin = 720;
@@ -732,6 +732,10 @@ public class Display {
 	  	{
 	  		Main.key8 = true;
 	  	}
+  	  	if(key == 27)
+	  	{
+	  		Main.keyEscape = true;
+	  	}
 	}
 
 	public void updateReleasedKeys(int key) {
@@ -799,8 +803,8 @@ public class Display {
 	  	}
 	}
 	public void updatePressedMouse(java.awt.event.MouseEvent arg0) {
-		Main.mouseI = (double) (arg0.getY()-25)*idim/idimWin + Main.screen.transi;
-		Main.mouseJ = (double) arg0.getX()*jdim/jdimWin + Main.screen.transj;
+		Main.mouseI = (double) (arg0.getY()-36)*idim/idimWin + Main.screen.transi;
+		Main.mouseJ = (double) (arg0.getX()-3)*jdim/jdimWin + Main.screen.transj;
 		Main.mouseLeft = true;
 	}
 
@@ -940,7 +944,7 @@ public class Display {
 		}
 	}
 	public void munitions() {
-		for(int j = 5 ; j < 5 + Main.mainChar.weapon.getMunitions() ; j++) {
+		for(int j = 5 ; j < 5 + Main.mainChar.weapon.getNbMaxMunitions() ; j++) {
 			for(int i = idim-50 ; i < idim-30 ; i++) {
 				img[i][2*j][0] = 127;
 				img[i][2*j][1] = 127;
@@ -972,5 +976,10 @@ public class Display {
 				}
 			}
 		}
+	}
+	
+	public void resetTrans() {
+		transi = 0;
+		transj = 0;
 	}
 }

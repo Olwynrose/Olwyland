@@ -7,14 +7,14 @@ import java.io.IOException;
 
 public class SkillTree {
 	
-	private Skill[] CommonCore;
-	private int nbSkillsCC;
-	private Skill[] FirstBranch;
-	private int nbSkillsFB;
-	private Skill[] SecondBranch;
-	private int nbSkillsSB;
-	private Skill[] ThirdBranch;
-	private int nbSkillsTB;
+	public Skill[] CommonCore;
+	public int nbSkillsCC;
+	public Skill[] FirstBranch;
+	public int nbSkillsFB;
+	public Skill[] SecondBranch;
+	public int nbSkillsSB;
+	public Skill[] ThirdBranch;
+	public int nbSkillsTB;
 	
 	public int indCC;
 	public int indFB;
@@ -107,5 +107,5 @@ public class SkillTree {
 		}
 		return 0;
 	}
-	
+		
 }

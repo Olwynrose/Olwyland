@@ -1328,7 +1328,6 @@ public class Mob extends Hitbox{
 					if(Main.items[i].type == 0) {
 						coins = coins - 1000;
 						Main.items[i].activeItem(position[0]-2, position[1], -9);
-						Main.items[i].dMax = 500;
 						break;
 					}
 				}
@@ -1338,7 +1337,6 @@ public class Mob extends Hitbox{
 					if(Main.items[i].type == 0) {
 						coins = coins - 500;
 						Main.items[i].activeItem(position[0]-2, position[1], -8);
-						Main.items[i].dMax = 500;
 						break;
 					}
 				}
@@ -1348,7 +1346,6 @@ public class Mob extends Hitbox{
 					if(Main.items[i].type == 0) {
 						coins = coins - 100;
 						Main.items[i].activeItem(position[0]-2, position[1], -7);
-						Main.items[i].dMax = 500;
 						break;
 					}
 				}
@@ -1358,7 +1355,6 @@ public class Mob extends Hitbox{
 					if(Main.items[i].type == 0) {
 						coins = coins - 50;
 						Main.items[i].activeItem(position[0]-2, position[1], -6);
-						Main.items[i].dMax = 500;
 						break;
 					}
 				}
@@ -1368,7 +1364,6 @@ public class Mob extends Hitbox{
 					if(Main.items[i].type == 0) {
 						coins = coins - 10;
 						Main.items[i].activeItem(position[0]-2, position[1], -5);
-						Main.items[i].dMax = 500;
 						break;
 					}
 				}
@@ -1378,7 +1373,6 @@ public class Mob extends Hitbox{
 					if(Main.items[i].type == 0) {
 						coins = coins - 5;
 						Main.items[i].activeItem(position[0]-2, position[1], -4);
-						Main.items[i].dMax = 500;
 						break;
 					}
 				}
@@ -1388,7 +1382,6 @@ public class Mob extends Hitbox{
 					if(Main.items[i].type == 0) {
 						coins = coins - 1;
 						Main.items[i].activeItem(position[0]-2, position[1], -3);
-						Main.items[i].dMax = 500;
 						break;
 					}
 				}

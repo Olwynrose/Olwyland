@@ -19,7 +19,8 @@ public class WeaponCharac {
 	public int[] munitions;				//current munitions
 	public int[] collectableMunitions; 	//number of collectable munitions
 
-	private SkillTree[] skillTrees;
+	public SkillTree[] skillTrees;
+	public int[] skillPoints;
 	private double[] multDmg;
 	private double[] multDisp;
 	public int[] addMun;
@@ -57,7 +58,7 @@ public class WeaponCharac {
 		}
 	}
 	
-	public int updateCharac(double posi, double posj, double diri, double dirj) {
+	public int updateCharac(double posi, double posj, double diri, double dirj) {		
 		int direction = 0;
 		if (Main.mouseLeft && (keyShot || type == 3 || type == 5) && times[type] <0.01 && (munitions[type] > 0 || type == 0)) {
 			keyShot = false;
@@ -456,16 +457,19 @@ public class WeaponCharac {
 		scope[6] = 5;
 		
 		expFirstLevel = new double[nbWeapons];
-		expFirstLevel[1] = 50;
-		expFirstLevel[2] = 50;
-		expFirstLevel[3] = 50;
-		expFirstLevel[4] = 50;
-		expFirstLevel[5] = 50;
-		expFirstLevel[6] = 50;
+		expFirstLevel[1] = 10;
+		expFirstLevel[2] = 10;
+		expFirstLevel[3] = 10;
+		expFirstLevel[4] = 10;
+		expFirstLevel[5] = 10;
+		expFirstLevel[6] = 10;
 
 		times = new double[nbWeapons];
 		
 		skillTrees = new SkillTree[nbWeapons];		
+		
+		skillPoints = new int [nbWeapons];
+		skillPoints[5] = 9;
 		
 		multDmg = new double[nbWeapons];
 		multDisp = new double[nbWeapons];
@@ -543,15 +547,96 @@ public class WeaponCharac {
 			expMaxLevel[indWeapon] += diffExp*q+r*expFirstLevel[indWeapon];
 			
 			skillPointsTotal[indWeapon] += 1;
+			skillPoints[indWeapon] += 1; 
+			
 			if (Main.debug[20]) {
-				System.out.println("Level up ! skill points total : " + skillPointsTotal[indWeapon]);
+				System.out.println("Level up !");
+				System.out.println("skill points total : " + skillPointsTotal[indWeapon]);
+				System.out.println("Skill points of the weapon " + indWeapon + " : " + skillPoints[indWeapon]);
 			}
 		}
 		if (Main.debug[20]) {
+			System.out.println("Weapon : " + indWeapon);
 			System.out.println("exp : " + expCurrent[indWeapon]);
 			System.out.println("progression : " + (expCurrent[indWeapon]-expMinLevel[indWeapon])/(expMaxLevel[indWeapon]-expMinLevel[indWeapon]));
+			System.out.println("Skill points : " + skillPoints[indWeapon]);
 		}
 		progressionExp[indWeapon] = (expCurrent[indWeapon]-expMinLevel[indWeapon])/(expMaxLevel[indWeapon]-expMinLevel[indWeapon]);
+	}
+	
+	public boolean updgrade(int iW, int iB, int iS) {	
+		switch(iB) {
+		case 0:
+		{
+			if (Main.debug[25]) {
+				System.out.println("Arme : " + iW);
+				System.out.println("indCC : " + skillTrees[iW].indCC);
+				System.out.println("iS : " + iS);
+				System.out.println("skillPoints : " + skillPoints[iW]);
+				System.out.println("cost : " + skillTrees[iW].CommonCore[iS].getCost());
+			}
+			
+			if (iS == skillTrees[iW].indCC && skillPoints[iW] >= skillTrees[iW].CommonCore[iS].getCost()) {
+				skillTrees[iW].indCC += 1;
+				skillPoints[iW] -= 1;
+				getSkillTreeMultipliers();
+				return true;
+			}
+		}
+		break;
+		case 1:
+		{
+			if (Main.debug[25]) {
+				System.out.println("indFB : " + skillTrees[iW].indFB);
+				System.out.println("iS : " + iS);
+				System.out.println("skillPoints : " + skillPoints[iW]);
+				System.out.println("cost : " + skillTrees[iW].FirstBranch[iS].getCost());
+			}
+			
+			if ((iS == skillTrees[iW].indFB && skillTrees[iW].indCC == skillTrees[iW].nbSkillsCC) && skillPoints[iW] >= skillTrees[iW].FirstBranch[iS].getCost()) {
+				skillTrees[iW].indFB += 1;
+				skillPoints[iW] -= 1;
+				getSkillTreeMultipliers();
+				return true;
+			}
+		}
+		break;
+		case 2:
+		{
+			if (Main.debug[25]) {
+				System.out.println("indSB : " + skillTrees[iW].indSB);
+				System.out.println("iS : " + iS);
+				System.out.println("skillPoints : " + skillPoints[iW]);
+				System.out.println("cost : " + skillTrees[iW].SecondBranch[iS].getCost());
+			}
+			
+			if ((iS == skillTrees[iW].indSB && skillTrees[iW].indCC == skillTrees[iW].nbSkillsCC) && skillPoints[iW] >= skillTrees[iW].FirstBranch[iS].getCost()) {
+				skillTrees[iW].indSB += 1;
+				skillPoints[iW] -= 1;
+				getSkillTreeMultipliers();
+				return true;
+			}
+		}
+		break;
+		case 3:
+		{
+			if (Main.debug[25]) {
+				System.out.println("indTB : " + skillTrees[iW].indTB);
+				System.out.println("iS : " + iS);
+				System.out.println("skillPoints : " + skillPoints[iW]);
+				System.out.println("cost : " + skillTrees[iW].ThirdBranch[iS].getCost());
+			}
+			
+			if ((iS == skillTrees[iW].indTB && skillTrees[iW].indCC == skillTrees[iW].nbSkillsCC) && skillPoints[iW] >= skillTrees[iW].FirstBranch[iS].getCost()) {
+				skillTrees[iW].indTB += 1;
+				skillPoints[iW] -= 1;
+				getSkillTreeMultipliers();
+				return true;
+			}
+		}
+		break;
+		}
+		return false;
 	}
 	
 	public void collectMunitions(int t) {
@@ -575,7 +660,19 @@ public class WeaponCharac {
 		this.keyShot = ks;
 	}
 	
-	public int getMunitions() {
-		return munitions[type] + addMun[type];
+	public int getNbMaxMunitions() {
+		return maxMunitions[type] + addMun[type];
+	}
+	
+	public int getNbWeapon() {
+		return nbWeapons;
+	}
+	public int getIndWeapon() {
+		if (this.type != 0) {
+			return this.type;
+		}
+		else {
+			return 1;
+		}
 	}
 }

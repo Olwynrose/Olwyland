@@ -170,6 +170,16 @@ public class Item extends Hitbox {
 		this.typeItem = t;
 		
 		this.state = 0;
+		
+		if (t > 0) {
+			dMax = 50;
+		}
+		else if (t < -2) {
+			dMax = 350;
+		}
+		else {
+			dMax = 125;
+		}
 	}
 	
 	public void desactivateItem() {
