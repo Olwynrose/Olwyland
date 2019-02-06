@@ -48,6 +48,7 @@ public class Mob extends Hitbox{
 	private int maxNbJump;
 
 	private int indArea;		// indice of the current area
+	private int idMob;			// to identify the mob
 	
 	// mob control
 	private boolean keyLeft;
@@ -97,8 +98,44 @@ public class Mob extends Hitbox{
 
 		weapon = new WeaponMob();
 		charac = new Characteristics();
-		charac.indSound = typeMob + 1;
-		charac.hitTime = 0;
+
+		checkPoint = new double[2];
+		checkPoint[0] = 100;
+		checkPoint[1] = 100;
+
+		animation = 0;
+		time = 0;
+		times = new int[10];
+		nbTimes = 0;
+
+		indArea = 0;
+
+		if (Main.debug[4]) {
+			System.out.println("friction coefficient : " + frictionCoef + "   [Character][Character]");
+		}
+		if (Main.debug[5]) {
+			System.out.println("jump speed : " + jumpSpeed + "   [Character][Character]");
+		}
+
+		setPoints();
+		this.position = new double[2];
+		this.position[0] = checkPoint[0];
+		this.position[1] = checkPoint[1];
+		this.speed = new double[2];
+	}
+	
+	public void activeMob(int t) {
+		typeMob = t;
+		idMob = Main.idMob;
+		Main.idMob = Main.idMob + 1;
+
+		if(typeMob>0) {
+			type = 1;
+		}
+		else {
+			type = 0;
+		}
+		
 		switch(typeMob) {
 		case 1:
 		{
@@ -140,6 +177,21 @@ public class Mob extends Hitbox{
 		}
 		
 		buf_hp = charac.hp;
+		
+
+		animation = 0;
+		time = 0;
+		times = new int[10];
+		nbTimes = 0;
+
+		indArea = 0;
+		
+		setPoints();
+		
+
+		charac.indSound = typeMob + 1;
+		charac.hitTime = 0;
+		
 		maxTimeAttack = 60;
 		waterAcceleration = 1;
 		waterSpeed = 7;
@@ -156,30 +208,6 @@ public class Mob extends Hitbox{
 		keyJump = true;
 		nbJump = 0;
 		maxNbJump = 2;
-
-		checkPoint = new double[2];
-		checkPoint[0] = 100;
-		checkPoint[1] = 100;
-
-		animation = 0;
-		time = 0;
-		times = new int[10];
-		nbTimes = 0;
-
-		indArea = 0;
-
-		if (Main.debug[4]) {
-			System.out.println("friction coefficient : " + frictionCoef + "   [Character][Character]");
-		}
-		if (Main.debug[5]) {
-			System.out.println("jump speed : " + jumpSpeed + "   [Character][Character]");
-		}
-
-		setPoints();
-		this.position = new double[2];
-		this.position[0] = checkPoint[0];
-		this.position[1] = checkPoint[1];
-		this.speed = new double[2];
 	}
 	
 	public void setPoints() {
@@ -190,22 +218,22 @@ public class Mob extends Hitbox{
 		this.points = new double[6][2];
 		this.nbPoints = 6;
 
-		this.points[0][0] = 0;
+		this.points[0][0] = 0 + 0.6*height;
 		this.points[0][1] = 0;
 
-		this.points[1][0] = - tanAlpha * (width / 2);
+		this.points[1][0] = - tanAlpha * (width / 2) + 0.6*height;
 		this.points[1][1] = width / 2;
 
-		this.points[2][0] = - height;
+		this.points[2][0] = - height + 0.6*height;
 		this.points[2][1] = width / 2;
 
-		this.points[3][0] = - height;
+		this.points[3][0] = - height + 0.6*height;
 		this.points[3][1] = - width / 2;
 
-		this.points[4][0] = - tanAlpha * (width / 2);
+		this.points[4][0] = - tanAlpha * (width / 2) + 0.6*height;
 		this.points[4][1] = - width / 2;
 
-		this.points[5][0] = 0;
+		this.points[5][0] = 0 + 0.6*height;
 		this.points[5][1] = 0;
 	}
 	
@@ -1288,7 +1316,7 @@ public class Mob extends Hitbox{
 	private int isIn() {
 
 		for (int i = 0 ; i < Main.nbAreas ; i++) {
-			if (Main.areas[i].isIn(this.position[0], this.position[1]))
+			if (Main.areas[i].isIn(this.position[0]+this.points[0][0], this.position[1]+this.points[0][1]))
 			{
 				indArea = i;
 				return Main.areas[i].getType();
@@ -1388,5 +1416,9 @@ public class Mob extends Hitbox{
 			}
 			
 		}
+	}
+	
+	public int getId() {
+		return idMob;
 	}
 }

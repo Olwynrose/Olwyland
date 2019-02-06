@@ -1013,7 +1013,7 @@ public class Character extends Hitbox {
 	private int isIn() {
 
 		for (int i = 0 ; i < Main.nbAreas ; i++) {
-			if (Main.areas[i].isIn(this.position[0], this.position[1]))
+			if (Main.areas[i].isIn(this.position[0]+this.points[0][0], this.position[1]+this.points[0][1]))
 			{
 				if (Main.debug[8]) {
 					System.out.println("Entry in area type : " + Main.areas[i].getType() + "   [Character][isIn]");

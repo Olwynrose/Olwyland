@@ -47,7 +47,7 @@ public class Spawn {
 							a = (int) Math.floor(nbSpawns*Math.random()-0.0001);
 							ci = spawnPoints[a][0];
 							cj = spawnPoints[a][1];
-							Main.mobs[n] = new Mob(type);
+							Main.mobs[n].activeMob(type);
 							Main.mobs[n].idSpawn = idSpawn;
 							Main.mobs[n].checkPoint[0] = ci;
 							Main.mobs[n].checkPoint[1] = cj;

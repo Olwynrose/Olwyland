@@ -1207,7 +1207,7 @@ public class Debug {
 
 				
 
-				ci = -202;
+				ci = -230;
 				cj = 1600;
 
 				Main.spawns[Main.nbSpawns] = new Spawn(1, 50, 1);
@@ -1219,13 +1219,10 @@ public class Debug {
 				Main.nbSpawns = Main.nbSpawns + 1;
 				
 				Main.spawns[Main.nbSpawns] = new Spawn(3, 400, 20);
-				ci = -202;
 				cj = 1600;
 				Main.spawns[Main.nbSpawns].setOnePoint(0, ci, cj);
-				ci = -202;
 				cj = 1000;
 				Main.spawns[Main.nbSpawns].setOnePoint(1, ci, cj);
-				ci = -202;
 				cj = 2200;
 				Main.spawns[Main.nbSpawns].setOnePoint(2, ci, cj);
 				Main.spawns[Main.nbSpawns].active = true;
@@ -1234,7 +1231,7 @@ public class Debug {
 				
 				
 
-				Main.areas[Main.nbAreas] = new Area(6, -450, 1050, 200, 100);
+				Main.areas[Main.nbAreas] = new Area(6, -450, 1050, 200, 100); 
 				Main.areas[Main.nbAreas].setIndTp(Main.nbAreas+1);
 				Main.areas[Main.nbAreas].setSpeedMultTp(1);
 				Main.nbAreas = Main.nbAreas + 1;

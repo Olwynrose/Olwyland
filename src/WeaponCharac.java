@@ -27,6 +27,10 @@ public class WeaponCharac {
 	private double[] multCoolDown;
 	private int[] addScope;
 	private boolean[] stopMob;
+	public int nbRebounds; 				// number of rebounds for the machingun
+	public double chanceRebound; 		// percentage of chance of rebounds for the machingun
+	public int nbBombs;					// number of bombs for the bouncer
+	
 	
 	public double[] expCurrent;
 	private double[] expFirstLevel;
@@ -40,7 +44,7 @@ public class WeaponCharac {
 	public double[] progressionExp;
 	
 	public WeaponCharac() throws NumberFormatException, IOException {
-		nbWeapons = 7;
+		nbWeapons = 8;
 		type = 1;
 		keyShot = true;
 		
@@ -51,6 +55,12 @@ public class WeaponCharac {
 		loadIndSkillTrees();
 		
 		getSkillTreeMultipliers();
+		
+		// ==================================== TEST ======================
+		chanceRebound = 20;
+		nbRebounds = 3;
+		skillPoints[5] = 9; // ====================================== TEST ===============================
+		
 		
 		munitions = new int[nbWeapons];
 		for (int i = 1 ; i < nbWeapons ; i++) {
@@ -79,6 +89,8 @@ public class WeaponCharac {
 						Main.friendlyShots[i].damages = damages[type] * multDmg[type];
 						
 						Main.friendlyShots[i].indWeapon = type;
+						Main.friendlyShots[i].nbRebounds = 6;
+						
 						Main.sounds.play(5);
 						break;
 					}
@@ -157,6 +169,9 @@ public class WeaponCharac {
 						Main.friendlyShots[i].hitMob = true;
 						Main.friendlyShots[i].time = scope[type] + addScope[type];
 						Main.friendlyShots[i].damages = damages[type] * multDmg[type];
+						if(100*Math.random()<chanceRebound) {
+							Main.friendlyShots[i].nbRebounds = nbRebounds;
+						}
 						Main.friendlyShots[i].indWeapon = type;
 						Main.sounds.play(5);
 						break;
@@ -164,7 +179,7 @@ public class WeaponCharac {
 				}
 			}
 			break;
-			case 7:
+			case 6:
 			{
 				double theta = Math.atan2(diri, dirj);
 				double rand_thata;
@@ -188,15 +203,16 @@ public class WeaponCharac {
 				}
 			}
 			break;
-			case 6:
+			case 7:
 			{
 				for(int i = 0 ; i < Main.maxNbShots ; i++) {
 					if(Main.friendlyShots[i].type == 0) {
 						Main.friendlyShots[i].fire(6, posi, posj, diri, dirj);
 						Main.friendlyShots[i].hitMob = true;
-						Main.friendlyShots[i].time = 40;
+						Main.friendlyShots[i].time = scope[type] + addScope[type];
 						Main.friendlyShots[i].damages = damages[type] * multDmg[type];
 						Main.friendlyShots[i].indWeapon = type;
+						Main.friendlyShots[i].nbBombs = nbBombs;
 						Main.sounds.play(6);
 						break;
 					}
@@ -232,6 +248,9 @@ public class WeaponCharac {
 		multCoolDown[0] = 1;
 		multDisp[0] = 1;
 		stopMob[0] = true;
+		nbBombs = 5;
+		nbRebounds = 1;
+		chanceRebound = 0;
 		
 		for (int n = 1 ; n < nbWeapons ; n++) {
 			multDmg[n] = 1;
@@ -431,6 +450,7 @@ public class WeaponCharac {
 		maxMunitions[4] = 2;	// jack3 yeallow 3
 		maxMunitions[5] = 100;	// simple machingun 
 		maxMunitions[6] = 20;	// shotgun
+		maxMunitions[7] = 8;	// bouncer
 		
 		collectableMunitions = new int[nbWeapons];
 		collectableMunitions[1] = 2;	// bomb
@@ -439,6 +459,7 @@ public class WeaponCharac {
 		collectableMunitions[4] = 1;	// jack3 yeallow 3
 		collectableMunitions[5] = 20;	// simple machingun 
 		collectableMunitions[6] = 5;	// shotgun
+		collectableMunitions[6] = 2;	// bouncer
 		
 		coolDown = new double[nbWeapons];
 		coolDown[0] = 8; 	// simple shot
@@ -448,6 +469,7 @@ public class WeaponCharac {
 		coolDown[4] = 115;	// jack3 yeallow 3
 		coolDown[5] = 4;	// simple machingun
 		coolDown[6] = 15;	// shotgun
+		coolDown[7] = 60;	// shotgun
 		
 		dispersion = new double[nbWeapons];
 		dispersion[5] = 0.1;	// simple machingun 
@@ -461,6 +483,7 @@ public class WeaponCharac {
 		damages[4] = 200;
 		damages[5] = 80;
 		damages[6] = 20;
+		damages[7] = 80;
 		
 		scope = new int[nbWeapons];
 		scope[0] = 8;
@@ -470,6 +493,7 @@ public class WeaponCharac {
 		scope[4] = 100;
 		scope[5] = 12;
 		scope[6] = 5;
+		scope[7] = 40;
 		
 		expFirstLevel = new double[nbWeapons];
 		expFirstLevel[1] = 10;
@@ -478,13 +502,13 @@ public class WeaponCharac {
 		expFirstLevel[4] = 10;
 		expFirstLevel[5] = 10;
 		expFirstLevel[6] = 10;
+		expFirstLevel[7] = 10;
 
 		times = new double[nbWeapons];
 		
 		skillTrees = new SkillTree[nbWeapons];		
 		
 		skillPoints = new int [nbWeapons];
-		skillPoints[5] = 9;
 		
 		multDmg = new double[nbWeapons];
 		multDisp = new double[nbWeapons];

@@ -4,3 +4,4 @@ Fire
 Jack3
 MachineGun
 ShotGun
+Bouncer

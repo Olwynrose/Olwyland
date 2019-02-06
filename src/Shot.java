@@ -10,10 +10,17 @@ public class Shot extends Hitbox{
 	public boolean stopMob;
 	public double damages;
 	public int indWeapon;		//index of the weapon that shot the shot
-	public int numBombs;
+	
 	private double rayAOE;
 	private double acceleration;
 	private int indArea;		// index of the current area
+	private int idShot;			// to identify the shot
+
+	// shot 1 (for the machingun)
+	public int nbRebounds;		// number of rebounds
+	public int idImmune;		// protected mob 
+	// shot 6 (for the Bouncer)
+	public int nbBombs;		// number of bombs
 	
 	
 	public Shot() {
@@ -103,12 +110,14 @@ public class Shot extends Hitbox{
 					for (int i = 0 ; i < Main.maxNbMobs ; i++) {
 						intersect(Main.mobs[i]);
 						if(tMin < buf_Sceneries) {
-							if(stopMob && Main.mobs[i].charac.hp>0) {
+							// hit one mob
+							if(stopMob && Main.mobs[i].charac.hp>0 && Main.mobs[i].getId()!=idImmune) {
 								weaponExp = Main.mobs[i].charac.hit(damages);
 								if (indWeapon > 0) {
 									Main.mainChar.weapon.updateExp(indWeapon, weaponExp);
 									impactMob = true;
 								}
+								idImmune = i;
 								break;
 							}
 							else {
@@ -146,6 +155,42 @@ public class Shot extends Hitbox{
 				switch(this.type) {
 				case 1:
 				{
+					if (nbRebounds > 0 && time == -1) {
+						// find a randomly a new mob
+						int nb = 2*Main.maxNbMobs;
+						int j = (int) (((double)Main.maxNbMobs)*Math.random()-0.0001);
+						while(nb>0 && (Main.mobs[j].getId() == idImmune || Main.mobs[j].typeMob==0 
+								|| (Math.pow(position[0]-Main.mobs[j].position[0],2) + Math.pow(position[1]-Main.mobs[j].position[1],2))>500*500)) {
+							nb = nb - 1;
+							j = (int) (((double)Main.maxNbMobs)*Math.random()-0.0001);
+						}
+						for(int n = 0 ; n < Main.maxNbShots ; n++) {
+							if(Main.friendlyShots[n].type == 0) {
+								if(nb>0) {
+									Main.friendlyShots[n].fire(1, position[0], position[1], 
+										Main.mobs[j].position[0] - position[0], Main.mobs[j].position[1] - position[1]);
+								}
+								else
+								{
+									double theta = Math.atan2(-speed[0], -speed[1]) - 0.5 + 1*Math.random();
+									Main.friendlyShots[n].fire(1, position[0], position[1], 
+											Math.sin(theta), Math.cos(theta));
+								}
+								Main.friendlyShots[n].hitMob = true;
+								Main.friendlyShots[n].time = 30;
+								Main.friendlyShots[n].damages = this.damages;
+								Main.friendlyShots[n].stopMob = true;
+								Main.friendlyShots[n].hitCharac = false;
+								Main.friendlyShots[n].indWeapon = this.indWeapon;
+								if(idImmune>=0) {
+									Main.friendlyShots[n].idImmune = Main.mobs[idImmune].getId();
+								}
+								Main.friendlyShots[n].nbRebounds = nbRebounds - 1;
+								Main.sounds.play(5);
+								break;
+							}
+						}
+					} // end rebound
 				}
 				break;
 				case 2:
@@ -170,18 +215,18 @@ public class Shot extends Hitbox{
 				break;
 				case 6:
 				{
-					if(numBombs>0) {
-						for(int j = 0 ; j < numBombs ; j++) {
+					if(nbBombs>0) {
+						for(int j = 0 ; j < nbBombs ; j++) {
 							for(int i = 0 ; i < Main.maxNbShots ; i++) {
 								if(Main.friendlyShots[i].type == 0) {
-									Main.friendlyShots[i].fire(6, position[0]-5, position[1], 150*Math.cos(2*Math.PI*j/((double)numBombs)) , 90*Math.sin(2*Math.PI*j/((double)numBombs)) );
+									Main.friendlyShots[i].fire(6, position[0]-5, position[1], 150*Math.cos(2*Math.PI*j/((double)nbBombs)) , 90*Math.sin(2*Math.PI*j/((double)nbBombs)) );
 									Main.friendlyShots[i].hitMob = true;
 									Main.friendlyShots[i].time = 25 + ((int) (15.0*Math.random()));
 									Main.friendlyShots[i].damages = this.damages;
 									Main.friendlyShots[i].stopMob = false;
 									Main.friendlyShots[i].hitCharac = false;
 									Main.friendlyShots[i].indWeapon = this.indWeapon;
-									Main.friendlyShots[i].numBombs = -1;
+									Main.friendlyShots[i].nbBombs = -1;
 									Main.sounds.play(7);
 									break;
 								}
@@ -237,7 +282,7 @@ public class Shot extends Hitbox{
 			
 			if(tMin < 1) {
 				if(type != 6 || impactMob) {
-					time = 0;
+					time = -1;
 				}
 				else {
 					tMin = 1;
@@ -258,7 +303,7 @@ public class Shot extends Hitbox{
 					}
 					if(onFloor) {
 						    position[0] = position[0] - 0.01;
-							if(numBombs>0) {
+							if(nbBombs>0) {
 								speed[0] = -0.5*speed[0];
 							}
 							else {
@@ -280,6 +325,13 @@ public class Shot extends Hitbox{
 		this.position[1] = j0;
 		this.type = typeIn;
 		init = true; 
+		
+		idShot = Main.idShot;
+		Main.idShot = Main.idShot + 1;
+
+		nbRebounds = 0;
+		idImmune = -1;
+		
 		switch(typeIn) {
 		// simple shot
 		case 1:
@@ -432,7 +484,7 @@ public class Shot extends Hitbox{
 			rayAOE = 0;
 			time = 100;
 			damages = 500;
-			numBombs = 15;
+			nbBombs = 5;
 			this.position[0] = i0;
 			this.position[1] = j0;
 			this.nbPoints = 4;

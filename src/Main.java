@@ -53,6 +53,9 @@ public class Main {
 	static boolean mouseLeft;
 	static double mouseI;
 	static double mouseJ;
+	
+	static int idMob;
+	static int idShot;
 
 	static int menu;
 	static DisplayMenu screenMenu;
@@ -88,7 +91,7 @@ public class Main {
 		debug[15] = true;		//display the character hitbox
 		debug[16] = true;		//display the mobs hitbox
 		debug[17] = true;		//display the shots hitbox
-		debug[18] = true;		//infinite defense
+		//debug[18] = true;		//infinite defense
 		debug[19] = true;		//load debug map instead of image map
 		//debug[20] = true;		//print the total exp and its progression and the total skill points of the current weapon
 		//debug[21] = true;		//print the values and types of the skill trees when loaded
@@ -195,11 +198,12 @@ public class Main {
 				menu = 1;
 				screen.centerChar();
 			}
+
+			tic = System.currentTimeMillis();
 			switch(menu)
 			{
 				case 1:
 				{
-					tic = System.currentTimeMillis();
 					
 					mainChar.update();
 					for(int n=0 ; n<maxNbShots ; n++){
@@ -221,14 +225,7 @@ public class Main {
 					
 					screen.global();
 		
-					toc = System.currentTimeMillis();
-					if (toc - tic < 50)
-					{
-						Thread.sleep(50 - (toc-tic));
-					}
-					if (debug[1]) {
-						System.out.println("Computing time : " + (toc-tic) + "   [Main]");
-					}
+					
 				}
 				break;
 				case 2:
@@ -237,6 +234,14 @@ public class Main {
 					
 				}
 				break;
+			}
+			toc = System.currentTimeMillis();
+			if (toc - tic < 50)
+			{
+				Thread.sleep(50 - (toc-tic));
+			}
+			if (debug[1]) {
+				System.out.println("Computing time : " + (toc-tic) + "   [Main]");
 			}
 		}
 	}
